@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="Default.hlsl" />
+    <FxCompile Include="Ghostburn.hlsl" />
+    <FxCompile Include="Horizon.hlsl" />
+    <FxCompile Include="Vertical.hlsl" />
+    <FxCompile Include="Distortion.hlsl" />
+    <FxCompile Include="Light.hlsl" />
+    <FxCompile Include="ExplosionGradien.hlsl" />
+    <FxCompile Include="TileMap.hlsl" />
+  </ItemGroup>
+</Project>

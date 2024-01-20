@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\DEV">
+      <UniqueIdentifier>{858f024f-4141-4aef-ab85-54e8f1aa3d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\DEV">
+      <UniqueIdentifier>{0e3c1a81-381c-4e72-b4d7-d75e12b94a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\OP">
+      <UniqueIdentifier>{bad84247-7813-486a-93de-5ca54e592457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\OP">
+      <UniqueIdentifier>{4eff3033-5adb-4f67-b5f8-9f4b4f59bb8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PIP">
+      <UniqueIdentifier>{c49cc2f9-b830-4604-ae13-d3fd3805ec0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\COM">
+      <UniqueIdentifier>{f8ddf431-436a-468b-93bf-06fa368e77a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PIP\MESH">
+      <UniqueIdentifier>{c3535d4d-96ee-4c35-b1f1-cedd8bde5e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PIP\SHA">
+      <UniqueIdentifier>{7f89fd3c-e175-4a30-a497-c8f3a10e1076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PIP\RES">
+      <UniqueIdentifier>{79e760bf-1785-4100-9c53-e1b18fb4b8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\PIP\STATE">
+      <UniqueIdentifier>{a0542cd1-6f8d-4ec6-bab3-a1bcbe7af877}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PIP">
+      <UniqueIdentifier>{dc0d8be5-f9c7-4459-ac91-4cccf4025660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PIP\MESH">
+      <UniqueIdentifier>{9e71c05c-3390-4121-8bdb-ae22ba79e1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PIP\SHA">
+      <UniqueIdentifier>{1ec42672-4a1a-4652-90fb-950d8b10b05f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PIP\STATE">
+      <UniqueIdentifier>{b5f2953c-4b8d-4d32-b822-55fc29735044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\PIP\RES">
+      <UniqueIdentifier>{910241f4-5458-4f6c-ad97-c4b17a773bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\COM">
+      <UniqueIdentifier>{92382727-da27-475c-bfd0-a75da06d5b26}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameVirtualProgress.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDevice.h">
+      <Filter>헤더 파일\DEV</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSampler.h">
+      <Filter>헤더 파일\PIP\RES</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTexture.h">
+      <Filter>헤더 파일\PIP\RES</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConstantBuffer.h">
+      <Filter>헤더 파일\PIP\RES</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDebugPlus.h">
+      <Filter>헤더 파일\OP</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFont.h">
+      <Filter>헤더 파일\OP</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameVtxShader.h">
+      <Filter>헤더 파일\PIP\SHA</Filter>
+    </ClInclude>
+    <ClInclude Include="GameShader.h">
+      <Filter>헤더 파일\PIP\SHA</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePixShader.h">
+      <Filter>헤더 파일\PIP\SHA</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDepthstencil.h">
+      <Filter>헤더 파일\PIP\STATE</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBlend.h">
+      <Filter>헤더 파일\PIP\STATE</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRasterizer.h">
+      <Filter>헤더 파일\PIP\STATE</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponent.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameAnimation.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCol.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRenderer.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSprite.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSpriteRenderer.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTransform.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameIdxBuffer.h">
+      <Filter>헤더 파일\PIP\MESH</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDevBuffer.h">
+      <Filter>헤더 파일\PIP\MESH</Filter>
+    </ClInclude>
+    <ClInclude Include="GameVtxBuffer.h">
+      <Filter>헤더 파일\PIP\MESH</Filter>
+    </ClInclude>
+    <ClInclude Include="Vtx.h">
+      <Filter>헤더 파일\PIP\MESH</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTileRenderer.h">
+      <Filter>헤더 파일\COM</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameDevice.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceBlend.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceDepthstencil.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceMesh.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceRasterizer.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceSampler.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDeviceShader.cpp">
+      <Filter>소스 파일\DEV</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConstantBuffer.cpp">
+      <Filter>소스 파일\PIP\RES</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSampler.cpp">
+      <Filter>소스 파일\PIP\RES</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTexture.cpp">
+      <Filter>소스 파일\PIP\RES</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFont.cpp">
+      <Filter>소스 파일\OP</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDebugPlus.cpp">
+      <Filter>소스 파일\OP</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBlend.cpp">
+      <Filter>소스 파일\PIP\STATE</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDepthstencil.cpp">
+      <Filter>소스 파일\PIP\STATE</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRasterizer.cpp">
+      <Filter>소스 파일\PIP\STATE</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePixShader.cpp">
+      <Filter>소스 파일\PIP\SHA</Filter>
+    </ClCompile>
+    <ClCompile Include="GameVtxShader.cpp">
+      <Filter>소스 파일\PIP\SHA</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTransform.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameActor.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameAnimation.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCol.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameComponent.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRenderer.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSprite.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSpriteRenderer.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTransformColFunc.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameVtxBuffer.cpp">
+      <Filter>소스 파일\PIP\MESH</Filter>
+    </ClCompile>
+    <ClCompile Include="GameIdxBuffer.cpp">
+      <Filter>소스 파일\PIP\MESH</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTileRenderer.cpp">
+      <Filter>소스 파일\COM</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
