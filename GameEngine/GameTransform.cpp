@@ -48,7 +48,7 @@ GameTransform::GameTransform()
 	memset(&CalMatrixCheck, 1, sizeof(CalMatrixCheck));
 	
 	
-	///////////////////////////////////////// BASE 
+	///////////////////////////////////////// 디폴트  
 	m_DefTD.CalUnitMatrix();
 
 
@@ -59,7 +59,7 @@ GameTransform::GameTransform()
 
 	///////////////////////////////////////// 타일맵 update
 	m_TileTD.CalUnitMatrix();
-	m_TileTD.CalTransposMat(); // 확인좀 해보자 
+
 
 
 }
@@ -92,7 +92,7 @@ void GameTransform::SetParent(CPtr<GameTransform> _Parent)
 
 		_Parent->m_ChildList.push_back(this);
 		CalMatrixCheck[(int)MRX_BASE::MRX_PARENT] = true;
-		m_DefTD.PARENT = _Parent->m_DefTD.WWORLD;
+		m_DefTD.PARENT = _Parent->m_DefTD.WWORLD; // ○ 디폴트
 		m_Parent = _Parent;
 
 		// 순서 : 크기->회전->이동
@@ -116,7 +116,7 @@ void GameTransform::SetParent(CPtr<GameTransform> _Parent)
 		CalWRot();
 
 		m_Parent = nullptr;
-		m_DefTD.PARENT.UnitMat();
+		m_DefTD.PARENT.UnitMat(); // ○ 디폴트 
 		// ※ 나의 LPos가 곧 w이다 
 
 		// 순서 중요하다. 
@@ -154,6 +154,8 @@ void GameTransform::TransformUpdate()
 	// 벡터를 활용해서 행렬을 만드는 것은 연산이 많이 드는 작업이다. 
 	// 그래서 Pos, Rot, Scale이 수정되었을 때만 행렬을 계산해서 효율을 높이고자 한다. 
 
+
+	////////////////////////////////////////////////////// ○ 디폴트
 	if (true == CalMatrixCheck[(int)MRX_BASE::MRX_SCALE])
 	{
 		m_DefTD.SCALE.Scale3d(m_LScale);
@@ -177,6 +179,7 @@ void GameTransform::TransformUpdate()
 	if (true == CalMatrixCheck[(int)MRX_BASE::MRX_LWORLD] ||
 		true == CalMatrixCheck[(int)MRX_BASE::MRX_PARENT])
 	{
+	//	○ 디폴트
 		m_DefTD.CalLWorld();
 		m_DefTD.CalWWorld();
 
@@ -200,7 +203,8 @@ void GameTransform::TransformUpdate()
 		if (true == CalMatrixCheck[(int)MRX_BASE::MRX_WWORLD])
 		{
 			_Child->CalMatrixCheck[(int)MRX_BASE::MRX_PARENT] = true;
-			_Child->m_DefTD.PARENT = m_DefTD.WWORLD;
+
+			_Child->m_DefTD.PARENT = m_DefTD.WWORLD; // ○ 디폴트 
 		}
 
 		// 부모행렬이 생기면 반드시 재계산 한다. 
@@ -221,7 +225,7 @@ void GameTransform::TransformUpdate()
 
 void GameTransform::CamUpdate(CPtr<GameCamera> _Cam)
 {
-	///////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////// ○ 디폴트 
 	m_DefTD.PROJ = _Cam->m_Proj;
 	m_DefTD.VIEW = _Cam->m_View;
 	m_DefTD.CalWVP();
@@ -234,6 +238,7 @@ void GameTransform::CamUpdate(CPtr<GameCamera> _Cam)
 
 	//////////////////////////////////////////////////////
 	// 여기서 타일맵 트랜스폼 정리 
+
 
 	m_TileTD.PROJ = _Cam->m_Proj;
 	m_TileTD.VIEW = _Cam->m_View;

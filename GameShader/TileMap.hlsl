@@ -10,7 +10,7 @@ struct VtxIn
 struct VtxOut
 {
     float4 WVP_Pos : SV_Position;
-    float4 WV_Pos : POSITION;
+    float4 W_Pos : POSITION;
     float4 Uv : TEXCOORD;
     float4 Color : COLOR;
 };
@@ -44,19 +44,9 @@ cbuffer CutData : register(b1)
 VtxOut VS_TileMap(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;
-    /* 
-    V       Cam
-    P       Cam
-    VP      Cam
-    ------------------
-    W       Tile->Transdata.world ..TilePos
-    WV      Tile->Transdata.world * Tile->Transdata.View
-    WVP     Tile->Transdata.world * Tile->Transdata.View * Tile->Transdata.Proj
     
-    */
-    
+    Out.W_Pos = mul(_In.Pos, WWORLD);
     Out.WVP_Pos = mul(_In.Pos, WVP);
-    Out.WV_Pos = mul(_In.Pos, WV);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
     

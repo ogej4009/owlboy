@@ -246,29 +246,40 @@ void GameTileMap::Update()
 {
 	m_FocusInfo = GetActor()->GetTrans()->GetWPos();
 
+
+	CVector TilePos;
+
 	for (auto& Tile : m_listAllTile)
 	{
 
-		if (
-			(-TILE_INTERVAL + m_FocusInfo.X) > Tile->TileKey.x	||
+		if ((-TILE_INTERVAL + m_FocusInfo.X) > Tile->TileKey.x	||
 			(TILE_INTERVAL + m_FocusInfo.X) < Tile->TileKey.x	||
 			(-TILE_INTERVAL + m_FocusInfo.Y) > Tile->TileKey.y	||
-			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->TileKey.y
-			)
+			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->TileKey.y)
 		{
 			continue;
 		}
 
-		float4 MapCenterPos = GetTrans()->GetWPos();
-		int2 MapCoord = CalCoord(MapCenterPos);
-		//CVector	WorldPos = CalPosWorld();
-		CVector TilePos;
+		//Tile->TileTD.WWORLD = Tile->TileTD.WWRef();
+
+		TilePos.X = Tile->TileTD.WWORLD.ArrV[3].X + (float)(Tile->TileKey.x * Tile->TileTD.WWORLD.ArrV[0].X);
+		TilePos.Y = Tile->TileTD.WWORLD.ArrV[3].Y + (float)(Tile->TileKey.y * Tile->TileTD.WWORLD.ArrV[0].Y);
+		TilePos.Z = Tile->TileTD.WWORLD.ArrV[3].Z;
+
+		Tile->TileTD.WWORLD.ArrV[3] = TilePos;
+		Tile->TileTD.SetWWVec(TilePos);
+		//////////////////////////////////////////// 여기까지는 그거임 
+
+
 	}
 
-	
+	CVector	WorldPos = CalPosWorld();
+	float4 MapCenterPos = GetTrans()->GetWPos();
+	int2 MapCoord = CalCoord(MapCenterPos);
 
 
 }
+
 
 /* 
 
@@ -357,40 +368,38 @@ void HSTRANS::CalTransData(HSCAM* _Cam)
 	for (auto& Tile : m_listAllTile)
 	{
 
-	if (
-		(-TILE_INTERVAL + m_CamKey.X) > Tile->m_Key.X ||
-		(TILE_INTERVAL + m_CamKey.X) < Tile->m_Key.X  ||
-		(-TILE_INTERVAL + m_CamKey.Y) > Tile->m_Key.Y ||
-		(TILE_INTERVAL + m_CamKey.Y) < Tile->m_Key.Y
-	)
-	{
-		continue;
-	}
-
-
-	--------------------- 타일의 위치를 정할 떄 트랜스 폼을 정의할 것이다. ---------------------
-
-
-	Tile->m_TransData.W = CREFWW();
-
-	TilePos.x = Tile->m_TransData.W.ArrVec[3].x + (float)(Tile->m_Key.X * Tile->m_TransData.W.ArrVec[0].x);
-	TilePos.y = Tile->m_TransData.W.ArrVec[3].y + (float)(Tile->m_Key.Y * Tile->m_TransData.W.ArrVec[1].y);
-	TilePos.z = Tile->m_TransData.W.ArrVec[3].z;
-
-	Tile->m_TransData.W.ArrVec[3] = TilePos;
-	Tile->m_TransData.V = _Cam->MatView();
-	Tile->m_TransData.P = _Cam->MatProj();
-	Tile->m_TransData.WV = Tile->m_TransData.W * Tile->m_TransData.V;
-	Tile->m_TransData.VP = _Cam->MatViewProj();
-	Tile->m_TransData.WVP = Tile->m_TransData.W * Tile->m_TransData.V * Tile->m_TransData.P;
-	Tile->m_TransData.AllTP();
-
-	if (false == Tile->RD->IsUpdate())
-	{
-		continue;
-	}
-	Tile->RD->Render();
-
+		if ((-TILE_INTERVAL + m_CamKey.X) > Tile->m_Key.X ||
+			(TILE_INTERVAL + m_CamKey.X) < Tile->m_Key.X  ||
+			(-TILE_INTERVAL + m_CamKey.Y) > Tile->m_Key.Y ||
+			(TILE_INTERVAL + m_CamKey.Y) < Tile->m_Key.Y)
+		{
+			continue;
+		}
+	
+	
+		--------------------- 타일의 위치를 정할 떄 트랜스 폼을 정의할 것이다. ---------------------
+	
+	
+		Tile->m_TransData.W = CREFWW();
+	
+		TilePos.x = Tile->m_TransData.W.ArrVec[3].x + (float)(Tile->m_Key.X * Tile->m_TransData.W.ArrVec[0].x);
+		TilePos.y = Tile->m_TransData.W.ArrVec[3].y + (float)(Tile->m_Key.Y * Tile->m_TransData.W.ArrVec[1].y);
+		TilePos.z = Tile->m_TransData.W.ArrVec[3].z;
+	
+		Tile->m_TransData.W.ArrVec[3] = TilePos;
+		Tile->m_TransData.V = _Cam->MatView();
+		Tile->m_TransData.P = _Cam->MatProj();
+		Tile->m_TransData.WV = Tile->m_TransData.W * Tile->m_TransData.V;
+		Tile->m_TransData.VP = _Cam->MatViewProj();
+		Tile->m_TransData.WVP = Tile->m_TransData.W * Tile->m_TransData.V * Tile->m_TransData.P;
+		Tile->m_TransData.AllTP();
+	
+		if (false == Tile->RD->IsUpdate())
+		{
+			continue;
+		}
+		Tile->RD->Render();
+	
 	}
 */
 

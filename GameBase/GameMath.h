@@ -1502,6 +1502,13 @@ public:
 	};
 
 public:
+	const CMatrix& WWRef()
+	{
+		return WWORLD;
+	}
+
+
+
 	void CalUnitMatrix()
 	{
 		for (auto& _Value : ARRMAT)
@@ -1526,6 +1533,11 @@ public:
 	void CalWWorld()
 	{
 		WWORLD = LWORLD * PARENT;
+	}
+
+	void SetWWVec(CVector _WWVec)
+	{
+		WWORLD.ArrV[3] = _WWVec;
 	}
 
 	void SetVP(CMatrix _VIEW, CMatrix _PROJ)
