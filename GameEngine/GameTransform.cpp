@@ -43,7 +43,7 @@ GameTransform::GameColStarter::GameColStarter()
 GameTransform::GameTransform()
 	: m_LPos(CVector::ZERO), m_LScale(CVector::ONE), m_LRot(CVector::ZERO)
 	, m_WPos(CVector::ZERO), m_WScale(CVector::ONE), m_WRot(CVector::ZERO)
-	, m_DefTD(), CalMatrixCheck{ true, }, m_Parent(nullptr), m_GridTD(), m_TileTD() //, TransDataNeeds
+	, m_DefTD(), CalMatrixCheck{ true, }, m_Parent(nullptr), m_GridTD()
 {
 	memset(&CalMatrixCheck, 1, sizeof(CalMatrixCheck));
 	
@@ -55,11 +55,6 @@ GameTransform::GameTransform()
 	///////////////////////////////////////// 그리드
 	m_GridTD.CalUnitMat(); // 추가 
 	m_GridTD.FloatSetting(10.0f, 50.0f, 0.05f, 0.1f); // 추가 
-
-
-	///////////////////////////////////////// 타일맵 update
-	m_TileTD.CalUnitMatrix();
-
 
 
 }
@@ -224,26 +219,13 @@ void GameTransform::TransformUpdate()
 #pragma endregion
 
 void GameTransform::CamUpdate(CPtr<GameCamera> _Cam)
-{
-	/////////////////////////////////////////////////////// ○ 디폴트 
+{ 
 	m_DefTD.PROJ = _Cam->m_Proj;
 	m_DefTD.VIEW = _Cam->m_View;
 	m_DefTD.CalWVP();
 
-
-	///////////////////////////////////////////////////////
 	m_GridTD.Pos = _Cam->GetTrans()->GetWPos();
 	m_GridTD.Pos.Y = 0.0f;
-
-
-	//////////////////////////////////////////////////////
-	// 여기서 타일맵 트랜스폼 정리 
-
-
-	m_TileTD.PROJ = _Cam->m_Proj;
-	m_TileTD.VIEW = _Cam->m_View;
-	m_TileTD.CalWVP();
-
 
 }
 
@@ -467,11 +449,6 @@ void GameTransform::LightUpdate(const LightData& _Light)
 	m_DefTD.PROJ = _Light.m_Proj;
 	m_DefTD.VIEW = _Light.m_View;
 	m_DefTD.CalWVP();
-
-	/////////////////////////////////////////////
-	m_TileTD.PROJ = _Light.m_Proj;
-	m_TileTD.VIEW = _Light.m_View;
-	m_TileTD.CalWVP();
 
 }
 

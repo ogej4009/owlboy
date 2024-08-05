@@ -8,7 +8,7 @@
 #endif
 
 #include "resource.h"       // 주 기호입니다.
-#include "LevelDesignView.h"
+#include "LevelDesignViewer.h"
 
 // CGameToolApp:
 // 이 클래스의 구현에 대해서는 GameTool.cpp을(를) 참조하세요.

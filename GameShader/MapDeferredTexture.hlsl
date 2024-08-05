@@ -76,7 +76,7 @@ Vtx3D_Out VS_MapDeferredTexture(Vtx3D_In _In)
     Pos.w = 1.0f;
     _In.Normal.w = 0.0f;
     
-    ///////////////////////////////////////////////////////////////////
+    
     Vtx3D_Out Out = (Vtx3D_Out) 0;
 
     Out.Pos = mul(_In.Pos, WVP);

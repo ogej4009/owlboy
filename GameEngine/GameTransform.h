@@ -73,7 +73,6 @@ protected:
 
 	CTransData m_DefTD;
 	CTransDataGrid m_GridTD;
-	CTransDataTileMap m_TileTD;
 
 	GameTransform* m_Parent;
 	std::list<GameTransform*> m_ChildList;
@@ -117,27 +116,6 @@ public:
 	{
 		return &m_GridTD;
 	}
-
-	/// 트랜스폼을 전달
-	/// 
-
-
-public:
-	CTransDataTileMap GetTransDataTM()
-	{
-		return m_TileTD;
-	}
-
-	const CTransDataTileMap& GetCTransDataTM()
-	{
-		return m_TileTD;
-	}
-
-	CTransDataTileMap* GetPTransDataTM()
-	{
-		return &m_TileTD;
-	}
-
 	
 
 public:

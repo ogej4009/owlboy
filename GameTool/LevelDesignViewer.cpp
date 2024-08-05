@@ -313,12 +313,12 @@ void LevelDesignViewer::SceneDebugDisplay()
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,70 }, CVector::WHITE);
 
-	swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-		, m_FreeCamActor->GetTrans()->GetWPos().X
-		, m_FreeCamActor->GetTrans()->GetWPos().Y
-		, m_FreeCamActor->GetTrans()->GetWPos().Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
+	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
+	//	, m_FreeCamActor->GetTrans()->GetWPos().X
+	//	, m_FreeCamActor->GetTrans()->GetWPos().Y
+	//	, m_FreeCamActor->GetTrans()->GetWPos().Z
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
 
 	//swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
 	//	, m_FreeCamCom->GetCamSize().X

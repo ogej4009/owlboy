@@ -246,55 +246,52 @@ void GameRenderer::ShadowOn()
 		//	NewTile->m_Index = _Index;
 		//	NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
 
-CPtr<GameRenderPlayer> GameRenderer::CreateRenderPlayerToTileMap(
-	const CPtr<GameMesh>& _Mesh
-	, const GameString& _MatName)
-{
-	//// 트랜스폼 연결 
-	//std::vector<CPtr<GameRenderPlayer>> NewList;
+//CPtr<GameRenderPlayer> GameRenderer::CreateRenderPlayerToTileMap(
+//	const CPtr<GameMesh>& _Mesh
+//	, const GameString& _MatName)
+//{
+//	//// 트랜스폼 연결 
+//	//std::vector<CPtr<GameRenderPlayer>> NewList;
+//
+//	//CPtr<XFbx> Fbx = XFbx::Find(_FbxName);
+//
+//	//for (size_t i = 0; i < Fbx->m_Mesh.size(); i++)
+//	//{
+//	//	/*CPtr<GameRenderPlayer> RP = CreateRenderPlayer(Fbx->m_Mesh[i]);
+//	//	NewList.push_back(RP);*/
+//	//	CPtr<GameRenderPlayer> RP = CreateRenderPlayer(Fbx->m_Mesh[i], _MatName);
+//
+//	//	GameFile NewFile = (Fbx->GameFile.DirPath() + Fbx->m_UserMatData[i].DifTexture);
+//	//	GameString DifTexName = NewFile.FileName();
+//	//	CPtr<GameTexture> DifTex = GameTexture::Find(DifTexName);
+//
+//	//	if (nullptr == DifTex)
+//	//	{
+//	//		GameTexture::Load(Fbx->GameFile.DirPath() + Fbx->m_UserMatData[i].DifTexture);
+//	//		DifTex = GameTexture::Find(DifTexName);
+//	//	}
+//
+//	//	RP->SetTexture(L"DifTex", DifTexName);
+//	//	RP->SetSampler(L"Smp", _SmpName);
+//	//	///////////////////////////////// 여기서 ? 
+//	//	NewList.push_back(RP);
+//
+//	//	if (0 >= Fbx->m_UserAniData.size())
+//	//	{
+//
+//	//		std::list<TextureSetter*> List = RP->AllTextureSetter(L"FrameAniTex");
+//	//		for (auto Setter : List)
+//	//		{
+//
+//	//			Setter->IsOption = true;
+//	//		}
+//	//	}
+//	//}
+//	//return NewList;
+//
+//}
 
-	//CPtr<XFbx> Fbx = XFbx::Find(_FbxName);
 
-	//for (size_t i = 0; i < Fbx->m_Mesh.size(); i++)
-	//{
-	//	/*CPtr<GameRenderPlayer> RP = CreateRenderPlayer(Fbx->m_Mesh[i]);
-	//	NewList.push_back(RP);*/
-	//	CPtr<GameRenderPlayer> RP = CreateRenderPlayer(Fbx->m_Mesh[i], _MatName);
-
-	//	GameFile NewFile = (Fbx->GameFile.DirPath() + Fbx->m_UserMatData[i].DifTexture);
-	//	GameString DifTexName = NewFile.FileName();
-	//	CPtr<GameTexture> DifTex = GameTexture::Find(DifTexName);
-
-	//	if (nullptr == DifTex)
-	//	{
-	//		GameTexture::Load(Fbx->GameFile.DirPath() + Fbx->m_UserMatData[i].DifTexture);
-	//		DifTex = GameTexture::Find(DifTexName);
-	//	}
-
-	//	RP->SetTexture(L"DifTex", DifTexName);
-	//	RP->SetSampler(L"Smp", _SmpName);
-	//	///////////////////////////////// 여기서 ? 
-	//	NewList.push_back(RP);
-
-	//	if (0 >= Fbx->m_UserAniData.size())
-	//	{
-
-	//		std::list<TextureSetter*> List = RP->AllTextureSetter(L"FrameAniTex");
-	//		for (auto Setter : List)
-	//		{
-
-	//			Setter->IsOption = true;
-	//		}
-	//	}
-	//}
-	//return NewList;
-
-}
-
-CPtr<GameRenderPlayer> GameRenderer::CreateRenderPlayerToTileMap(const GameString& _MeshName, const GameString& _MatName, CTransDataTileMap* _Trans)
-{
-	return CPtr<GameRenderPlayer>();
-}
 
 std::list<TextureData*> GameRenderPlayer::AllTextureData(const GameString& _SetterName)
 {

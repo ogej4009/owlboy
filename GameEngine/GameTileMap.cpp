@@ -16,29 +16,29 @@ void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 		TileRemove(_Pos, _Index);
 
 		TILE* NewTile = new TILE();
-		NewTile->TileKey.Key = Key;
+		NewTile->Key.Key = Key;
 
 		m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
 		m_listAllTile.push_back(NewTile);
 
-		// 타일의 트랜스폼을 전달하는 방식에 대해 
-		NewTile->TileRP = m_RP; 
-		NewTile->TileIndex = _Index;
-		NewTile->TileRP->SetCBuffer(L"CutData", &m_Sprite->SpriteData(NewTile->TileIndex), CBUFMODE::CB_LINK);
+		NewTile->RPlayer = m_RPlayer; 
+		CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
+		NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+		NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
 		return;
 	}
 
 	TILE* NewTile = new TILE();
-	NewTile->TileKey.Key = Key;
+	NewTile->Key.Key = Key;
 
 	m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
 	m_listAllTile.push_back(NewTile);
 
-	// 타일의 트랜스폼을 전달하는 방식에 대해 
-	NewTile->TileRP = m_RP;
-	NewTile->TileIndex = _Index;
-	NewTile->TileRP->SetCBuffer(L"CutData", &m_Sprite->SpriteData(NewTile->TileIndex), CBUFMODE::CB_LINK);
-
+	NewTile->RPlayer = m_RPlayer;
+	NewTile->Index = _Index;
+	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
+	NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+	NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
 
 }
 
@@ -104,10 +104,13 @@ int2 GameTileMap::CalCoord(float4 _Pos)
 }
 
 
-void GameTileMap::CalRangeTex(const GameString _Name)
+void GameTileMap::SetTileTex(const GameString _Name)
 {
 
-	m_Render->SetTexture(L"TileTex", _Name);
+	m_Render->SetTexture(L"SrcTex", _Name); 
+//	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
+//	m_Render->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+	m_Render->SetSampler(L"SrcSmp", L"LWSMP");
 
 	m_mapAllTile.clear();
 
@@ -132,8 +135,8 @@ void GameTileMap::CalRangeTex(const GameString _Name)
 			float CenterX = (x * InterX);
 			float CenterY = (y * InterY);
 
-			m_mapAllTile[Index.Key].TileKey.Arr[0] = CenterX + HInterX;
-			m_mapAllTile[Index.Key].TileKey.Arr[1] = CenterY + HInterY;
+			m_mapAllTile[Index.Key].Key.Arr[0] = CenterX + HInterX;
+			m_mapAllTile[Index.Key].Key.Arr[1] = CenterY + HInterY;
 
 			// 트랜스폼 만들기..
 			//TilePos.x = Tile->m_TransData.W.ArrVec[3].x + (float)(Tile->m_Key.X * Tile->m_TransData.W.ArrVec[0].x);
@@ -147,8 +150,8 @@ void GameTileMap::CalRangeTex(const GameString _Name)
 			//TilePos.Y += (float)m_mapAllTile[Index.Key].TileKey.Arr[1];
 
 			// 1
-			TilePos = CalTexPos({(float)m_mapAllTile[Index.Key].TileKey.Arr[0]
-				, (float)m_mapAllTile[Index.Key].TileKey.Arr[1]	});
+			TilePos = CalTexPos({(float)m_mapAllTile[Index.Key].Key.Arr[0]
+				, (float)m_mapAllTile[Index.Key].Key.Arr[1]	});
 			// 2
 			//m_mapAllTile = 여기다 넣어  
 
@@ -181,8 +184,7 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	X = _X;
 	Y = _Y;
 
-	m_Render = GetActor()->CreateCom<GameRenderer>(_Index); //////// 트랜스폼 전달에 대해 
-
+	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);  
 
 	m_Sprite = GameSprite::Find(_SrcTexName);
 	m_Tex = GameTexture::Find(_SrcTexName);
@@ -236,44 +238,38 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	m_Mesh->SetVtxBuffer(VB);
 	m_Mesh->SetIdxBuffer(IB);
 
-	m_Render->CreateRenderPlayerToTileMap(m_Mesh, L"TileMap");
+	m_Render->CreateRenderPlayer(m_Mesh, L"TileMap");
 	
-	CalRangeTex(_SrcTexName);
+	SetTileTex(_SrcTexName);
 
 }
 
 void GameTileMap::Update()
 {
-	m_FocusInfo = GetActor()->GetTrans()->GetWPos();
-
+	m_FocusInfo = CVector(0.0f, 0.0f);
 
 	CVector TilePos;
 
 	for (auto& Tile : m_listAllTile)
 	{
 
-		if ((-TILE_INTERVAL + m_FocusInfo.X) > Tile->TileKey.x	||
-			(TILE_INTERVAL + m_FocusInfo.X) < Tile->TileKey.x	||
-			(-TILE_INTERVAL + m_FocusInfo.Y) > Tile->TileKey.y	||
-			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->TileKey.y)
+		if ((-TILE_INTERVAL + m_FocusInfo.X) > Tile->Key.x	||
+			(TILE_INTERVAL + m_FocusInfo.X) < Tile->Key.x	||
+			(-TILE_INTERVAL + m_FocusInfo.Y) > Tile->Key.y	||
+			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->Key.y)
 		{
 			continue;
 		}
 
-		//Tile->TileTD.WWORLD = Tile->TileTD.WWRef();
+		TilePos.X = Tile->Data.WWORLD.ArrV[3].X + (float)(Tile->Key.x * Tile->Data.WWORLD.ArrV[0].X);
+		TilePos.Y = Tile->Data.WWORLD.ArrV[3].Y + (float)(Tile->Key.y * Tile->Data.WWORLD.ArrV[0].Y);
+		TilePos.Z = Tile->Data.WWORLD.ArrV[3].Z;
 
-		TilePos.X = Tile->TileTD.WWORLD.ArrV[3].X + (float)(Tile->TileKey.x * Tile->TileTD.WWORLD.ArrV[0].X);
-		TilePos.Y = Tile->TileTD.WWORLD.ArrV[3].Y + (float)(Tile->TileKey.y * Tile->TileTD.WWORLD.ArrV[0].Y);
-		TilePos.Z = Tile->TileTD.WWORLD.ArrV[3].Z;
-
-		Tile->TileTD.WWORLD.ArrV[3] = TilePos;
-		Tile->TileTD.SetWWVec(TilePos);
-		//////////////////////////////////////////// 여기까지는 그거임 
-
+		Tile->Data.WWORLD.ArrV[3] = TilePos;
 
 	}
 
-	CVector	WorldPos = CalPosWorld();
+//	CVector	WorldPos = CalPosWorld();
 	float4 MapCenterPos = GetTrans()->GetWPos();
 	int2 MapCoord = CalCoord(MapCenterPos);
 

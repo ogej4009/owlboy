@@ -1368,26 +1368,6 @@ enum class MRX_GRID
 };
 
 
-enum class MRX_TILE
-{
-	MRX_POS,
-	MRX_SCALE,
-	MRX_ROT,
-	MRX_REVO,
-	MRX_PARENT,
-	MRX_LWORLD,
-	MRX_WWORLD,
-	MRX_VIEW,
-	MRX_PROJ,
-	MRX_WV,
-	MRX_VP,
-	MRX_WVP,
-	MRX_MAX,
-};
-
-
-
-
 class CTransData
 {
 public:
@@ -1452,6 +1432,11 @@ public:
 		WVP = WWORLD * VIEW * PROJ;
 	}
 
+	void SetWWorldForTile(CMatrix _Mat)
+	{
+		WWORLD = _Mat;
+	}
+
 public:
 	void CalTransData()
 	{
@@ -1476,99 +1461,6 @@ public:
 
 };
 
-
-
-class CTransDataTileMap
-{
-public:
-	union
-	{
-		struct
-		{
-			CMatrix POS;
-			CMatrix SCALE;
-			CMatrix ROT;
-			CMatrix REVO;
-			CMatrix PARENT;
-			CMatrix LWORLD;
-			CMatrix WWORLD;
-			CMatrix VIEW;
-			CMatrix PROJ;
-			CMatrix WV;
-			CMatrix VP;
-			CMatrix WVP;
-		};
-		CMatrix	ARRMAT[(int)MRX_TILE::MRX_MAX];
-	};
-
-public:
-	const CMatrix& WWRef()
-	{
-		return WWORLD;
-	}
-
-
-
-	void CalUnitMatrix()
-	{
-		for (auto& _Value : ARRMAT)
-		{
-			_Value.UnitMat();
-		}
-	}
-
-	void CalTransposMat()
-	{
-		for (auto& _Value : ARRMAT)
-		{
-			_Value.TRANSPOSE();
-		}
-	}
-
-	void CalLWorld()
-	{
-		LWORLD = SCALE * ROT * POS * REVO;
-	}
-
-	void CalWWorld()
-	{
-		WWORLD = LWORLD * PARENT;
-	}
-
-	void SetWWVec(CVector _WWVec)
-	{
-		WWORLD.ArrV[3] = _WWVec;
-	}
-
-	void SetVP(CMatrix _VIEW, CMatrix _PROJ)
-	{
-		VIEW = _VIEW;
-		PROJ = _PROJ;
-	}
-
-	/* 데이터 수정, 업데이트의 편의성을 위한 방식 */
-	void CalWVP()
-	{
-		WV = WWORLD * VIEW;
-		VP = VIEW * PROJ;
-		WVP = WWORLD * VIEW * PROJ;
-	}
-
-public:
-	void CalTransData()
-	{
-		CalLWorld();
-		CalWWorld();
-		CalWVP();
-	}
-
-	CTransDataTileMap() {}
-	CTransDataTileMap(const CTransDataTileMap& _Other)
-	{
-		memcpy_s(this, sizeof(CTransDataTileMap), &_Other, sizeof(CTransDataTileMap));
-	}
-	~CTransDataTileMap() {}
-};
 
 
 

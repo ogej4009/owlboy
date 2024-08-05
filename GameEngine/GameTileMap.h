@@ -4,13 +4,13 @@
 #include "GameRenderer.h"
 
 
-struct TILE
+class TILE
 {
 public:
-	int2 TileKey; 
-	unsigned int TileIndex;
-	CTransDataTileMap TileTD;
-	GameRenderPlayer* TileRP;
+	int2 Key; 
+	unsigned int Index;
+	CTransData Data;
+	GameRenderPlayer* RPlayer;
 };
 
 class GameMesh;
@@ -29,7 +29,7 @@ private:
 	CPtr<GameSprite> m_Sprite;
 	CPtr<GameMesh> m_Mesh;
 	CPtr<GameRenderer> m_Render;
-	CPtr<GameRenderPlayer> m_RP;
+	CPtr<GameRenderPlayer> m_RPlayer;
 	std::vector<Vtx2D> m_VecVtx;
 	std::map<__int64, TILE> m_mapAllTile;
 	std::list<TILE*> m_listAllTile;
@@ -53,7 +53,7 @@ public:
 	int2 CalCoord(float4 _Pos);
 	CVector CalPosWorld(const CVector& _Pos);
 	CVector CalTexPos(const CVector& _Pos);
-	void CalRangeTex(const GameString _Name);
+	void SetTileTex(const GameString _Name);
 
 public:
 	void Init() override;
