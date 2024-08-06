@@ -7,11 +7,13 @@
 class TILE
 {
 public:
-	int2 Key; 
-	unsigned int Index;
-	CTransData Data;
-	GameRenderPlayer* RPlayer;
+	int2 Key; // POS
+	unsigned int Index; // UV
+	CTransData Data; // RENDER (+ COLOR)
+	GameRenderPlayer* RPlayer; 
 };
+
+
 
 class GameMesh;
 class GameSprite;
@@ -51,13 +53,14 @@ public:
 public:
 	// 디자인뷰어에서 활용할 함수..
 	int2 CalCoord(float4 _Pos);
+	float LimitLevel(float4 _Pos);
 	CVector CalPosWorld(const CVector& _Pos);
 	CVector CalTexPos(const CVector& _Pos);
-	void SetTileTex(const GameString _Name);
+	void SetWorldTexture(const GameString _Name);
 
 public:
 	void Init() override;
-	void Init(int& _X, int& _Y, const GameString& _TexName, int _Index);
+	void Init(int& _X, int& _Y, const GameString& _TexName, int _Index = 0);
 	void Update() override;
 
 };

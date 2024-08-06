@@ -192,11 +192,6 @@ public:
 	virtual void ForwardRender(CPtr<GameCamera> _Cam);
 	virtual void ShadowRender(const LightData& _Data);
 
-
-	//CPtr<GameRenderPlayer> CreateRenderPlayerToTileMap(
-	//	const CPtr<GameMesh>& _Mesh
-	//	, const GameString& _MatName);
-
 	//CPtr<GameRenderPlayer> CreateRenderPlayerToTileMap(
 	//	const GameString&  _MeshName
 	//	, const GameString& _MatName

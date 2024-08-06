@@ -126,7 +126,7 @@ void TutorScene::SceneChangeEnd()
 	}
 	GetScene()->ActorClear();
 
-}
+} // libxl.lib
 
 void TutorScene::SceneDebugDisplay()
 {

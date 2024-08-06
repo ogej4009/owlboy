@@ -237,14 +237,7 @@ void GameRenderer::ShadowOn()
 
 //////////////////////////////////////////////// 플레이어 ////////////////////////////////////////////////
 
-		//	HSRENDERDATA* RD = CreateRenderData(L"2DRECT", L"2DSPRITE", NewTile->m_TransData);
-		//	RD->SMP(L"LSMP", L"LSMP");
-		//	RD->SMP(L"PSMP", L"PSMP");
-		//	RD->CB(L"TEXCOLOR", m_Color, true);
-		//	RD->TEX(L"SpriteTex", m_Sprite->Tex());
-		//	NewTile->RD = RD;
-		//	NewTile->m_Index = _Index;
-		//	NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
+
 
 //CPtr<GameRenderPlayer> GameRenderer::CreateRenderPlayerToTileMap(
 //	const CPtr<GameMesh>& _Mesh

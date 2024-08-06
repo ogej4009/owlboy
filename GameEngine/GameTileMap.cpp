@@ -22,9 +22,12 @@ void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 		m_listAllTile.push_back(NewTile);
 
 		NewTile->RPlayer = m_RPlayer; 
+		NewTile->Index = _Index;
 		CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
 		NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+		NewTile->RPlayer->SetTexture(L"SrcTex", m_Sprite->Tex());
 		NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
+
 		return;
 	}
 
@@ -38,7 +41,18 @@ void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 	NewTile->Index = _Index;
 	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
 	NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+	NewTile->RPlayer->SetTexture(L"SrcTex", m_Sprite->Tex());
 	NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
+	
+	//	HSRENDERDATA* RD = CreateRenderData(L"2DRECT", L"2DSPRITE", NewTile->m_TransData);
+	//	RD->SMP(L"LSMP", L"LSMP");
+	//	RD->SMP(L"PSMP", L"PSMP");
+	//	RD->CB(L"TEXCOLOR", m_Color, true);
+	//	RD->TEX(L"SpriteTex", m_Sprite->Tex());
+	//	NewTile->RD = RD;
+	//	NewTile->m_Index = _Index;
+	//	NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
+
 
 }
 
@@ -79,13 +93,15 @@ CVector GameTileMap::CalTexPos(const CVector& _Pos)
 
 CVector GameTileMap::CalPosWorld(const CVector& _Pos)
 {
-	CVector ReturnVec;
 	CVector ScaleVec;
 	ScaleVec = GetTrans()->GetWScale();
-	ReturnVec.X = _Pos.X * ScaleVec.X;
-	ReturnVec.Y = _Pos.Y * ScaleVec.Y;
-	ReturnVec.Z = _Pos.Z;
-	return ReturnVec;
+	
+	CVector ResultVec;
+	ResultVec.X = _Pos.X * ScaleVec.X;
+	ResultVec.Y = _Pos.Y * ScaleVec.Y;
+	ResultVec.Z = _Pos.Z;
+	
+	return ResultVec;
 }
 
 int2 GameTileMap::CalCoord(float4 _Pos)
@@ -103,14 +119,45 @@ int2 GameTileMap::CalCoord(float4 _Pos)
 	return ReturnIndex;
 }
 
+float GameTileMap::LimitLevel(float4 _Pos)
+{
+	float4 Scale = GetTrans()->GetWScale();
 
-void GameTileMap::SetTileTex(const GameString _Name)
+	Scale = Scale.HalfVec();
+
+	if (
+		_Pos.Z > Scale.Z ||
+		_Pos.Z < -Scale.Z ||
+		_Pos.X > Scale.X ||
+		_Pos.X < -Scale.X
+		)
+	{
+		return 0.0f;
+	}
+
+	//int2 Key = Index(_Pos);
+	//float YDis = Min;
+
+	//CVector UpTri0 = CalPosToWorld(m_YTileMap[Key.Key].Up.Arr[0]);
+	//CVector UpTri1 = CalPosToWorld(m_YTileMap[Key.Key].Up.Arr[1]);
+	//CVector UpTri2 = CalPosToWorld(m_YTileMap[Key.Key].Up.Arr[2]);
+	//DirectX::TriangleTests::Intersects(Ori, Dir, UpTri0, UpTri1, UpTri2, YDis);
+	//if (YDis != Min)
+	//{
+	//	return YDis;
+	//}
+
+	return 0.0f;
+}
+
+
+void GameTileMap::SetWorldTexture(const GameString _Name)
 {
 
-	m_Render->SetTexture(L"SrcTex", _Name); 
-//	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
-//	m_Render->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
-	m_Render->SetSampler(L"SrcSmp", L"LWSMP");
+	/// m_Render->SetTexture(L"SrcTex", _Name); 
+	//	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
+	//	m_Render->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
+	//  m_Render->SetSampler(L"SrcSmp", L"LWSMP");
 
 	m_mapAllTile.clear();
 
@@ -235,12 +282,13 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	}
 
 	IB->Create(m_MapIdx.size(), sizeof(UINT), &m_MapIdx[0], DXGI_FORMAT::DXGI_FORMAT_R32_UINT);
+
 	m_Mesh->SetVtxBuffer(VB);
 	m_Mesh->SetIdxBuffer(IB);
 
 	m_Render->CreateRenderPlayer(m_Mesh, L"TileMap");
 	
-	SetTileTex(_SrcTexName);
+	//SetWorldTexture(_SrcTexName);
 
 }
 
@@ -269,9 +317,9 @@ void GameTileMap::Update()
 
 	}
 
-//	CVector	WorldPos = CalPosWorld();
-	float4 MapCenterPos = GetTrans()->GetWPos();
-	int2 MapCoord = CalCoord(MapCenterPos);
+	//	CVector	WorldPos = CalPosWorld();
+	//float4 MapCenterPos = GetTrans()->GetWPos();
+	//int2 MapCoord = CalCoord(MapCenterPos);
 
 
 }

@@ -153,7 +153,7 @@ void LevelDesignViewer::Init()
 
 	{
 		m_TileMapActor = GetScene()->CreateActor();
-		m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel1.png", 0); // 짝수여야 하네
+		m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel1.png", 3); 
 	}
 
 

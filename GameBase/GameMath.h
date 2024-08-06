@@ -1336,9 +1336,6 @@ struct int4
 typedef CVector float4;
 
 
-
-
-
 enum class MRX_BASE
 {
 	MRX_POS,
