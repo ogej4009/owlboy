@@ -5,6 +5,97 @@
 #include "Vtx.h"
 
 
+void GameTileMap::Init() {}
+void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Index)
+{
+	float TestX;
+	float TestY;
+
+	TestX = TILE_INTERVAL; // 0.16f
+	TestY = TILE_INTERVAL; // 0.16f
+
+	float FullScaleX = TestX * _X;
+	float FullScaleY = TestY * _Y;
+
+	float4 FullScaleVec;
+	FullScaleVec.X = FullScaleX;
+	FullScaleVec.Y = FullScaleY;
+
+	X = _X;
+	Y = _Y;
+
+	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);
+
+	m_Sprite = GameSprite::Find(_SrcTexName);
+	m_Tex = GameTexture::Find(_SrcTexName);
+
+	m_Mesh = new GameMesh();
+	CPtr<GameVtxBuffer> VB = new GameVtxBuffer();
+	CPtr<GameIdxBuffer> IB = new GameIdxBuffer();
+
+	m_VecVtx.resize((X + 1) * (Y + 1));
+
+	float StartX = -0.5f;
+	float StartY = 0.5f;
+
+	for (int y = 0; y < Y + 1; y++)
+	{
+		for (int x = 0; x < X + 1; x++)
+		{
+			float PosY = StartY - (y * ((float)1 / Y));
+			float PosX = StartX + (x * ((float)1 / X));
+
+			int Index = y * (X + 1) + x;
+
+			m_VecVtx[Index].Pos.X = PosX;
+			m_VecVtx[Index].Pos.Y = PosY;
+
+			m_VecVtx[Index].Uv.X = (float)x;
+			m_VecVtx[Index].Uv.Y = (float)y;
+		}
+	}
+
+	VB->Create(m_VecVtx.size(), sizeof(Vtx2D), &m_VecVtx[0]);
+
+	std::vector<UINT> m_MapIdx;
+
+	for (int y = 0; y < Y; y++)
+	{
+		for (int x = 0; x < X; x++)
+		{
+			int Pivot = y * (X + 1) + x;
+			m_MapIdx.push_back(Pivot);
+			m_MapIdx.push_back(Pivot + 1);
+			m_MapIdx.push_back(Pivot + (X + 1) + 1);
+
+			m_MapIdx.push_back(Pivot);
+			m_MapIdx.push_back(Pivot + (X + 1) + 1);
+			m_MapIdx.push_back(Pivot + (X + 1));
+		}
+	}
+
+	IB->Create(m_MapIdx.size(), sizeof(UINT), &m_MapIdx[0], DXGI_FORMAT::DXGI_FORMAT_R32_UINT);
+
+	m_Mesh->SetVtxBuffer(VB);
+	m_Mesh->SetIdxBuffer(IB);
+
+	m_SprCutData = m_Sprite->SpriteData(0);
+
+
+	m_Render->CreateRenderPlayer(m_Mesh, L"TileMap");
+	m_Render->SetTexture(L"SrcTex", _SrcTexName);
+	m_Render->SetSampler(L"SrcSmp", L"LWSMP");
+	m_Render->SetCBuffer(L"SrcCutData", &m_SprCutData, CBUFMODE::CB_LINK);
+	//m_SprCutData = m_Sprite->SpriteData(m_SprIndex); // 이거 업데이트()에서 설정 
+
+
+
+	SetWorldTexture(_SrcTexName);
+
+
+}
+
+
 void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 {
 	int2 Coord = CalCoord(_Pos);
@@ -19,15 +110,14 @@ void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 		NewTile->Key.Key = Key;
 
 		m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-		m_listAllTile.push_back(NewTile);
 
-		NewTile->RPlayer = m_RPlayer; 
+		m_SprCutData = m_Sprite->SpriteData(_Index);
+
 		NewTile->Index = _Index;
-		CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
-		NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
-		NewTile->RPlayer->SetTexture(L"SrcTex", m_Sprite->Tex());
-		NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
-
+		NewTile->RP = m_RP;
+		NewTile->RP->SetCBuffer(L"SrcCutData", &m_SprCutData, CBUFMODE::CB_LINK);
+		NewTile->RP->SetTexture(L"SrcTex", m_Sprite->Tex());
+		NewTile->RP->SetSampler(L"SrcSmp", L"LWSMP");
 		return;
 	}
 
@@ -35,24 +125,14 @@ void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
 	NewTile->Key.Key = Key;
 
 	m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-	m_listAllTile.push_back(NewTile);
 
-	NewTile->RPlayer = m_RPlayer;
+	m_SprCutData = m_Sprite->SpriteData(_Index);
+
 	NewTile->Index = _Index;
-	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
-	NewTile->RPlayer->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
-	NewTile->RPlayer->SetTexture(L"SrcTex", m_Sprite->Tex());
-	NewTile->RPlayer->SetSampler(L"SrcSmp", L"LWSMP");
-	
-	//	HSRENDERDATA* RD = CreateRenderData(L"2DRECT", L"2DSPRITE", NewTile->m_TransData);
-	//	RD->SMP(L"LSMP", L"LSMP");
-	//	RD->SMP(L"PSMP", L"PSMP");
-	//	RD->CB(L"TEXCOLOR", m_Color, true);
-	//	RD->TEX(L"SpriteTex", m_Sprite->Tex());
-	//	NewTile->RD = RD;
-	//	NewTile->m_Index = _Index;
-	//	NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
-
+	NewTile->RP = m_RP;
+	NewTile->RP->SetCBuffer(L"SrcCutData", &m_SprCutData, CBUFMODE::CB_LINK);
+	NewTile->RP->SetTexture(L"SrcTex", m_Sprite->Tex()); 
+	NewTile->RP->SetSampler(L"SrcSmp", L"LWSMP");
 
 }
 
@@ -154,11 +234,6 @@ float GameTileMap::LimitLevel(float4 _Pos)
 void GameTileMap::SetWorldTexture(const GameString _Name)
 {
 
-	/// m_Render->SetTexture(L"SrcTex", _Name); 
-	//	CVector SpriteVec = m_Sprite->SpriteData(NewTile->Index);
-	//	m_Render->SetCBuffer(L"SrcTexIdx", &SpriteVec, CBUFMODE::CB_LINK);
-	//  m_Render->SetSampler(L"SrcSmp", L"LWSMP");
-
 	m_mapAllTile.clear();
 
 	int HX = (X / 2);
@@ -185,23 +260,12 @@ void GameTileMap::SetWorldTexture(const GameString _Name)
 			m_mapAllTile[Index.Key].Key.Arr[0] = CenterX + HInterX;
 			m_mapAllTile[Index.Key].Key.Arr[1] = CenterY + HInterY;
 
-			// 트랜스폼 만들기..
-			//TilePos.x = Tile->m_TransData.W.ArrVec[3].x + (float)(Tile->m_Key.X * Tile->m_TransData.W.ArrVec[0].x);
-			//TilePos.y = Tile->m_TransData.W.ArrVec[3].y + (float)(Tile->m_Key.Y * Tile->m_TransData.W.ArrVec[1].y);
-			//TilePos.z = Tile->m_TransData.W.ArrVec[3].z;
-
 			CVector TilePos;
 
-			//TilePos = GetActor()->GetTrans()->GetWPos();
-			//TilePos.X += (float)m_mapAllTile[Index.Key].TileKey.Arr[0];
-			//TilePos.Y += (float)m_mapAllTile[Index.Key].TileKey.Arr[1];
+			TilePos = CalTexPos({ (float)m_mapAllTile[Index.Key].Key.Arr[0]
+								, (float)m_mapAllTile[Index.Key].Key.Arr[1]	});
 
-			// 1
-			TilePos = CalTexPos({(float)m_mapAllTile[Index.Key].Key.Arr[0]
-				, (float)m_mapAllTile[Index.Key].Key.Arr[1]	});
-			// 2
-			//m_mapAllTile = 여기다 넣어  
-
+			int TEST = 0;
 
 		}
 	}
@@ -209,120 +273,34 @@ void GameTileMap::SetWorldTexture(const GameString _Name)
 
 }
 
-
-void GameTileMap::Init() {}
-void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Index)
-{
-
-	// 값확인
-	float TestX;
-	float TestY;
-	
-	TestX = TILE_INTERVAL; // 0.16f
-	TestY = TILE_INTERVAL; // 0.16f
-
-	float FullScaleX = TestX * _X;
-	float FullScaleY = TestY * _Y;
-
-	float4 FullScaleVec;
-	FullScaleVec.X = FullScaleX;
-	FullScaleVec.Y = FullScaleY;
-	
-	X = _X;
-	Y = _Y;
-
-	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);  
-
-	m_Sprite = GameSprite::Find(_SrcTexName);
-	m_Tex = GameTexture::Find(_SrcTexName);
-
-	m_Mesh = new GameMesh();
-	CPtr<GameVtxBuffer> VB = new GameVtxBuffer();
-	CPtr<GameIdxBuffer> IB = new GameIdxBuffer();
-
-	m_VecVtx.resize((X + 1) * (Y + 1));
-
-	float StartX = -0.5f;
-	float StartY = 0.5f;
-
-	for (int y = 0; y < Y + 1; y++)
-	{
-		for (int x = 0; x < X + 1; x++)
-		{
-			float PosY = StartY - (y * ((float)1 / Y));
-			float PosX = StartX + (x * ((float)1 / X));
-
-			int Index = y * (X + 1) + x;
-
-			m_VecVtx[Index].Pos.X = PosX;
-			m_VecVtx[Index].Pos.Y = PosY;
-
-			m_VecVtx[Index].Uv.X = (float)x;
-			m_VecVtx[Index].Uv.Y = (float)y;
-		}
-	}
-
-	VB->Create(m_VecVtx.size(), sizeof(Vtx2D), &m_VecVtx[0]);
-
-	std::vector<UINT> m_MapIdx;
-
-	for (int y = 0; y < Y; y++)
-	{
-		for (int x = 0; x < X; x++)
-		{
-			int Pivot = y * (X + 1) + x;
-			m_MapIdx.push_back(Pivot);
-			m_MapIdx.push_back(Pivot + 1);
-			m_MapIdx.push_back(Pivot + (X + 1) + 1);
-
-			m_MapIdx.push_back(Pivot);
-			m_MapIdx.push_back(Pivot + (X + 1) + 1);
-			m_MapIdx.push_back(Pivot + (X + 1));
-		}
-	}
-
-	IB->Create(m_MapIdx.size(), sizeof(UINT), &m_MapIdx[0], DXGI_FORMAT::DXGI_FORMAT_R32_UINT);
-
-	m_Mesh->SetVtxBuffer(VB);
-	m_Mesh->SetIdxBuffer(IB);
-
-	m_Render->CreateRenderPlayer(m_Mesh, L"TileMap");
-	
-	//SetWorldTexture(_SrcTexName);
-
-}
 
 void GameTileMap::Update()
 {
-	m_FocusInfo = CVector(0.0f, 0.0f);
-
-	CVector TilePos;
-
-	for (auto& Tile : m_listAllTile)
-	{
-
-		if ((-TILE_INTERVAL + m_FocusInfo.X) > Tile->Key.x	||
-			(TILE_INTERVAL + m_FocusInfo.X) < Tile->Key.x	||
-			(-TILE_INTERVAL + m_FocusInfo.Y) > Tile->Key.y	||
-			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->Key.y)
-		{
-			continue;
-		}
-
-		TilePos.X = Tile->Data.WWORLD.ArrV[3].X + (float)(Tile->Key.x * Tile->Data.WWORLD.ArrV[0].X);
-		TilePos.Y = Tile->Data.WWORLD.ArrV[3].Y + (float)(Tile->Key.y * Tile->Data.WWORLD.ArrV[0].Y);
-		TilePos.Z = Tile->Data.WWORLD.ArrV[3].Z;
-
-		Tile->Data.WWORLD.ArrV[3] = TilePos;
-
-	}
-
-	//	CVector	WorldPos = CalPosWorld();
+	
+	//CVector WorldPos = CalPosWorld();
 	//float4 MapCenterPos = GetTrans()->GetWPos();
 	//int2 MapCoord = CalCoord(MapCenterPos);
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* 
@@ -447,3 +425,110 @@ void HSTRANS::CalTransData(HSCAM* _Cam)
 	}
 */
 
+/* 
+
+for (auto& Tile : m_listAllTile)
+	{
+
+		if ((-TILE_INTERVAL + m_FocusInfo.X) > Tile->Key.x	||
+			(TILE_INTERVAL + m_FocusInfo.X) < Tile->Key.x	||
+			(-TILE_INTERVAL + m_FocusInfo.Y) > Tile->Key.y	||
+			(TILE_INTERVAL + m_FocusInfo.Y) < Tile->Key.y)
+		{
+			continue;
+		}
+
+		TilePos.X = Tile->Data.WWORLD.ArrV[3].X + (float)(Tile->Key.x * Tile->Data.WWORLD.ArrV[0].X);
+		TilePos.Y = Tile->Data.WWORLD.ArrV[3].Y + (float)(Tile->Key.y * Tile->Data.WWORLD.ArrV[0].Y);
+		TilePos.Z = Tile->Data.WWORLD.ArrV[3].Z;
+
+		Tile->Data.WWORLD.ArrV[3] = TilePos;
+
+	}
+
+*/
+
+
+/* 
+
+
+void GameHeightMap::WTex(const GameString _TextureName)
+{
+
+	m_Render->SetTexture(L"WTex", _TextureName);
+
+	m_YTileMap.clear();
+
+	int HX = (X / 2);
+	int HZ = (Z / 2);
+
+	float InterX = (1.0f / (float)X);
+	float InterZ = (1.0f / (float)Z);
+	float HInterX = InterX * 0.5F;
+	float HInterZ = InterZ * 0.5F;
+
+	for (int z = -HZ; z < (HZ + 1); z++)
+	{
+		for (int x = -HX; x < (HX + 1); x++)
+		{
+			int2 Index;
+			Index.x = x;
+			Index.y = z;
+
+			if (Index.x == 0 && Index.y == -10)
+			{
+				int a = 0;
+			}
+
+			float CenterX = (x * InterX);
+			float CenterZ = (z * InterZ);
+
+			m_YTileMap[Index.Key].Up.Arr[0] = { CenterX + -HInterX, 0.0f, CenterZ + HInterZ };
+			m_YTileMap[Index.Key].Up.Arr[1] = { CenterX + HInterX, 0.0f, CenterZ + HInterZ };
+			m_YTileMap[Index.Key].Up.Arr[2] = { CenterX + HInterX, 0.0f, CenterZ + -HInterZ };
+
+
+			m_YTileMap[Index.Key].Down.Arr[0] = m_YTileMap[Index.Key].Up.Arr[0];
+			m_YTileMap[Index.Key].Down.Arr[1] = m_YTileMap[Index.Key].Up.Arr[2];
+			m_YTileMap[Index.Key].Down.Arr[2] = { CenterX + -HInterX, 0.0f, CenterZ + -HInterZ };
+
+			CVector Pos;
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Up.Arr[0]);
+			m_YTileMap[Index.Key].Up.Arr[0].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Up.Arr[1]);
+			m_YTileMap[Index.Key].Up.Arr[1].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Up.Arr[2]);
+			m_YTileMap[Index.Key].Up.Arr[2].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Down.Arr[0]);
+			m_YTileMap[Index.Key].Down.Arr[0].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Down.Arr[1]);
+			m_YTileMap[Index.Key].Down.Arr[1].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+			Pos = CalTexelPos(m_YTileMap[Index.Key].Down.Arr[2]);
+			m_YTileMap[Index.Key].Down.Arr[2].Y = m_HTex->GetPixel({ (int)Pos.X, (int)Pos.Y }).X * GetTrans()->GetWScale().Y;
+
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (Min > m_YTileMap[Index.Key].Up.Arr[i].Y)
+				{
+					Min = m_YTileMap[Index.Key].Up.Arr[i].Y;
+				}
+			}
+
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (Min > m_YTileMap[Index.Key].Down.Arr[i].Y)
+				{
+					Min = m_YTileMap[Index.Key].Down.Arr[i].Y;
+				}
+			}
+		}
+	}
+
+
+}
+
+
+
+
+*/

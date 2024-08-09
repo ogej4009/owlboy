@@ -25,9 +25,6 @@ void GameSpriteRenderer::Init()
 void GameSpriteRenderer::Init(int Order)
 {
 	GameRenderer::Init(L"FrameRect", L"Default", Order);
-	//// m_DefTD : 트랜스폼 데이터 
-	//// 상수버퍼를 Create()만 한다. 
-	//// 값을 채워넣는다.
 	m_SprDrawColor = CVector::WHITE;
 	//m_SprRenderOption[3] = m_SprRenderOption[2] = m_SprRenderOption[1] = m_SprRenderOption[0] = 0;
 }

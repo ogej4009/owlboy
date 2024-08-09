@@ -4,15 +4,14 @@
 #include "GameRenderer.h"
 
 
-class TILE
+//////////////////////////////////////// 
+struct TILE
 {
-public:
-	int2 Key; // POS
-	unsigned int Index; // UV
-	CTransData Data; // RENDER (+ COLOR)
-	GameRenderPlayer* RPlayer; 
+	int2 Key; 
+	UINT Index;
+	CTransData TD;
+	GameRenderPlayer* RP; 
 };
-
 
 
 class GameMesh;
@@ -31,13 +30,14 @@ private:
 	CPtr<GameSprite> m_Sprite;
 	CPtr<GameMesh> m_Mesh;
 	CPtr<GameRenderer> m_Render;
-	CPtr<GameRenderPlayer> m_RPlayer;
+	CPtr<GameRenderPlayer> m_RP;
 	std::vector<Vtx2D> m_VecVtx;
 	std::map<__int64, TILE> m_mapAllTile;
 	std::list<TILE*> m_listAllTile;
 	CPtr<GameTexture> m_Tex;
 	CPtr<GameTransform> m_Trans;
-	
+	CVector m_SprCutData;
+
 private:
 	CVector m_FocusInfo;
 	CVector m_TilePos;
