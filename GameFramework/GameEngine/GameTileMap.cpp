@@ -88,135 +88,60 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	FullRectSize = CVector{ X * TILE_INTERVAL, Y * TILE_INTERVAL };
 
 	RPList = m_Render->CreateRenderPlayerTileMap(m_Mesh, L"TileMap", TILEIDX);
-
-	Setting();
-
+	//TileInfoSetting();
 }
 
 void GameTileMap::Update()
 {
-	// TILE 정보 
+	// TILE 정보
+
+
 }
 
-void GameTileMap::Setting()
-{
-	m_mapAllTile.clear();
-
-	int HX = (X / 2);
-	int HY = (Y / 2);
-
-	float InterX = (1.0f / (float)X);
-	float InterY = (1.0f / (float)Y);
-
-	float HInterX = InterX * 0.5f;
-	float HInterY = InterY * 0.5f;
-
-	for (int y = -HY; y < (HY + 1); y++)
-	{
-		for (int x = -HX; x < (HX + 1); x++)
-		{
-			int2 Index;
-
-			Index.x = x;
-			Index.y = y;
-
-			float CenterX = (x * InterX);
-			float CenterY = (y * InterY);
-
-			m_mapAllTile[Index.Key].Key.Arr[0] = CenterX + HInterX;
-			m_mapAllTile[Index.Key].Key.Arr[1] = CenterY + HInterY;
-			m_mapAllTile[Index.Key].Index = m_Index;
-			m_mapAllTile[Index.Key].RP = m_Render->GetRenderPlayer(m_Index);
-
-			CalTexPos({ m_mapAllTile[Index.Key].Key.Arr[0], m_mapAllTile[Index.Key].Key.Arr[1] });
-
-			m_Index++;
-			int TEST = 0;
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
-{
-	int2 Coord = CalCoord(_Pos);
-	__int64 Key = Coord.Key;
-	std::map<__int64, TILE>::iterator FindIter = m_mapAllTile.find(Key);
-
-	if (m_mapAllTile.end() != FindIter)
-	{
-		//TileRemove(_Pos, _Index);
-		TILE* NewTile = new TILE();
-		NewTile->Key.Key = Key;
-		NewTile->Index = _Index;
-		NewTile->RP = m_RP;
-		m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-		//m_Render->RPAddOn(_Index);
-		return;
-	}
-
-	//TileRemove(_Pos, _Index);
-	TILE* NewTile = new TILE();
-	NewTile->Key.Key = Key;
-	m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-	m_Render->RPAddOn(RPList, _Index);
-	return;
-}
-
-
-/* 
-	void CreateTile(__int64 _Key, unsigned int _Index)
-	{
-		__int64 Key = _Key;
-		std::map<__int64, TILE*>::iterator Fiter = m_AllTile.find(Key);
-		if (m_AllTile.end() != Fiter)
-		{
-			DeleteTile(_Key, _Index);
-
-			TILE* NewTile = new TILE(0, nullptr);
-			NewTile->m_Key.TileKey = Key;
-			NewTile->m_Index = _Index;
-
-			m_AllTile.insert(std::map<__int64, TILE*>::value_type(Key, NewTile));
-			m_AllTileList.push_back(NewTile);
-
-			HSRENDERDATA* RD = CreateRenderData(L"2DRECT", L"2DSPRITE", NewTile->m_TransData);
-			RD->SMP(L"LSMP", L"LSMP");
-			RD->SMP(L"PSMP", L"PSMP");
-			RD->CB(L"TEXCOLOR", m_Color, true);
-			RD->TEX(L"SpriteTex", m_Sprite->Tex());
-
-			NewTile->RD = RD;
-			NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
-			return;
-		}
-		TILE* NewTile = new TILE(0, nullptr);
-		NewTile->m_Key.TileKey = Key;
-
-		m_AllTile.insert(std::map<__int64, TILE*>::value_type(Key, NewTile));
-		m_AllTileList.push_back(NewTile);
-
-		HSRENDERDATA* RD = CreateRenderData(L"2DRECT", L"2DSPRITE", NewTile->m_TransData);
-		RD->SMP(L"LSMP", L"LSMP");
-		RD->SMP(L"PSMP", L"PSMP");
-		RD->CB(L"TEXCOLOR", m_Color, true);
-		RD->TEX(L"SpriteTex", m_Sprite->Tex());
-		NewTile->RD = RD;
-		NewTile->m_Index = _Index;
-		NewTile->RD->CB(L"TEXCUT", m_Sprite->CutData(NewTile->m_Index));
-
-	}
-*/
-
-
-
+//
+//void GameTileMap::TileAdd(CVector _Pos, unsigned int _Index)
+//{
+//	// 좌표를 통해 키를 만든다. 
+//	int2 Coord = CalCoord(_Pos);
+//	__int64 Key = Coord.Key;
+//
+//	// 인덱스를 찾는 함수를 만든다. 
+//	//int Index = CalIndex(Coord);
+//
+//	std::map<__int64, TILE>::iterator FindIter = m_mapAllTile.find(Key);
+//
+//	if (m_mapAllTile.end() != FindIter)
+//	{
+//		TileRemove(_Pos, _Index);
+//		TILE* NewTile = new TILE();
+//		NewTile->Key.Key = Key;
+//		NewTile->Index = 0; // 수정 
+//		NewTile->Rp = m_Render->GetRenderPlayer(NewTile->Index);
+//		//  + 텍스쳐 옵션설정 바꾼다. 
+//		NewTile->Rp->m_RenderOption.IsDifTexture = true;
+//		NewTile->Rp->SetTexture(L"SrcTex", m_Tex);
+//		NewTile->Rp->SetSampler(L"SrcSmp", L"LWSMP");
+//		CVector SprCutData = m_Sprite->SpriteData(5);
+//		NewTile->Rp->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
+//		m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
+//		NewTile->Rp->Render();
+//		return;
+//	}
+//
+//	TileRemove(_Pos, _Index);
+//	TILE* NewTile = new TILE();
+//	NewTile->Key.Key = Key;
+//	NewTile->Index = 0; // 수정 
+//	NewTile->Rp = m_Render->GetRenderPlayer(NewTile->Index);
+//	//  + 텍스쳐 옵션설정 바꾼다. 
+//	NewTile->Rp->m_RenderOption.IsDifTexture = true;
+//	NewTile->Rp->SetTexture(L"SrcTex", m_Tex);
+//	NewTile->Rp->SetSampler(L"SrcSmp", L"LWSMP");
+//	CVector SprCutData = m_Sprite->SpriteData(5);
+//	NewTile->Rp->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
+//	m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
+//	NewTile->Rp->Render();
+//}
 
 
 
@@ -242,11 +167,45 @@ void GameTileMap::TileLoad()
 
 
 
+int GameTileMap::CalIndex(int2 _Coord)
+{
+	int aTileIdx = 0;
+	return aTileIdx;
+}
 
-
-
-
-
+//
+//void GameTileMap::TileInfoSetting()
+//{
+//	m_mapAllTile.clear();
+//
+//	int HX = (X / 2);
+//	int HY = (Y / 2);
+//
+//	float InterX = (1.0f / (float)X);
+//	float InterY = (1.0f / (float)Y);
+//
+//	float HInterX = InterX * 0.5f;
+//	float HInterY = InterY * 0.5f;
+//
+//	for (int y = -HY; y < (HY + 1); y++)
+//	{
+//		for (int x = -HX; x < (HX + 1); x++)
+//		{
+//			int2 Index;
+//
+//			Index.x = x;
+//			Index.y = y;
+//
+//			float CenterX = (x * InterX);
+//			float CenterY = (y * InterY);
+//
+//			m_mapAllTile[Index.Key].Key.Arr[0] = CenterX + HInterX;
+//			m_mapAllTile[Index.Key].Key.Arr[1] = CenterY + HInterY;
+//			m_mapAllTile[Index.Key].Index = m_Index;
+//			m_Index++;
+//		}
+//	}
+//}
 
 
 
@@ -289,6 +248,3 @@ int2 GameTileMap::CalCoord(float4 _Pos)
 	return ReturnIndex;
 }
 
-
-
-// 스케일에 문제 있다. 딱 Y 0.16만큼

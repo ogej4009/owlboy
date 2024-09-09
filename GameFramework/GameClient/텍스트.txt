@@ -562,7 +562,7 @@ private:
 	std::wstring m_TileName[2];
 	int m_TileNameIndex;
 
-
+	// Update
 public:
 	_ljMapEditor(std::wstring _SaveFile, int m_TileNameIndex = 0);
 	~_ljMapEditor();

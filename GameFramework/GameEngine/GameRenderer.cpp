@@ -17,6 +17,8 @@
 #include "GameSprite.h"
 #include "GameLight.h"
 
+
+
 //////////////////////////////////////////////// 랜더러 ////////////////////////////////////////////////
 
 
@@ -82,6 +84,7 @@ CPtr<GameRenderPlayer> GameRenderer::GetRenderPlayer(int _Index)
 {
 	return m_PlayerList[_Index];
 }
+
 
 void GameRenderer::SetTexture(const GameString& _Name, const CPtr<GameTexture>& _Res)
 {
@@ -239,111 +242,42 @@ void GameRenderer::ShadowOn()
 //////////////////////////////////////////////// 플레이어 ////////////////////////////////////////////////
 
 
-/* 
 
 
-std::vector<GamePtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerToFbx(const GameString& _FbxName, const GameString& _MatName, const GameString& _SmpName)
+void GameRenderer::RpUpdate(int _Index)
 {
-	std::vector<GamePtr<GameRenderPlayer>> NewList;
+	CPtr<GameRenderPlayer> RP = GetRenderPlayer(_Index);
 
-	GamePtr<GameFbx> Fbx = GameFbx::Find(_FbxName);
 
-	// 매쉬가 4개면 보통 재질정보도 4개이다.
-	// Fbx->m_UserMatData size == 4
-	// Fbx->m_Mesh size == 4
-	// RenderPlayer.resize(Fbx->m_Mesh.size());
-
-	for (size_t i = 0; i < Fbx->m_Mesh.size(); i++)
+	// 생성하는 것이 아니라 찾아서 해당인덱스를 찾아서 
+	// 그 것을 리턴한다. 그렇게 할수밖에 없다. 
+		
+	if (true == RP->IsTexture(L"ErrorTile"))
 	{
-		GamePtr<GameRenderPlayer> RP = CreateRenderPlayer(Fbx->m_Mesh[i], _MatName);
-		GameFile NewFile = (Fbx->_File.DirPath() + Fbx->m_UserMatData[i].DifTexture);
-		GameString DifTexName = NewFile.FileName();
-		GamePtr<GameTexture> DifTex = GameTexture::Find(DifTexName);
+		CPtr<GameSprite> Spr = GameSprite::Find(L"ColLevel2.png");
+		CPtr<GameTexture> Tex = Spr->Tex();
+		GameString TexName = Tex->Name();
 
-		if (nullptr == DifTex)
-		{
-			GameTexture::Load(Fbx->_File.DirPath() + Fbx->m_UserMatData[i].DifTexture);
-			DifTex = GameTexture::Find(DifTexName);
-		}
-
-		RP->TEXTURE(L"DifTex", DifTexName);
-		RP->SAMPLER(L"Smp", _SmpName);
-		NewList.push_back(RP);
-
-		if (0 >= Fbx->m_UserAniData.size())
-		{
-			std::list<CTextureSetter*> List = RP->AllTextureSetter(L"FrameAniTex");
-
-			for (auto Setter : List)
-			{
-				// 애니메이션 있는 개체만 있지는 않다.
-				Setter->IsOption = true;
-			}
-		}
+		RP->m_RenderOption.IsDifTexture = true;
+		RP->SetTexture(L"SrcTex", Tex);
+		CVector CutData = Spr->SpriteData(_Index);
+		RP->SetCBuffer(L"SrcCutData", &CutData, CBUFMODE::CB_LINK);
+		RP->SetSampler(L"SrcSmp", L"LWSMP");
 	}
-	return NewList;
-}
 
+	// 벡터를 해당 인덱스에 다시 넣어주는 방법 
 
-// 랜더러가 하는 것입니다. m_Render->ShadowOn();
-void GameRenderer::ShadowOn()
-{
-	for (auto& RenderPlayer : m_DeferredList)
-	{
-		GameRenderPlayer* NewPlayer = new GameRenderPlayer();
-		NewPlayer->m_Parent = this;
-		NewPlayer->MESH(RenderPlayer->MESH());
-		NewPlayer->MATERIAL(L"Shadow", false);
-
-		if (true == RenderPlayer->IsTEXTURE(L"FrameAniTex"))
-		{
-			GamePtr<GameTexture> Tex = RenderPlayer->GetTEXTURE(L"FrameAniTex");
-			GameString TexName = Tex->NAME();
-
-			if (nullptr != Tex && L"ERROR.png" != TexName)
-			{
-				NewPlayer->RenderOption.IsAni = true;
-				NewPlayer->TEXTURE(L"FrameAniTex", Tex);
-			}
-		}
-
-		m_ShadowList.push_back(NewPlayer);
-
-	}
-}
-
-*/
-
-
-void GameRenderer::RPAddOn(std::vector<CPtr<GameRenderPlayer>> _VecRP, int _Index)
-{
-	for (auto& RenderPlayer : _VecRP)
-	{
-		GameRenderPlayer* RP = new GameRenderPlayer();
-		RP->m_Parent = this;
-		RP->SetMesh(RenderPlayer->GetMesh());
-		RP->SetMaterial(L"TileMap", false);
-
-		if (true == RP->IsTexture(L"ErrorTile"))
-		{
-			CPtr<GameSprite> Spr = GameSprite::Find(L"ColLevel2.png");
-			CPtr<GameTexture> Tex = Spr->Tex();
-			GameString TexName = Tex->Name();
-			int TEST = 0;
-
-			RP->m_RenderOption.IsDifTexture = true;
-			RP->SetTexture(L"SrcTex", Tex);
-			CVector NewCutData = Spr->SpriteData(_Index);
-			RP->SetCBuffer(L"SrcCutData", &NewCutData, CBUFMODE::CB_LINK);
-			RP->SetSampler(L"SrcSmp", L"LWSMP");
-		}
-		m_PlayerList.push_back(RP);
-	}
+	
+	
 }
 
 
 std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileMap(const CPtr<GameMesh>& _Mesh, const GameString& _MatName, int _INDEX)
 {
+	// 랜더플레이어 리스트를 건든다. 
+	// 옵션을 건드려서 
+	// 이것의 내용을 만든다. 
+	// 
 	std::vector<CPtr<GameRenderPlayer>> NewList;
 	
 	CPtr<GameSprite> COLSPR = GameSprite::Find(L"ColLevel2.png");

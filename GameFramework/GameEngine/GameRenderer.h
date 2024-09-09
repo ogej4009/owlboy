@@ -164,6 +164,7 @@ class GameCamera;
 class GameSprite;
 class GameRenderer : public GameTransform
 {
+
 public:
 	std::vector<CPtr<GameRenderPlayer>> m_PlayerList;
 	std::vector<CPtr<GameRenderPlayer>> m_DeferredList;
@@ -196,15 +197,10 @@ public:
 	std::vector<CPtr<GameRenderPlayer>> CreateRenderPlayerTileMap(const CPtr<GameMesh>& _Mesh
 		, const GameString& _MatName
 		, int INDEX);
-	// 중간에 어디서 바꿀수 있는 함수가 필요할 것인가? 
-	// 아니면 텍스쳐만 어떻게 할 수 있도록 할 것인가? 
-
-
-	void RPAddOn(std::vector<CPtr<GameRenderPlayer>> _VecRP, int Index);
 
 public:
 	void ShadowOn();
-
+	void RpUpdate(int _Index);
 
 public:
 	GameRenderer();

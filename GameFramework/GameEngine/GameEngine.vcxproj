@@ -52,6 +52,7 @@
     <ClInclude Include="GameStructuredBuffer.h" />
     <ClInclude Include="GameTexture.h" />
     <ClInclude Include="GameTileMap.h" />
+    <ClInclude Include="GameTileRenderer.h" />
     <ClInclude Include="GameTransform.h" />
     <ClInclude Include="GameVirtualProgress.h" />
     <ClInclude Include="GameVtxBuffer.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="GameStructuredBuffer.cpp" />
     <ClCompile Include="GameTexture.cpp" />
     <ClCompile Include="GameTileMap.cpp" />
+    <ClCompile Include="GameTileRenderer.cpp" />
     <ClCompile Include="GameTransform.cpp" />
     <ClCompile Include="GameTransformColFunc.cpp" />
     <ClCompile Include="GameVtxBuffer.cpp" />

@@ -7,7 +7,9 @@
 #include <GameDebugPlus.h>
 #include <GameLight.h>
 #include <GameRenderTarget.h>
+#include <GameTileRenderer.h>
 #include <GameTileMap.h>
+
 #include <GameMesh.h>
 
 // -------------------------------- LOG
@@ -160,11 +162,16 @@ void LevelDesignViewer::Init()
 
 
 	{
+		m_TileRDActor = GetScene()->CreateActor();
+		m_TileRDCom = m_TileRDActor->CreateCom<GameTileRenderer>(80, 46, L"ColLevel2.png", 4);
+		m_TileRDActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
+	}
+
+	{
 		m_TileMapActor = GetScene()->CreateActor();
 		m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel2.png", 4);
 		m_TileMapActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
 	}
-
 
 
 	//{
@@ -344,7 +351,7 @@ void LevelDesignViewer::SceneDebugDisplay()
 }
 
 
-
+//GameTileMap m_TileMapCom
 void LevelDesignViewer::CtrlUpdate()
 {
 	// --------------------------------------------------------------- 
@@ -360,7 +367,9 @@ void LevelDesignViewer::CtrlUpdate()
 		else
 		{
 			//m_TileMapCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), m_SrcSpriteTileIndex);
+			m_TileRDCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
 			m_TileMapCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
+
 			// 내가 원하는 곳에 있는 그 녀석의 좌표와 인덱스를 가져다가 
 			// 해당 랜더플레이어가 가진 텍스쳐를 바꿀것이다. 
 		}
@@ -385,7 +394,7 @@ void LevelDesignViewer::CtrlUpdate()
 
 	if (GameInput::Press(L"CLEAR"))
 	{
-		m_TileMapCom->TileClear();
+		//m_TileMapRD->TileClear();
 	}
 
 

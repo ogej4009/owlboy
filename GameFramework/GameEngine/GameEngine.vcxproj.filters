@@ -41,6 +41,7 @@
       <Filter>.h</Filter>
     </ClInclude>
     <ClInclude Include="GameTileMap.h" />
+    <ClInclude Include="GameTileRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameDebugPlus.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="GameGeometryShader.cpp" />
     <ClCompile Include="GameHeightMap.cpp" />
     <ClCompile Include="GameTileMap.cpp" />
+    <ClCompile Include="GameTileRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include=".h">

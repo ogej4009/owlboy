@@ -50,6 +50,7 @@ public:
 class FreeCam;
 class DesignCam;
 class GameTileMap;
+class GameTileRenderer;
 class LevelDesignViewer : public SceneComponent // MapToolEditor
 {
 	friend class Dlg0;
@@ -76,8 +77,10 @@ public:
 	int m_SrcSpriteTileIndex;
 
 public:
-	CPtr<GameActor> m_DesignCamActor;
 	CPtr<GameActor> m_TileMapActor;
+	CPtr<GameActor> m_TileRDActor;
+
+	CPtr<GameActor> m_DesignCamActor;
 	CPtr<GameActor> m_CamActor;
 	CPtr<GameActor> m_LightActor;
 	CPtr<GameActor> m_PlayerActor;
@@ -96,13 +99,13 @@ public:
 	CPtr<GameActor>		GridActor;
 	CPtr<GameRenderer>	GridRender;
 
-
+	CPtr<GameTileRenderer> m_TileRDCom;
+	CPtr<GameTileMap> m_TileMapCom;
 
 
 
 
 	CPtr<DesignCam> m_DesignCamCom;
-	CPtr<GameTileMap> m_TileMapCom;
 	CPtr<GameCamera> m_CamCom;
 	CPtr<GameLight> m_LightCom;
 	/*
