@@ -5,14 +5,13 @@
 #include "GameSprite.h"
 
 
-class GameRenderPlayer;
-class CTileInfo
+class TILE
 {
 public:
-	int2 Key;
-	unsigned int Index;
-	CPtr<GameRenderPlayer> Rp;
+	int2 KEY;
+	unsigned int INDEX;
 };
+
 
 class GameMesh;
 class GameSprite;
@@ -35,32 +34,32 @@ private:
 	CPtr<GameRenderPlayer> m_RP;
 	std::vector<Vtx2D> m_VecVtx;
 	std::vector<CPtr<GameRenderPlayer>> RPList;
-	int m_Index;
 	CVector m_SprCutData;
-	std::map<__int64, CTileInfo> m_mapAllTile;
-	std::list<CTileInfo*> m_listAllTile;
+	CVector m_SprDrawColor;
+	int m_SprRenderOption[4];
+	std::map<__int64, TILE> m_mapAllTile;
+	std::list<TILE*> m_listAllTile;
+	int m_SprIndex;
+	CVector MapSize;
 
-private:
-	CVector FullRectSize;
 public:
-	// 타일추가제거기능.. 
 	void TileAdd(CVector _Pos, unsigned int _Index);
 	void TileRemove(CVector _Pos, unsigned int _Index);
 	void TileClear();
 	void TileSave();
 	void TileLoad();
 
-public:
-	// 디자인뷰어에서 활용할 함수..
-	int CalIndex(int2 _Coord);
+public:  
 	int2 CalCoord(float4 _Pos);
 	CVector CalPosWorld(const CVector& _Pos);
 	CVector CalTexPos(const CVector& _Pos);
 
-
 public:
-	void TileInfoSetting();
-	//void TileSetting();
+	void SettingTile();
+	void SetMapSize(CVector _Size)
+	{
+		MapSize = _Size;
+	}
 
 public:
 	void Init() override;
@@ -73,4 +72,7 @@ public:
 	~GameTileRenderer();
 
 };
-#define TILE_INTERVAL 0.16f
+
+
+#define TILE_INTERVAL_A 0.16f
+

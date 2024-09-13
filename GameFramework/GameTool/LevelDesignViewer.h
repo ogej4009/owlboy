@@ -3,19 +3,10 @@
 #include <SaveData.h>
 
 
-//class MeshCreateData
-//{
-//public:
-//	GameString  m_MeshName;
-//	int4		m_TYPE;
-//	CVector		m_Scale;
-//	CVector		m_Rot;
-//	CVector		m_Pos;
-//};
-
 class MeshCreateData
 {
 public:
+	//	GameString  m_MeshName;
 	int4		m_Index;
 	CVector		m_Scale;
 	CVector		m_Rot;
@@ -45,8 +36,6 @@ public:
 };
 
 
-
-
 class FreeCam;
 class DesignCam;
 class GameTileMap;
@@ -59,10 +48,7 @@ class LevelDesignViewer : public SceneComponent // MapToolEditor
 	friend class Dlg3;
 	friend class Dlg4;
 
-
-
 public:
-#pragma region 포그(안개)
 	struct FogBufferData
 	{
 		float FogStart;
@@ -71,14 +57,13 @@ public:
 		float Dummy2;
 	};
 	CVector PaperBurnTestCBuffer;
-#pragma endregion
 
 public:
-	int m_SrcSpriteTileIndex;
+	int SEL_TILESPR_INDEX;
 
 public:
 	CPtr<GameActor> m_TileMapActor;
-	CPtr<GameActor> m_TileRDActor;
+	CPtr<GameActor> TILERENDERER;
 
 	CPtr<GameActor> m_DesignCamActor;
 	CPtr<GameActor> m_CamActor;
@@ -94,16 +79,11 @@ public:
 	std::map<int, LightCreateData> m_LightCreateMeshComData;
 	std::map<int, CPtr<GameLight>> m_LightMeshComData;
 
-	/////////////////////////////////////////////////////////////////////////////// 추가 
-
 	CPtr<GameActor>		GridActor;
 	CPtr<GameRenderer>	GridRender;
 
-	CPtr<GameTileRenderer> m_TileRDCom;
+	CPtr<GameTileRenderer> TILERENDERCOM;
 	CPtr<GameTileMap> m_TileMapCom;
-
-
-
 
 	CPtr<DesignCam> m_DesignCamCom;
 	CPtr<GameCamera> m_CamCom;
@@ -115,35 +95,36 @@ public:
 	CPtr<GameFogFilter> m_FogFilterCom;
 	*/
 	
-public: //  Entity
-	// 맵오브젝트 관리
+	CVector m_ScreenPos3DToWorldPos;
+
+public:
+	CPtr<GameActor> m_FreeCamActor;
+	CPtr<FreeCam>	m_FreeCamCom;
+
+public:
 	static int OneMapObj;
 	static std::map<GameActor*, MapObjData> AllMapObjData;
 	static std::map<GameString*, SaveMapObjData> AllSaveMapObjData;
 	static LevelDesignViewer* pViewer;
 
 public:
-	// 맵오브젝트 추가제거함수
 	static void ClearMapObj();
 	static void AddSelMapObj(int _Select, CVector _Pos);
 	static void ColMapObj(GameCol* _Cursor, GameCol* _Obj);
 
-	// 맵오브젝트 포인터소환
 public:
 	static LevelDesignViewer* G_pViewer()
 	{
 		return pViewer;
 	}
 
-public:
-	CPtr<GameActor> m_FreeCamActor;
-	CPtr<FreeCam>	m_FreeCamCom;
 
-	//////////////////////////////////////////////////////////////////
-	void CtrlUpdate();
+public:
+	void InteractionUpdate();
 	void TextDebugUpdate();
 	void TargetDebugUpdate();
-	//////////////////////////////////////////////////////////////////
+	
+public:
 	void CreateAnimationMesh();
 	void CreateStaticMesh();
 	void FillInAllLightValue();

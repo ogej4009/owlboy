@@ -9,10 +9,7 @@
 #include <GameRenderTarget.h>
 #include <GameTileRenderer.h>
 #include <GameTileMap.h>
-
 #include <GameMesh.h>
-
-// -------------------------------- LOG
 #include <EnumData.h>
 #include <ValueData.h>
 #include <DesignCam.h>
@@ -95,24 +92,22 @@ void LevelDesignViewer::Progress()
 void LevelDesignViewer::Init()
 {
 
-#pragma region FOG에 대해서 
+#pragma region FOG에관하여 
 	PaperBurnTestCBuffer = CVector{ 0.0f,0.0f ,0.0f ,3.0f };
-	FogBufferData FBD;
+	FogBufferData DATA;
 
 	float BorderNear = 0.0f;
 	float BorderFar = 50.0f;
 
-	FBD.FogStart = BorderNear;
-	FBD.FogEnd = BorderFar;
+	DATA.FogStart = BorderNear;
+	DATA.FogEnd = BorderFar;
 #pragma endregion
 
 #pragma region COLLISION(충돌연결)
 	GetScene()->ColLink(0,1); // 예시
 #pragma endregion
 
-
-
-	m_SrcSpriteTileIndex = 0;
+	SEL_TILESPR_INDEX = 0;
 
 	if (nullptr == GameInput::FindKey(L"SELECT"))
 	{
@@ -124,10 +119,6 @@ void LevelDesignViewer::Init()
 	}
 
 	FileCreate();
-
-
-
-#pragma region 카메라 
 
 	{
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
@@ -142,36 +133,20 @@ void LevelDesignViewer::Init()
 		m_DesignCamCom = NewActor->CreateCom<DesignCam>();
 		m_DesignCamActor = NewActor;
 	} 
-#pragma endregion
-
-	
-/* 
-	 타일스트라이프를 만들때 
-	 전체 텍스쳐의 사이즈를 정하는 것이 고려되어야 한다. 
-	 타일은 명확히 16의 배수여야 한다. 16x16 의 배수여야 한다. 
-	 16 x 특정계수 = ?? 
-
-*/
-	//{
-	//	CPtr<GameActor> NewActor = GetScene()->CreateActor();
-	//	CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>(L"TestGrid.png",(UINT)RENDER_ORDER::RO_ACTOR);
-	//	NewActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
-	//	NewActor->GetTrans()->SetWPos({ 0.0f, 0.0f, 0.0f });
-	//}
-
 
 
 	{
-		m_TileRDActor = GetScene()->CreateActor();
-		m_TileRDCom = m_TileRDActor->CreateCom<GameTileRenderer>(80, 46, L"ColLevel2.png", 4);
-		m_TileRDActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
+		TILERENDERER = GetScene()->CreateActor();
+		TILERENDERCOM = TILERENDERER->CreateCom<GameTileRenderer>(80, 46, L"ColLevel2.png", 0);
+		TILERENDERCOM->SetMapSize({ 12.80f, 7.20f, 1.0f });
+		TILERENDERER->GetTrans()->SetWScale({ TILE_INTERVAL_A, TILE_INTERVAL_A, 1.0f }); // 맵 사이즈 커스텀 
 	}
 
-	{
+	/*{
 		m_TileMapActor = GetScene()->CreateActor();
 		m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel2.png", 4);
 		m_TileMapActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
-	}
+	}*/
 
 
 	//{
@@ -189,8 +164,6 @@ void LevelDesignViewer::Init()
 	//	GridRender->SetCBuffer(L"CAMDATA", &GridRender->GetTransDataPlus());
 	//}
 
-
-#pragma region 타일맵
 
 	//{
 	//	CPtr<GameActor> NewActor = GetScene()->CreateActor();
@@ -211,7 +184,6 @@ void LevelDesignViewer::Init()
 	}
 	*/
 
-#pragma endregion
 
 
 #pragma region SPHERE
@@ -255,7 +227,7 @@ void LevelDesignViewer::Init()
 
 
 
-#pragma region 라이트 
+#pragma region LIGHT 
 	{
 		m_LightActor = GetScene()->CreateActor();
 		float4 Dir = CVector(0.0f, 1.0f, -1.0f);
@@ -277,16 +249,24 @@ void LevelDesignViewer::Init()
 
 void LevelDesignViewer::Update()
 {
-	SceneDebugDisplay();
 
-#pragma region 라이트 컨트롤러
-	//LIGHT CTRL
-	//텍스트 디버그 
-	//  타겟 값
-	CtrlUpdate();
+#pragma region LIGHT CONTROLLER
+	InteractionUpdate();
 	TextDebugUpdate();
 	TargetDebugUpdate();
 #pragma endregion
+	SceneDebugDisplay();
+
+	//////////////////////////////////////////////////////
+
+	/* 
+	< 디자인 >
+	맵 범위를 넘지 않는 클릭 이미지 스트라이프 추가 
+	또한 스트라이프 범위 체크해서 딱 그곳으로 클릭할 수 있다. 
+
+
+	
+	*/
 
 
 
@@ -336,27 +316,43 @@ void LevelDesignViewer::SceneDebugDisplay()
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,70 }, CVector::WHITE);
 
-	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-	//	, m_FreeCamActor->GetTrans()->GetWPos().X
-	//	, m_FreeCamActor->GetTrans()->GetWPos().Y
-	//	, m_FreeCamActor->GetTrans()->GetWPos().Z
-	//);
-	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
+	swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
+		, m_DesignCamActor->GetTrans()->GetWPos().X
+		, m_DesignCamActor->GetTrans()->GetWPos().Y
+		, m_DesignCamActor->GetTrans()->GetWPos().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
 
-	//swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
-	//	, m_FreeCamCom->GetCamSize().X
-	//	, m_FreeCamCom->GetCamSize().Y);
-	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
+	swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
+		, m_DesignCamCom->GetCamSize().X
+		, m_DesignCamCom->GetCamSize().Y);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
+
+	swprintf_s(Arr, L"[ScreenPos3DToWorldPos] X : %f, Y : %f, Z : %f"
+		, m_ScreenPos3DToWorldPos.X
+		, m_ScreenPos3DToWorldPos.Y
+		, m_ScreenPos3DToWorldPos.Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,130 }, CVector::WHITE);
 
 }
 
 
-//GameTileMap m_TileMapCom
-void LevelDesignViewer::CtrlUpdate()
+
+void LevelDesignViewer::InteractionUpdate()
 {
-	// --------------------------------------------------------------- 
+	
+	m_ScreenPos3DToWorldPos = m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D());
+
 	if (GameInput::Press(L"SELECT"))
 	{
+		CVector POS = TILERENDERCOM->GetTrans()->GetWPos();
+		CVector SCALE = TILERENDERCOM->GetTrans()->GetWScale();
+
+		// 전체 사이즈 
+
+		// 스트라이프 사이즈 
+
 		if (m_DesignCamCom->GetTrans()->GetWPos().X - (m_DesignCamCom->GetCamSize().X * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
 			m_DesignCamCom->GetTrans()->GetWPos().X + (m_DesignCamCom->GetCamSize().X * 0.5f) < m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
 			m_DesignCamCom->GetTrans()->GetWPos().Y - (m_DesignCamCom->GetCamSize().Y * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y ||
@@ -366,12 +362,10 @@ void LevelDesignViewer::CtrlUpdate()
 		}
 		else
 		{
-			//m_TileMapCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), m_SrcSpriteTileIndex);
-			m_TileRDCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
-			m_TileMapCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
-
-			// 내가 원하는 곳에 있는 그 녀석의 좌표와 인덱스를 가져다가 
-			// 해당 랜더플레이어가 가진 텍스쳐를 바꿀것이다. 
+			TILERENDERCOM->TileAdd(
+				m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D())
+				, 5
+			);
 		}
 
 	}
@@ -387,7 +381,7 @@ void LevelDesignViewer::CtrlUpdate()
 		}
 		else
 		{
-			//m_TileMapCom->TileRemove(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), m_SrcSpriteTileIndex);
+			//m_TileMapCom->TileRemove(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), SEL_TILESPR_INDEX);
 		}
 
 	}
@@ -398,7 +392,6 @@ void LevelDesignViewer::CtrlUpdate()
 	}
 
 
-	// --------------------------------------------------------------- 
 	if (GameInput::Press(L"AMB_DOWN"))
 	{
 		m_LightCom->SetAmbColor({
@@ -407,7 +400,7 @@ void LevelDesignViewer::CtrlUpdate()
 			m_LightCom->GetAmbColor().Z - GameTime::DeltaTime(1.0F) });
 	}
 
-	// --------------------------------------------------------------- 
+
 	if (GameInput::Press(L"AMB_UP"))
 	{
 		m_LightCom->SetAmbColor({

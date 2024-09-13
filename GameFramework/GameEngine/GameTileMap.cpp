@@ -88,7 +88,7 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	FullRectSize = CVector{ X * TILE_INTERVAL, Y * TILE_INTERVAL };
 
 	RPList = m_Render->CreateRenderPlayerTileMap(m_Mesh, L"TileMap", TILEIDX);
-	//TileInfoSetting();
+	//SettingTile();
 }
 
 void GameTileMap::Update()
@@ -174,7 +174,7 @@ int GameTileMap::CalIndex(int2 _Coord)
 }
 
 //
-//void GameTileMap::TileInfoSetting()
+//void GameTileMap::SettingTile()
 //{
 //	m_mapAllTile.clear();
 //
