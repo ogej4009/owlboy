@@ -1,13 +1,13 @@
 #pragma once
 
-enum class RENDER_ORDER
+enum class eRENDER_ORDER
 {
 	RO_ACTOR,
 	RO_COL_LEVEL,
 	RO_UI,
 };
 
-enum class COLLISION_ORDER
+enum class eCOLLISION_ORDER
 {
 	CO_PLAYER,
 	CO_TARGET,
@@ -19,7 +19,7 @@ enum class COLLISION_ORDER
 	CO_BACKDROP,
 };
 
-enum class LAYER_GROUP
+enum class eLAYER_GROUP
 {
 	BGCLOUDS,
 	PARABACK,
@@ -27,13 +27,13 @@ enum class LAYER_GROUP
 	WATERFALL,
 };
 
-enum class BOX
+enum class eBOX_TYPE
 {
 	HIDE_SPRITE_LAYER,
 	SNAP_TO_GRID,
 };
 
-enum class BATCH_SPACING
+enum class eBATCH_SPACING
 {
 	X,
 	Y,

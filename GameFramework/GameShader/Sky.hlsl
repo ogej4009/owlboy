@@ -1,6 +1,8 @@
 #include "BumpBase.hlsli"
+#include "RenderBase.hlsli"
 
-struct Vtx3D_In
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -12,7 +14,7 @@ struct Vtx3D_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
@@ -25,40 +27,29 @@ struct Vtx3D_Out
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
-Vtx3D_Out VS_Sky(Vtx3D_In _In)
+VtxOut VS_Sky(VtxIn _In)
 {
     _In.Normal.w = 0.0f;
    
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
-    Out.Pos = mul(_In.Pos, WVP);
+    VtxOut Out = (VtxOut) 0;
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
     
     _In.Pos.w = 1.0f;
-    Out.ViewPos = mul(_In.Pos, WV);
+    Out.ViewPos = mul(_In.Pos, TD.WV);
       
     _In.Normal.w = 0.0f;
-    Out.ViewNormal = mul(_In.Normal, WV);
+    Out.ViewNormal = mul(_In.Normal, TD.WV);
 
     _In.BiNormal.w = 0.0f;
-    Out.ViewBiNormal = mul(_In.BiNormal, WV);
+    Out.ViewBiNormal = mul(_In.BiNormal, TD.WV);
 
     _In.Tangent.w = 0.0f;
-    Out.ViewTangent = mul(_In.Tangent, WV);
+    Out.ViewTangent = mul(_In.Tangent, TD.WV);
 
     return Out;
 }
@@ -68,33 +59,27 @@ struct ForwardOut
     float4 ForwardColor : SV_Target0;
 };
 
-cbuffer RenderOption : register(b8)
+cbuffer RenderOptionData : register(b8)
 {
-    int IsDifTexture;
-    int IsNormalTexture;
-    int IsShadow;
-    int IsAni;
-    int IsDummy0;
-    int IsDummy1;
-    int IsDummy2;
-    int IsDummy3;
-    float4 BasicColor;
+    RenderOption RO;
 }
 
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 
-ForwardOut PS_Sky(Vtx3D_Out _In)
+ForwardOut PS_Sky(VtxOut _In)
 {
     ForwardOut Out = (ForwardOut) 0;
     
-    if (IsDifTexture != 0)
+    if (RO.IsDifTexture != 0)
     {
         Out.ForwardColor = Tex.Sample(Smp, _In.Uv.xy);
     }
     else
     {
-        Out.ForwardColor = BasicColor;
+        Out.ForwardColor = RO.BasicColor;
     }
+    
     return Out;
 }
+

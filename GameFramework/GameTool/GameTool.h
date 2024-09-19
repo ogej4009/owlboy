@@ -34,3 +34,4 @@ public:
 };
 
 extern CGameToolApp theApp;
+

@@ -1,6 +1,6 @@
 #include "BumpBase.hlsli"
 #include "RenderBase.hlsli"
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 
 struct Vtx3D_In
 {
@@ -23,12 +23,12 @@ struct Vtx3D_Out
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase MatrixData;
+    TransData MatrixData;
 }
 
-cbuffer RenderOption : register(b8)
+cbuffer RenderOptionData : register(b8)
 {
-    RenderOptionBase RenderOptionData;
+    RenderOption Data;
 }
 
 Vtx3D_Out VS_DebugMesh(Vtx3D_In _In)

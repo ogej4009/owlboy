@@ -42,6 +42,11 @@
     </ClInclude>
     <ClInclude Include="GameTileMap.h" />
     <ClInclude Include="GameTileRenderer.h" />
+    <ClInclude Include="GameBloomFilter.h" />
+    <ClInclude Include="GameOutLineFilter.h" />
+    <ClInclude Include="GameFbx.h" />
+    <ClInclude Include="GameFbxEx.h" />
+    <ClInclude Include="GameFbx2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameDebugPlus.cpp" />
@@ -87,6 +92,11 @@
     <ClCompile Include="GameHeightMap.cpp" />
     <ClCompile Include="GameTileMap.cpp" />
     <ClCompile Include="GameTileRenderer.cpp" />
+    <ClCompile Include="GameBloomFilter.cpp" />
+    <ClCompile Include="GameOutLineFilter.cpp" />
+    <ClCompile Include="GameFbx.cpp" />
+    <ClCompile Include="GameFbxEx.cpp" />
+    <ClCompile Include="GameFbx2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include=".h">

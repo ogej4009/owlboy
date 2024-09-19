@@ -1,18 +1,20 @@
-struct Vtx3D_In
+
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
 };
 
-Vtx3D_Out VS_DeferredMerge(Vtx3D_In _In)
+VtxOut VS_DeferredMerge(VtxIn _In)
 {
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
     Out.Pos = _In.Pos;
     Out.Uv = _In.Uv;
     return Out;
@@ -27,7 +29,7 @@ Texture2D DifColor : register(t0);
 Texture2D LightColor : register(t1);
 SamplerState Smp : register(s0);
 
-DeferredOut PS_DeferredMerge(Vtx3D_Out _In)
+DeferredOut PS_DeferredMerge(VtxOut _In)
 {
     float4 DifOut = DifColor.Sample(Smp, _In.Uv.xy);
 

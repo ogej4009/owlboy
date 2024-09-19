@@ -396,9 +396,9 @@ void GameRenderPlayer::SetMaterial(const GameString& _Name, bool _Push)
 					SetCBuffer(L"TransData", m_Parent->GetPTransData(), CBUFMODE::CB_LINK);
 				} 
 
-				if (L"RenderOption" == _Res.second.Name)
+				if (L"RenderOptionData" == _Res.second.Name)
 				{
-					SetCBuffer(L"RenderOption", &m_RenderOption, CBUFMODE::CB_LINK);
+					SetCBuffer(L"RenderOptionData", &m_RenderOption, CBUFMODE::CB_LINK);
 				}
 
 				break;

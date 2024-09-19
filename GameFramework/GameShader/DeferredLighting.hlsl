@@ -1,5 +1,6 @@
 #include "LightBase.hlsli"
 
+
 struct Vtx3D_In
 {
     float4 Pos : POSITION;

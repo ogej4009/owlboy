@@ -52,9 +52,9 @@ void Intro::SceneChangeStart()
 	{
 		// 액터
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEF_POS);
+		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEFAULT_POS);
 		// 등록부
-		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)RENDER_ORDER::RO_ACTOR);
+		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)eRENDER_ORDER::RO_ACTOR);
 		NewCam->SetCamSize({ 6.4f * 4.0f, 3.6f * 4.0f });
 		NewCam->SetMode(CAMMODE::ORTH);
 		// 컴포넌트 
@@ -64,7 +64,7 @@ void Intro::SceneChangeStart()
 	{
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
 		NewActor->GetTrans()->SetWPos({ 0.0f, 0.0f, 10.0f });
-		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_ACTOR);
+		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_ACTOR);
 		NewRender->SetSprite(L"sprIntro_2782x1564.png");
 		NewRender->SetSrcSizeOfTexture(L"sprIntro_2782x1564.png");
 	}
@@ -101,7 +101,7 @@ void Intro::SceneChangeEnd()
 			GameSprite::Delete(_File.FileName());
 		}
 	}
-	GetScene()->ActorClear();
+	//GetScene()->ActorClear();
 }
 
 void Intro::SceneDebugDisplay()

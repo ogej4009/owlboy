@@ -143,6 +143,11 @@ public:
 		m_Path = _Path;
 	}
 
+	//GameFile(const wchar_t* _Path) : m_IsOpen(false), FILEPOINTER(nullptr)
+	//{
+	//	SetPath(_Path);
+	//}
+
 	GameFile(const GameString& _FilePath, const GameString& _FileMode)
 		: FILEPOINTER(nullptr), m_IsOpen(false)
 	{

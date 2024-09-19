@@ -1,4 +1,6 @@
-struct Vtx3D_In
+
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -6,7 +8,7 @@ struct Vtx3D_In
     float4 Normal : NORMAL;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
@@ -14,9 +16,9 @@ struct Vtx3D_Out
     float4 Normal : NORMAL;
 };
 
-Vtx3D_Out VS_MotionBlurDraw(Vtx3D_In In)
+VtxOut VS_MotionBlurDraw(VtxIn In)
 {
-    Vtx3D_Out Out = (Vtx3D_In) 0;
+    VtxOut Out = (VtxIn) 0;
     Out.Pos = In.Pos;
     Out.Uv = In.Uv;
     Out.Color = In.Color;
@@ -37,7 +39,7 @@ cbuffer Motion_Blur_Data : register(b1)
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 
-float4 PS_MotionBlurDraw(Vtx3D_Out Out) : SV_Target0
+float4 PS_MotionBlurDraw(VtxOut Out) : SV_Target0
 {
     int Blur = 30;
     float4 CurP = mul(Pos, WVP2);
@@ -90,3 +92,4 @@ float4 PS_MotionBlurDraw(Vtx3D_Out Out) : SV_Target0
 	
     return RealColor;
 }
+

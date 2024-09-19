@@ -115,7 +115,7 @@ void UITrigger::Init(GameString _Name, UINT _Dir)
 	{
 		ValueData::PIXEL_SCALE = 0.01f;
 		ValueData::PIXEL_RATIO = 1.0f / ValueData::PIXEL_SCALE;
-		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_UI);
+		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_UI);
 		m_Render->SetSprite(_Name);
 		m_Render->SetSrcSizeOfTexture(_Name);
 		//m_Render->SetLScale({ 20.0f * ValueData::PIXEL_SCALE , 36.0f * ValueData::PIXEL_SCALE , 1.0f });
@@ -167,7 +167,7 @@ UITrigger::~UITrigger()
 //void UITrigger::Init(const GameString& _SprName, float _Speed, int _Start, int _End, bool _Chk)
 //{
 //	{
-//		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((int)RENDER_ORDER::RO_UI);
+//		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((int)eRENDER_ORDER::RO_UI);
 //		m_Render->SetSprite(_SprName);
 //		m_Render->SetSrcSizeOfTexture(_SprName);
 //		m_Anim = GetActor()->CreateCom<GameAnimation>(m_Render);

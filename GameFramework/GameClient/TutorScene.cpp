@@ -9,7 +9,7 @@
 
 void TutorScene::Init()
 {
-	GetScene()->ColLink((UINT)COLLISION_ORDER::CO_PLAYER, (int)COLLISION_ORDER::CO_ENEMIES);
+	GetScene()->ColLink((UINT)eCOLLISION_ORDER::CO_PLAYER, (int)eCOLLISION_ORDER::CO_ENEMIES);
 }
 
 void TutorScene::Update()
@@ -51,9 +51,9 @@ void TutorScene::SceneChangeStart()
 	{
 		// 액터
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEF_POS);
+		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEFAULT_POS);
 		// 등록부
-		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)RENDER_ORDER::RO_ACTOR, (UINT)RENDER_ORDER::RO_COL_LEVEL);
+		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)eRENDER_ORDER::RO_ACTOR, (UINT)eRENDER_ORDER::RO_COL_LEVEL);
 		NewCam->SetCamSize({ 6.4f, 3.6f });
 		NewCam->SetMode(CAMMODE::PERS);
 		// 컴포넌트 
@@ -63,9 +63,9 @@ void TutorScene::SceneChangeStart()
 	{
 		// 액터
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEF_POS);
+		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEFAULT_POS);
 		// 등록부
-		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(1, (UINT)RENDER_ORDER::RO_UI);
+		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(1, (UINT)eRENDER_ORDER::RO_UI);
 		NewCam->SetCamSize({ 6.4f, 3.6f });
 		NewCam->SetMode(CAMMODE::ORTH);
 		// 컴포넌트 
@@ -83,13 +83,13 @@ void TutorScene::SceneChangeStart()
 		CVector Coord;
 		Coord.X = ValueData::STAGE_SCALE.X * 0.5f;
 		Coord.Y = ValueData::STAGE_SCALE.Y * -0.5f;
-		Coord.Z = ValueData::DEBUG_DEFAULT_Z_ORDER;
+		Coord.Z = ValueData::COL_LEVEL_DEFAULT_Z_ORDER;
 
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
 		NewActor->GetTrans()->SetWScale(ValueData::STAGE_SCALE);
 		NewActor->GetTrans()->SetWPos(Coord);
 
-		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_COL_LEVEL);
+		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_COL_LEVEL);
 		NewRender->SetSprite(ValueData::STAGE_NAME);
 		NewRender->Off();
 	}
@@ -97,7 +97,7 @@ void TutorScene::SceneChangeStart()
 	// 플레이어
 	{
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::PLAYER_DEFAULT_POS_INSTAGE);
+		NewActor->GetTrans()->SetWPos(ValueData::HERO_DEFAULT_POS_INSTAGE);
 		NewActor->CreateCom<Hero>();
 	}
 
@@ -124,7 +124,7 @@ void TutorScene::SceneChangeEnd()
 			GameSprite::Delete(_File.FileName());
 		}
 	}
-	GetScene()->ActorClear();
+	//GetScene()->ActorClear();
 
 } // libxl.lib
 
@@ -168,7 +168,7 @@ void TutorScene::SceneValueDataInit()
 {
 	ValueData::STAGE_NAME = L""; // 이름 
 	ValueData::STAGE_SCALE = { 1.0f, 1.0f }; // TEX -> GET 크기 
-	ValueData::PLAYER_DEFAULT_POS_INSTAGE = { 0.0f, 0.0f, ValueData::PLAYER_DEFAULT_Z_ORDER }; // 위치 
+	ValueData::HERO_DEFAULT_POS_INSTAGE = { 0.0f, 0.0f, ValueData::HERO_DEFAULT_Z_ORDER }; // 위치 
 }
 
 TutorScene::TutorScene()

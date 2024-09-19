@@ -33,7 +33,7 @@ void Cursor::ChangeState(CURSORSTATE _State)
 void Cursor::Idle()
 {
 	// 항상 여기 들어오면 초기화 한다. 
-	//m_Scale = { CURSOR_IMG_SIZE_MAX, CURSOR_IMG_SIZE_MAX };
+	//Scale = { CURSOR_IMG_SIZE_MAX, CURSOR_IMG_SIZE_MAX };
 	//m_Time = CURSOR_DEFAULT_TIME_LIMIT;
 }
 
@@ -57,18 +57,18 @@ void Cursor::Init()
 	m_StateName[(unsigned int)CURSORSTATE::SHOOTING] = L"SHOOTING";
 	
 	{
-		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_UI);
+		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_UI);
 		m_Render->SetLScale({ 0.36f, 0.36f, 1.0f });
 	}
 	
 	{
-		m_ColRender = GetActor()->CreateCom<GameSpriteRenderer>((int)RENDER_ORDER::RO_ACTOR);
+		m_ColRender = GetActor()->CreateCom<GameSpriteRenderer>((int)eRENDER_ORDER::RO_ACTOR);
 		m_ColRender->SetLScale({ 0.36f, 0.36f, 1.0f });
 		m_ColRender->SetSprite(L"sprRect_100x100.png");
 	}
 
 	{
-		m_Col = GetActor()->CreateCom<GameCol>((int)COLLISION_ORDER::CO_CURSOR);
+		m_Col = GetActor()->CreateCom<GameCol>((int)eCOLLISION_ORDER::CO_CURSOR);
 		m_Col->SetLScale({ 0.36f, 0.36f, 1.0f });
 		m_Col->ColType(COLTYPE::AABB2D);
 	}
@@ -86,8 +86,8 @@ void Cursor::Init()
 void Cursor::Update()
 {
 	m_Pos = GetActor()->GetScene()->MainCam()->OrthWorldMousePos2d();
-	m_Render->SetLPos(m_Pos + ValueData::CAM_DEF_POS); // SetLPos()?
-	m_ColRender->SetLPos(m_Pos + ValueData::CAM_DEF_POS);
+	m_Render->SetLPos(m_Pos + ValueData::CAM_DEFAULT_POS); // SetLPos()?
+	m_ColRender->SetLPos(m_Pos + ValueData::CAM_DEFAULT_POS);
 
 	switch (m_State)
 	{

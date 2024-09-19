@@ -139,7 +139,7 @@
   <ItemGroup>
     <FxCompile Include="Dash.hlsl" />
     <FxCompile Include="DebugMesh.hlsl" />
-    <FxCompile Include="Default.hlsl">
+    <FxCompile Include="Sprite.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -195,7 +195,6 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="UI.hlsl" />
     <FxCompile Include="Vertical.hlsl" />
     <FxCompile Include="YellowLight.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -205,7 +204,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AnimBase.hlsli" />
+    <None Include="AnimationBase.hlsli" />
     <None Include="BumpBase.hlsli" />
     <None Include="LightBase.hlsli" />
     <None Include="RenderBase.hlsli" />

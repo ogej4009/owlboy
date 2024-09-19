@@ -2,9 +2,9 @@
 
 struct VtxIn
 {
-    float4 Pos : SHA_INIT_POSITION;
-    float4 Uv : SHA_INIT_TEXCOORD;
-    float4 Color : SHA_INIT_COLOR;
+    float4 Pos : POSITION;
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
 };
 
 struct VtxOut
@@ -16,26 +16,26 @@ struct VtxOut
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase TDB;
+    TransData TD;
 }
 
 cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase ROB;
+    RenderOption RO;
 }
 
 cbuffer CutData : register(b1)
 {
-    SprCutDataBase SCDB;
+    CutData CD;
 };
 
 VtxOut VS_Distortion(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;
-    Out.Pos = mul(_In.Pos, TDB.WVP);
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
-    Out.Pos.x += SCDB.SprCutData.y * sin(SCDB.SprCutData.x * Out.Pos.y + SCDB.SprCutData.z * SCDB.SprCutData.w);
+    Out.Pos.x += CD.Data.y * sin(CD.Data.x * Out.Pos.y + CD.Data.z * CD.Data.w);
     return Out;
 }
 

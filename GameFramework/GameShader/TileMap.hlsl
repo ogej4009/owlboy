@@ -8,11 +8,10 @@ struct VtxIn
     float4 Color : COLOR;
 };
 
-
 struct VtxOut
 {
-    float4 Pos : SV_Position;
     //float4 VIEWPOS : POSITION;
+    float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
     float4 Color : COLOR;
 };
@@ -20,43 +19,20 @@ struct VtxOut
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
-//cbuffer RenderOption : register(b8)
-//{
-//    int IsDifTexture;
-//    int IsNormalTexture;
-//    int IsOutLine;
-//    int IsShadow;
-//    int IsAni;
-//    int IsDummy0;
-//    int IsDummy1;
-//    int IsDummy2;
-//    float4 BasicColor;
-//}
-
-cbuffer RenderOption : register(b2)
+cbuffer RenderOptionData : register(b7)
 {
-    float4 Option;
+    RenderOption RO;
 }
 
-
-cbuffer SrcCutData : register(b1)
+cbuffer CutData : register(b1)
 {
-    float4 FCutData;
+    CutData CD;
 };
+
+///////////////////////// ¼öÁ¤ 
 
 Texture2D SrcTex : register(t0);
 SamplerState SrcSmp : register(s0);
@@ -64,18 +40,18 @@ SamplerState SrcSmp : register(s0);
 VtxOut VS_TileMap(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;    
-    Out.Pos = mul(_In.Pos, WVP);
-    //Out.VIEWPOS = mul(_In.Pos, WV);
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
+    //Out.VIEWPOS = mul(_In.Pos, WV);
     
-    
-    if (Option.x != 0)// true false
+    if (RO.IsDifTexture.x != 0)// true false
     {
-        float XSize = FCutData.z;
-        float YSize = FCutData.w;
-        float XStart = FCutData.x;
-        float YStart = FCutData.y;
+        float XSize = CD.Data.z;
+        float YSize = CD.Data.w;
+        float XStart = CD.Data.x;
+        float YStart = CD.Data.y;
+        
         Out.Uv.x = (Out.Uv.x * XSize) + XStart;
         Out.Uv.y = (Out.Uv.y * YSize) + YStart;
         
@@ -100,16 +76,14 @@ struct DeferredOut
     //float4 DepColor : SV_Target3;
 };
 
-
 Texture2D ErrorTile : register(t1);
 SamplerState Smp : register(s1);
-
 
 DeferredOut PS_TileMap(VtxOut _Out) : SV_Target0
 {  
     DeferredOut Out = (DeferredOut) 0;
    
-   if (Option.x == 0) // true false
+    if (RO.IsDifTexture.x == 0) // true false
    {
         Out.DifColor = ErrorTile.Sample(Smp, _Out.Uv.xy);
    }
@@ -133,3 +107,4 @@ DeferredOut PS_TileMap(VtxOut _Out) : SV_Target0
     return Out;
     
 }
+

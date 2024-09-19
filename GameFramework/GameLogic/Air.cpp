@@ -28,7 +28,7 @@ void Air::GetStageInfo()
 	m_FrameRange = ValueData::STAGE_SCALE;
 
 	// 저장등록된 위치를 가져온다. 
-	// m_Pos = ;
+	// Pos = ;
 }
 
 void Air::Reset()

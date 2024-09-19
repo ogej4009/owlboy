@@ -1,9 +1,9 @@
 #include "LightBase.hlsli"
 #include "BumpBase.hlsli"
 #include "RenderBase.hlsli"
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 
-struct Vtx3D_In
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -15,7 +15,7 @@ struct Vtx3D_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
@@ -28,24 +28,24 @@ struct Vtx3D_Out
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase MatrixData;
+    TransData MatrixData;
 }
 
-cbuffer RenderOption : register(b8)
+cbuffer RenderOptionData : register(b8)
 {
-    RenderOptionBase RenderOptionData;
+    RenderOption RO;
 }
 
 Texture2D FrameAniTex : register(t0);
 
-Vtx3D_Out VS_Forward(Vtx3D_In _In)
+VtxOut VS_Forward(VtxIn _In)
 {
-    if (0 != RenderOptionData.IsAni)
+    if (0 != RO.IsAni)
     {
         SkinningTex(_In.Pos, _In.Normal, _In.Weight, _In.Index, FrameAniTex);
     }
 
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
     Out.Pos = mul(_In.Pos, MatrixData.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
@@ -79,9 +79,9 @@ Texture2D Tex : register(t0);
 Texture2D NormalTexture : register(t1);
 SamplerState Smp : register(s0);
 
-ForwardOut PS_Forward(Vtx3D_Out _In)
+ForwardOut PS_Forward(VtxOut _In)
 {
-    if (0 != RenderOptionData.IsNormalTexture)
+    if (0 != RO.IsNormalTexture)
     {
         _In.ViewNormal = CalBump(_In.ViewNormal, _In.ViewBiNormal, _In.ViewTangent, _In.Uv.xy, NormalTexture, Smp);
     }
@@ -103,16 +103,17 @@ ForwardOut PS_Forward(Vtx3D_Out _In)
 
     ForwardOut Out = (ForwardOut) 0;
 
-    if (RenderOptionData.IsDifTexture != 0)
+    if (RO.IsDifTexture != 0)
     {
         Out.ForwardColor = Tex.Sample(Smp, _In.Uv.xy);
         Out.ForwardColor.xyz *= (ResultLightColor.Dif.xyz + ResultLightColor.Spc.xyz + ResultLightColor.Amb.xyz);
     }
     else
     {
-        Out.ForwardColor.xyz = RenderOptionData.BasicColor.xyz * (ResultLightColor.Dif.xyz + ResultLightColor.Spc.xyz + ResultLightColor.Amb.xyz);
-        Out.ForwardColor.w = RenderOptionData.BasicColor.w;
+        Out.ForwardColor.xyz = RO.BasicColor.xyz * (ResultLightColor.Dif.xyz + ResultLightColor.Spc.xyz + ResultLightColor.Amb.xyz);
+        Out.ForwardColor.w = RO.BasicColor.w;
     }
 
     return Out;
 }
+

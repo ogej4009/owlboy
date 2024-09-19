@@ -13,7 +13,7 @@ void Hero::TEST_ENTER_HUD()
 {
 
 	int  a = 0;
-	/*if (_Other->Order() != (int)COLLISION_ORDER::CO_TARGET)
+	/*if (_Other->Order() != (int)eCOLLISION_ORDER::CO_TARGET)
 	{
 		return;
 	}*/

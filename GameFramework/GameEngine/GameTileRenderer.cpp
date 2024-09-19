@@ -16,12 +16,12 @@ GameTileRenderer::~GameTileRenderer()
 
 void GameTileRenderer::Init()
 {
-	GameRenderer::Init(L"FrameRect", L"Default", 0);
+	GameRenderer::Init(L"FrameRect", L"Sprite", 0);
 }
 
 void GameTileRenderer::Init(int& _X, int& _Y, const GameString& _TexName, int _Index)
 {
-	GameRenderer::Init(L"FrameRect", L"Default", _Index);
+	GameRenderer::Init(L"FrameRect", L"Sprite", _Index);
 
 	X = _X;
 	Y = _Y;

@@ -229,5 +229,6 @@
     <Text Include="텍스트.txt">
       <Filter>타일맵</Filter>
     </Text>
+    <Text Include="PLAYSTAGE1.txt" />
   </ItemGroup>
 </Project>

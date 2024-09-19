@@ -1,6 +1,6 @@
 #include "RenderBase.hlsli"
 
-struct Vtx3D_In
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -12,16 +12,16 @@ struct Vtx3D_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
     float4 Color : COLOR;
 };
 
-Vtx3D_Out VS_Fog(Vtx3D_In _In)
+VtxOut VS_Fog(VtxIn _In)
 {
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
     Out.Pos = _In.Pos;
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
@@ -33,17 +33,12 @@ cbuffer CamPos : register(b4)
     float4 CPos;
 }
 
-cbuffer RenderOption : register(b7)
-{
-    RenderOptionBase RenderOptionData;
-}
-
 Texture2D DTex : register(t0);
 Texture2D PTex : register(t1);
 SamplerState Smp : register(s0);
 
 
-float4 PS_Fog(Vtx3D_Out _In) : SV_Target0
+float4 PS_Fog(VtxOut _In) : SV_Target0
 {
     float4 DIFCOLOR;
     float4 POSCOLOR;

@@ -1,8 +1,47 @@
 
 #include "LevelDesignViewer.h"
+#include <GameSound.h>
 
-void LevelDesignViewer::FileCreate()
+
+void LevelDesignViewer::File_In()
 {
+
+	{
+		GameDirectory Dic;
+
+		Dic.MoveParent(L"GameFramework");
+		Dic.Move(L"resource");
+		Dic.Move(L"sound");
+
+		auto FileList = Dic.DirAllFile();
+
+		for (auto& _File : FileList)
+		{
+			GameSound::Load(_File);
+		}
+
+		//GameSound::Play(L"Dungeon.mp3");
+	}
+
+	/*{
+		GameDirectory Dic;
+
+		Dic.MoveParent(L"GameFramework");
+		Dic.Move(L"resource");
+		Dic.Move(L"data");
+
+		auto FileList = Dic.DirAllFile();
+
+		for (auto& _File : FileList)
+		{
+			GameTexture::Load(_File);
+		}
+
+		for (auto& _File : FileList)
+		{
+			GameSprite::Create(_File.FileName(), 1, 1);
+		}
+	}*/
 
 	{
 		GameDirectory Dic;
@@ -32,6 +71,7 @@ void LevelDesignViewer::FileCreate()
 
 
 
+	
 
 
 
@@ -39,7 +79,7 @@ void LevelDesignViewer::FileCreate()
 
 }
 
-void LevelDesignViewer::FileDelete()
+void LevelDesignViewer::File_Out()
 {
 	{
 		GameDirectory Dic;

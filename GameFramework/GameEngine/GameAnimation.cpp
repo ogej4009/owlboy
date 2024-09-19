@@ -396,6 +396,23 @@ void GameAnimation::Update()
 
 void GameAnimation::CreateAni(const GameString& _AniName, const GameString& _SpriteName, unsigned int _Start, unsigned int _End, float _FrameTime, bool _Loop)
 {
+	/* 
+	
+	WGAMESTRING AninamePlusFBX = _AniName + L".FBX";
+
+	WGAMESTRING MainFBX = Name().Cut(0, Name().StrCount() - 5);
+	// 애니메이션이 있는쪽이 호출해야 한다.
+	if (CanILoad(AninamePlusFBX, MainFBX))
+	{
+		FbxPtr->LoadUserFormat(AninamePlusFBX, MainFBX);
+	}
+	else
+	{
+		FbxPtr->CalWFbxExBoneFrameTransMatrix(m_MainFbx);
+		FbxPtr->SaveUserFormat(AninamePlusFBX, MainFBX);
+	}
+	*/
+
 	if (m_Anim.end() != m_Anim.find(_AniName))
 	{
 		MSG_ASSERT_CODE(_AniName + L"이미 만들어진 애니메이션 이름입니다");

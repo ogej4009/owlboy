@@ -9,20 +9,20 @@ struct LightData
     float4 LightPower;
     float4 SpecPow;
     float4 LightDir;
-    float4 LightDirInv;
-    float4 LightPos;
+    float4 LightDirInv; // 이게 L빛의 역방향 
+    float4 LightPos; // 포인트 라이트
     float4 LightRange;
     float4 ShadowOption;
-    float4 CamPos;
-    float4 OnOff;
-    float4 m_ShadowRange;
+    float4 CamPos; // 이게 L빛의 역방향
+    float4 OnOff; // 이게 L빛의 역방향
+    float4 m_ShadowRange; // 그림자를 볼수있는 범위 
     CMatrix m_View;
     CMatrix m_Proj;
     CMatrix m_ViewProj;
     CMatrix m_CamViewInverse;
 
     LightData()
-        : SpecPow(10000.0f, 0.0f, 0.0f, 0.0f)
+        : SpecPow(10000.0f, 0.0f, 0.0f, 0.0f) // 30.0f, 0.0f, 0.0f, 0.0f
         , LightPower(1.0f, 1.0f, 1.0f, 1.0f)
     {
     }

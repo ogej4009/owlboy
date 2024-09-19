@@ -1,11 +1,14 @@
-struct VtxGrid_In
+#include "RenderBase.hlsli"
+
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
     float4 Color : COLOR;
 };
 
-struct VtxGrid_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 WPos : POSITION; 
@@ -15,18 +18,7 @@ struct VtxGrid_Out
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
 cbuffer GridTransData : register(b0)
@@ -38,17 +30,17 @@ cbuffer GridTransData : register(b0)
     float GRID_LINE_THICKNESS;
 }
 
-VtxGrid_Out VS_Grid(VtxGrid_In _In)
+VtxOut VS_Grid(VtxIn _In)
 {
-    VtxGrid_Out Out = (VtxGrid_Out) 0;
-    Out.Pos = mul(_In.Pos, WVP);
-    Out.WPos = mul(_In.Pos, WWORLD);
+    VtxOut Out = (VtxOut) 0;
+    Out.Pos = mul(_In.Pos, TD.WVP);
+    Out.WPos = mul(_In.Pos, TD.WWORLD);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
     return Out;
 }
 
-float4 PS_Grid(VtxGrid_Out _In) : SV_Target0
+float4 PS_Grid(VtxOut _In) : SV_Target0
 {
     float Color = _In.Color;
     float4 Pos = _In.WPos;

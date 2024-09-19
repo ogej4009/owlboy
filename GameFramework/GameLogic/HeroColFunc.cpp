@@ -13,7 +13,7 @@ void Hero::ColTriggerStay(GameCol* _This, GameCol* _Other)
 {
 	if (true == GameInput::Down(L"LMOUSE"))
 	{
-		if (_Other->Order() != (int)COLLISION_ORDER::CO_TARGET)
+		if (_Other->Order() != (int)eCOLLISION_ORDER::CO_TARGET)
 		{
 			return;
 		}

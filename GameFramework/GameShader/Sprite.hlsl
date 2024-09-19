@@ -16,31 +16,35 @@ struct VtxOut
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase TDB;
+    TransData TD;
 }
 
 cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase ROB;
+    RenderOption RO;
 }
 
 cbuffer CutData : register(b1)
 {
-    SprCutDataBase SCDB;
+    CutData CD;
 };
 
-VtxOut VS_Default(VtxIn _In)
+VtxOut VS_Sprite(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;
-    Out.Pos = mul(_In.Pos, TDB.WVP);
+    
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
-    float XSize = SCDB.SprCutData.z;
-    float YSize = SCDB.SprCutData.w;
-    float XStart = SCDB.SprCutData.x;
-    float YStart = SCDB.SprCutData.y;
+    
+    float XSize = CD.Data.z;
+    float YSize = CD.Data.w;
+    float XStart = CD.Data.x;
+    float YStart = CD.Data.y;
+    
     Out.Uv.x = (Out.Uv.x * XSize) + XStart;
     Out.Uv.y = (Out.Uv.y * YSize) + YStart;
+    
     return Out;
 }
 
@@ -60,7 +64,7 @@ struct DeferredOut
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 
-DeferredOut PS_Default(VtxOut _Out) : SV_Target0
+DeferredOut PS_Sprite(VtxOut _Out) : SV_Target0
 {
    //NormalOut Out;
    //Out.NormalColor = Tex.Sample(Smp, _Out.Uv.xy);
@@ -102,7 +106,6 @@ DeferredOut PS_Default(VtxOut _Out) : SV_Target0
     {
         Out.DifColor.a = Color.a;
     }
-
 
     return Out;
    

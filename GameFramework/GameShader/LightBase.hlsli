@@ -53,3 +53,4 @@ struct ObjectLightData
     int4 LightCount;
     LightData ArrLightData[128];
 };
+

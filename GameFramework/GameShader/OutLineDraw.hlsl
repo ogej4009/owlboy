@@ -1,18 +1,20 @@
-struct Vtx3D_In
+
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
 };
 
-Vtx3D_Out VS_OutLineDraw(Vtx3D_In _In)
+VtxOut VS_OutLineDraw(VtxIn _In)
 {
-    Vtx3D_Out Out = (Vtx3D_In) 0;
+    VtxOut Out = (VtxIn) 0;
     Out.Pos = _In.Pos;
     Out.Uv = _In.Uv;
     return Out;
@@ -32,7 +34,7 @@ cbuffer OUTLINEDATA : register(b0)
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 
-float4 PS_OutLineDraw(Vtx3D_Out _In) : SV_Target0
+float4 PS_OutLineDraw(VtxOut _In) : SV_Target0
 {
     float limit = DisArr[0];
     float4 TexColor;

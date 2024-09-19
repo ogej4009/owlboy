@@ -27,4 +27,11 @@ public:
 	CComboBox m_ComboBoxList;
 	bool m_bDlg3Trigger;
 	afx_msg void OnBnClickedTileSelBtn();
+	afx_msg void OnBnClickedButtonsave();
+	afx_msg void OnLbnSelchangeListmapsave();
+	CListBox m_MapSaveListCtrl;
+	CListBox m_MapSelListCtrl;
+	afx_msg void OnLbnSelchangeListmapselect();
+	CString m_MapSaveValue;
+	CString m_MapSelValue;
 };

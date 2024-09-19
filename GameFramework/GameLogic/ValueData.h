@@ -5,47 +5,47 @@
 class CStaticData
 {
 public:
-	int4 m_Index;
-	CVector m_Scale;
-	CVector m_Rot;
-	CVector m_Pos;
+	int4 Index;
+	CVector Scale;
+	CVector Rot;
+	CVector Pos;
 };
 
 class CStaticActorData
 {
 public:
-	int4 m_ActorType;
-	CStaticData m_MeshData;
+	int4 ActorType;
+	CStaticData MeshData;
 };
 
 class CAnimData
 {
 public:
-	int4 m_Type;
-	CVector m_Scale;
-	CVector m_Rot;
-	CVector m_Pos;
+	int4 Type;
+	CVector Scale;
+	CVector Rot;
+	CVector Pos;
 };
 
 
 class ValueData
 {
 public:
-	static CVector CAM_DEF_POS;
+	static CVector CAM_DEFAULT_POS;
 	static float PIXEL_RATIO;
 	static float PIXEL_SCALE;
 	static GameString STAGE_NAME;
 	static CVector STAGE_SCALE;
-	static CVector PLAYER_DEFAULT_POS_INSTAGE;
-	static float PLAYER_DEFAULT_Z_ORDER;
-	static float DEBUG_DEFAULT_Z_ORDER;
+	static CVector HERO_DEFAULT_POS_INSTAGE;
+	static float HERO_DEFAULT_Z_ORDER;
+	static float COL_LEVEL_DEFAULT_Z_ORDER;
 };
 
 bool OverCheck(CVector Pos);
 
 class DayCycle
 {
-	float m_DayTime;
+	float DayTime;
 
 };
 

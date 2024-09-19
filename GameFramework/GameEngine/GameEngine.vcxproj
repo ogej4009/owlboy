@@ -22,6 +22,7 @@
     <ClInclude Include="GameActor.h" />
     <ClInclude Include="GameAnimation.h" />
     <ClInclude Include="GameBlend.h" />
+    <ClInclude Include="GameBloomFilter.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameCol.h" />
     <ClInclude Include="GameComponent.h" />
@@ -30,6 +31,9 @@
     <ClInclude Include="GameDepthstencil.h" />
     <ClInclude Include="GameDevBuffer.h" />
     <ClInclude Include="GameDevice.h" />
+    <ClInclude Include="GameFbx.h" />
+    <ClInclude Include="GameFbx2.h" />
+    <ClInclude Include="GameFbxEx.h" />
     <ClInclude Include="GameFont.h" />
     <ClInclude Include="GameGeometryShader.h" />
     <ClInclude Include="GameHeightMap.h" />
@@ -37,6 +41,7 @@
     <ClInclude Include="GameLight.h" />
     <ClInclude Include="GameMaterial.h" />
     <ClInclude Include="GameMesh.h" />
+    <ClInclude Include="GameOutLineFilter.h" />
     <ClInclude Include="GameParticle.h" />
     <ClInclude Include="GamePixShader.h" />
     <ClInclude Include="GameRasterizer.h" />
@@ -63,6 +68,7 @@
     <ClCompile Include="GameActor.cpp" />
     <ClCompile Include="GameAnimation.cpp" />
     <ClCompile Include="GameBlend.cpp" />
+    <ClCompile Include="GameBloomFilter.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameCol.cpp" />
     <ClCompile Include="GameComponent.cpp" />
@@ -77,6 +83,9 @@
     <ClCompile Include="GameDeviceRasterizer.cpp" />
     <ClCompile Include="GameDeviceSampler.cpp" />
     <ClCompile Include="GameDeviceShader.cpp" />
+    <ClCompile Include="GameFbx.cpp" />
+    <ClCompile Include="GameFbx2.cpp" />
+    <ClCompile Include="GameFbxEx.cpp" />
     <ClCompile Include="GameFont.cpp" />
     <ClCompile Include="GameGeometryShader.cpp" />
     <ClCompile Include="GameHeightMap.cpp" />
@@ -84,6 +93,7 @@
     <ClCompile Include="GameLight.cpp" />
     <ClCompile Include="GameMaterial.cpp" />
     <ClCompile Include="GameMesh.cpp" />
+    <ClCompile Include="GameOutLineFilter.cpp" />
     <ClCompile Include="GameParticle.cpp" />
     <ClCompile Include="GamePixShader.cpp" />
     <ClCompile Include="GameRasterizer.cpp" />

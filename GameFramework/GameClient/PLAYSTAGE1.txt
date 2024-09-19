@@ -1,0 +1,3062 @@
+#include "STAGE_03_PLAY.h"
+#include <WGAMESCENE.h>
+#include <WGAMEACTOR.h>
+#include <WCAM.h>
+#include <WTRANS.h>
+#include <WSPRITERENDERER.h>
+#include <WGAMESPRITE.h>
+#include <WGAMETIME.h>
+#include <WFREECAM.h>
+#include <WFBX.h>
+#include <WGAMESOUND.h>
+#include <WRenderTarget.h>
+#include <WLight.h>
+#include <WBoneAnimationComEx.h>
+#include <WOutLineFilter.h>
+#include <WGAME_PLAYER.h>
+#include <WEAP_P90.h>
+#include <WEAP_FLAMETHROWER.h>
+#include <WEAP_GRENADE.h>
+#include <WEAP_KATANA.h>
+#include <WEAP_SHOTGUN.h>
+#include <WEAP_MOD_LASER.h>
+#include <W3DDEBUG.h>
+#include <WCOL.h>
+#include <WFbxEx.h>
+#include <W3DUI.h>
+#include <WBloomFilter.h>
+#include <WMotionBlur.h>
+#include <WFogFilter.h>
+#include <WMapBloomFilter.h>
+
+#include <TEST_MAP.h>
+#include <TEST_COL_MAP.h>
+#include <PROP_cablepack_goingdown_long.h>
+#include <PROP_cables_flow_4.h>
+#include <PROP_capsule_simple.h>
+#include <PROP_checkpoint_building.h>
+#include <PROP_checkpoint_bumper_B.h>
+#include <PROP_container_1_A.h>
+#include <PROP_container_1_B.h>
+#include <PROP_container_1_C.h>
+#include <PROP_container_1_D.h>
+#include <PROP_container_base_raid.h>
+#include <PROP_container_damaged_2.h>
+#include <PROP_container_damaged_3.h>
+#include <PROP_container_opened_1.h>
+#include <PROP_Cylinder_001.h>
+#include <PROP_Cylinder_Brush2_StaticMesh.h>
+#include <PROP_Cylinder_Brush3_StaticMesh.h>
+#include <PROP_eight.h>
+#include <PROP_eight_big.h>
+#include <PROP_engine_2_A.h>
+#include <PROP_Engine1.h>
+#include <PROP_farm_big_pipes_1.h>
+#include <PROP_farm_block_big.h>
+#include <PROP_farm_block_small.h>
+#include <PROP_farm_blue_block_A.h>
+#include <PROP_farm_concrete_wall_high.h>
+#include <PROP_farm_concrete_wall_low.h>
+#include <PROP_farm_pipe_cooler_F2.h>
+#include <PROP_farm_plasticfloor.h>
+#include <PROP_farm_transformer.h>
+#include <PROP_farm_wallbox_cables.h>
+#include <PROP_farm_wallbox_cables_4s.h>
+#include <PROP_farm_wallbox_cables_small1.h>
+#include <PROP_farm_wallbox_cables_small2.h>
+#include <PROP_farm_wallbox_cables_straight.h>
+#include <PROP_farm_wallbox_cables2.h>
+#include <PROP_farm_wallbox_cables3.h>
+#include <PROP_farm_wallbox_cables4.h>
+#include <PROP_floor_smooth_1.h>
+#include <PROP_high_pipe_corner_left.h>
+#include <PROP_high_pipe_down.h>
+#include <PROP_high_pipe_exhaust.h>
+#include <PROP_high_pipe_straight_broken.h>
+#include <PROP_high_pipe_straight_broken2.h>
+#include <PROP_high_pipe_straight_long.h>
+#include <PROP_medical_cables_medium_1.h>
+#include <PROP_medical_cables_medium_2.h>
+#include <PROP_medical_cables_medium_3.h>
+#include <PROP_medical_cables_medium_4.h>
+#include <PROP_medical_container_1.h>
+#include <PROP_medical_container_2.h>
+#include <PROP_medical_container_2_half.h>
+#include <PROP_medical_crate_bigger.h>
+#include <PROP_medical_crate_bigger_opened.h>
+#include <PROP_medical_pipes_left.h>
+#include <PROP_medical_pipes_right.h>
+#include <PROP_pipe_cooler_mommy_A.h>
+#include <PROP_sewer_hatch_closed.h>
+#include <PROP_terminal_cables_01.h>
+#include <PROP_terminal_cables_02.h>
+#include <PROP_train_car_B_bottom.h>
+#include <PROP_wall_armored_A.h>
+#include <PROP_wall_armored_B.h>
+#include <PROP_wall_armored_gate_A.h>
+#include <PROP_wall_loop.h>
+#include <PROP_Wall_Loop_002.h>
+#include <PROP_yellow_box.h>
+#include <W3DUI_NONTRACKING.h>
+#include <EFFECT_MUZZLE_FLASH.h>
+#include <ENEMY_TRI_RANGE.h>
+#include <ENEMY_TRI_WHITE.h>
+#include <ENEMY_TRIADA_MELEE.h>
+#include <ENEMY_TRIADA_BOSS.h>
+#include <ENEMY_JUNK_GUARD.h>
+#include <ENEMY_GUARD5.h>
+#include <ENEMY_GUARD4.h>
+#include <ENEMY_GUARD3.h>
+#include <ENEMY_EGZO_TERMINATOR.h>
+#include <ENEMY_EGZO_MELEE.h>
+#include <ENEMY_EGZO_RIFLE.h>
+#include <ENEMY_EGZO_TERMINATOR2.h>
+#include <ENEMY_GUARD1.h>
+#include <ENEMY_GUARD2.h>
+
+
+WPTR<WCAM> CamPtr5;
+
+
+STAGE_03_PLAY::STAGE_03_PLAY()
+{
+}
+
+STAGE_03_PLAY::~STAGE_03_PLAY()
+{
+}
+
+void STAGE_03_PLAY::Init()
+{
+	ShowCursor(false);
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////스폰용////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+	IsSpawnStart = false;
+	spawntime = 0.0f; // 변경 x
+	spawncontrol = 5.0f;
+	spawn_once_A = true;
+	spawn_once_B = true;
+
+	player_x = 0.0f;
+	player_z = 0.0f;
+	
+	handling_x = 0.0f;
+	handling_z = 0.0f;
+	shakeit = false;
+	weaptype = 1;
+	swingtime = 0.0f;
+
+	SPAWN_Z_9 = { -9.8f, 0.0f, 0.2f };
+	SPAWN_Z_8 = { -7.5f, 0.0f, -7.4f };
+	SPAWN_Z_6 = { 0.0f, 0.0f, -9.9f };
+	SPAWN_Z_5 = { 6.8f, 0.0f, -6.3f };
+	SPAWN_Z_3 = { 9.8f, 0.0f, -0.1f };
+	SPAWN_Z_2 = { 7.7f, 0.0f, 7.5f };
+	SPAWN_Z_12 = { 0.0f, 0.0f, 9.6f };
+	SPAWN_Z_10 = { -8.1f, 0.0f, 7.9f };
+	SPAWN_Z_0 = { 0.0f, 0.0f, 0.0f };
+
+	//==========================================================================
+	Angle = 0.0f;
+	DEBUG_SWITCH = false;
+
+	{
+		WGAMEDIRECTORY Dic;
+
+		Dic.MoveParent(L"Wah3DX");
+		Dic.Move(L"RES");
+		Dic.Move(L"SOUND");
+
+		auto FileList = Dic.DirAllFile();
+
+		for (auto& _File : FileList)
+		{
+			WGAMESOUND::Load(_File);
+		}
+
+
+	}
+
+	{
+		WGAMEDIRECTORY Dic;
+
+		Dic.MoveParent(L"Wah3DX");
+		Dic.Move(L"RES");
+		Dic.Move(L"TEXTURE");
+		Dic.Move(L"GLOBAL");
+
+		auto FileList = Dic.DirAllFile();
+
+		for (auto& _File : FileList)
+		{
+			WTEXTURE::Load(_File);
+		}
+
+		WGAMESPRITE::Create(L"T_laser_beam.png", 1, 1);
+		WGAMESPRITE::Create(L"T_muzzle_flash_2x2_1.png", 2, 2);
+		WGAMESPRITE::Create(L"UI_DUMMY.png", 1, 1);
+	}
+
+	{
+		WGAMEDIRECTORY Dic;
+
+		Dic.MoveParent(L"Wah3DX");
+		Dic.Move(L"RES");
+		Dic.Move(L"STATICMESH");
+		auto FileList = Dic.DirAllFile();
+		WFbxEx::Load(Dic.PlusFileName(L"TEST_MAP.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"TEST_COL_MAP.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"cablepack_goingdown_long.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"cables_flow_4.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"capsule_simple.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"checkpoint_building.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"checkpoint_bumper_B.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_1_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_1_B.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_1_C.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_1_D.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_base_raid.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_damaged_2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_damaged_3.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"container_opened_1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Cylinder_001.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Cylinder_Brush2_StaticMesh.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Cylinder_Brush3_StaticMesh.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"eight.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"eight_big.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"engine_2_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Engine1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_big_pipes_1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_block_big.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_block_small.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_blue_block_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_concrete_wall_high.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_concrete_wall_low.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_pipe_cooler_F2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_plasticfloor.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_transformer.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables_4s.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables_small1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables_small2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables_straight.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables3.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"farm_wallbox_cables4.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"floor_smooth_1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_corner_left.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_down.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_exhaust.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_straight_broken.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_straight_broken2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"high_pipe_straight_long.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_cables_medium_1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_cables_medium_2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_cables_medium_3.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_cables_medium_4.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_container_1.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_container_2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_container_2_half.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_crate_bigger.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_crate_bigger_opened.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_pipes_left.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"medical_pipes_right.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"pipe_cooler_mommy_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"sewer_hatch_closed.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"terminal_cables_01.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"terminal_cables_02.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"train_car_B_bottom.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"wall_armored_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"wall_armored_B.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"wall_armored_gate_A.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"wall_loop.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Wall_Loop_002.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"yellow_box.FBX"));
+
+		WFbxEx::Load(Dic.PlusFileName(L"splitter_bullet.FBX"));
+
+	}
+
+	{
+		WGAMEDIRECTORY Dic;
+
+		Dic.MoveParent(L"Wah3DX");
+		Dic.Move(L"RES");
+		Dic.Move(L"MESH");
+
+		auto FileList = Dic.DirAllFile();
+		WFbxEx::Load(Dic.PlusFileName(L"LASER.fbx"));
+
+		WFbxEx::Load(Dic.PlusFileName(L"GANG_RANGE.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"TRIADA_WHITE.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"TRIADA_MELEE.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"TRIADA_BOSS.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"TRAFFICKING.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"JUNK_GUARD.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"GUARD5.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"GUARD4.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"GUARD3.FBX"));
+		//WFbxEx::Load(Dic.PlusFileName(L"GUARD2.FBX"));
+		//WFbxEx::Load(Dic.PlusFileName(L"GUARD.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"EGZO_TERMINATOR2.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"EGZO_TERMINATOR.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"EGZO_RIFLE.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"EGZO_MELEE.FBX"));
+		
+
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_walk_bl.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"AnimMan.FBX"));
+
+		WFbxEx::Load(Dic.PlusFileName(L"ALS_N_Run_RB.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"P90.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"flamethrower_01.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"sword_brute.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"molotov_throwable.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"SHOTGUN_IDLE.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"SHOTGUN_FIRE_ANI.FBX"));
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_ruiner_Mesh.FBX"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_idle_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_run_r.fbx"));
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_pistol_aim_dash_r.fbx"));
+
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_idle_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_run_r.fbx"));
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_rifle_aim_dash_r.fbx"));
+
+
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_idle_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_aim_run_r.fbx"));
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_attack_rl_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_attack_run_rl_02.fbx"));
+
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_b.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_bl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_br.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_fl.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_fr.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_l.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Hero_Animations_EXPORT_ruiner_melee_dash_r.fbx"));
+
+
+
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_dynamic_03_fast_para.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_dynamic_04_fast_para.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_dynamic_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_dynamic_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_hit_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_idle_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_aim_run_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_03.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_04.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_05.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_death_f_06.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_rifle_spawn_jump18m.fbx"));
+
+
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_hit_dynamic_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_hit_dynamic_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_hit_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_hit_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_idle_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_aim_run_f.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_attack_long_lr_2.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_attack_long_rl_2.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_attack_strong_lr_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_attack_strong_rl_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_01.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_02.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_03.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_04.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_05.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_death_f_06.fbx"));
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_melee_spawn_jump_02.fbx"));
+
+
+		WFbxEx::Load(Dic.PlusFileName(L"Enemy_Animations_EXPORT_enemy_pistol_aim_grenade_throw.fbx"));
+
+	}
+
+
+
+	//SCENE()->ColLink(0, 1);
+	SCENE()->ColLink(
+		(int)COLORDER::COLORDER_ENEMY,
+		(int)COLORDER::COLORDER_PLAYER_PROJECTILE
+	);
+
+	{
+		// 사각형 하나 띄우려는 녀석.
+		WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
+
+		NewActor->TRANS()->LPOS({ 0.0f, 0.0f, -10.0f });
+		WPTR<WCAM> NewCam = NewActor->CreateCom<WCAM>(0, (int)0);
+		NewCam->MODE(CAMMODE::PERS);
+		NewCam->CAMSIZE({ 12.8f, 7.2f });
+		m_LineFilter = NewCam->AddFilter<WOutLineFilter>(10);
+		m_FogFilter = NewCam->AddFilter<WFogFilter>(10);
+		m_WMotionBlurFilter = NewCam->AddFilter<WMotionBlur>(10);
+		m_MapFilterCom = NewCam->AddFilter<WMapBloomFilter>(10);
+		FreeCam = NewActor->CreateCom<WFREECAM>(10.0f);
+	}
+
+	{
+		WPTR<WGAMEACTOR> PTR = SCENE()->CreateActor(L"UICAMERA");
+		PTR->TRANS()->WPOS({ 0.0f, 0.0f, -10.0f });
+		WPTR<WCAM> Cam = PTR->CreateCom<WCAM>(1, (int)RENDERORDER::RENDERORDER_UI);
+		Cam->CAMSIZE({ 1280.0f, 720.0f });
+		Cam->MODE(CAMMODE::ORTH);
+		// PTR->CreateCom<CHRFREECAM>();
+	}
+	// fbx가 아무리 복잡하게 로딩했다고 하더라도 dx에서 그리려면 => 버텍스 버퍼 인덱스 버퍼 
+
+
+#pragma region SKY SPHERE
+	{
+		WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
+		WPTR<WRENDERER> NewRender = NewActor->CreateCom<WRENDERER>(L"SPHERE", L"DefferdFront");
+		NewActor->TRANS()->LPOS({ 0.0F, 0.0F, 0.0F });
+		NewActor->TRANS()->LSCALE({ 200.0F, 200.0F, 200.0F });
+	}
+#pragma endregion
+
+
+
+	//{
+
+	//	WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
+	//	WPTR<WRENDERER> NewRender = NewActor->CreateCom<WRENDERER>(L"SPHERE", L"Foward");
+
+	//	NewRender->TEXTURE(L"Tex", L"SKY.jpg");
+	//	NewRender->SAMPLER(L"Smp", L"LWSMP");
+
+	//	NewActor->TRANS()->LPOS({ 2.0F, 2.0F, 2.0F });
+	//}
+
+	//{
+
+	//	WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
+	//	WPTR<W3DUI> _W3DUI = NewActor->CreateCom<W3DUI>(L"SKY.jpg");
+
+	//	NewActor->TRANS()->LPOS({ 3.0F, 2.0F, 2.0F });
+	//}
+
+
+	//{
+	//	m_UnderMap = SCENE()->CreateActor();
+	//	m_UnderMap->TRANS()->LSCALE({ 0.01f,0.01f,0.01f });
+	//	m_UnderMap->TRANS()->LPOS({ -22.35f, -30.0f, 13.5f });
+	//	WPTR<WRENDERER> NewRender = m_UnderMap->CreateCom<WRENDERER>();
+	//	NewRender->CreateRenderPlayerToFbxEx(L"TEST_MAP.FBX", L"DefferdStatic", 0);
+	//	NewRender->ShadowOn();
+	//}
+	
+
+
+#pragma endregion
+
+	// ------------------- 플레이어  ---------------------
+	{
+		PLAYERActor = SCENE()->CreateActor("TEST_PLAYER");
+		PLAYERActor->TRANS()->WPOS({ 0.0f, 0.0f, 0.0f });
+		Player = PLAYERActor->CreateCom<WGAME_PLAYER>();
+		//m_WMotionBlurFilter->PlayerPos = PLAYERActor;
+	}
+
+
+	//{
+	//	WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+	//	ENEMY->TRANS()->WPOS({ 10.0f, 0.0f, 0.0f });
+	//	ENEMY->CreateCom<ENEMY_GUARD5>();
+	//}
+
+	AllActorLoad();
+
+
+#pragma region LIGHT
+    // 0
+	{
+		m_LightActor = SCENE()->CreateActor();
+		float4 Dir = WVECTOR(0.0f, 1.0f, -1.0f);
+		Dir *= 100.0f;
+		m_LightCom = m_LightActor->CreateCom<WLight>(0);
+		m_LightCom->SetDifColor({ 0.8f, 0.11f, 0.12f, 1.0f });
+		WPTR<WRENDERER> NewRender = m_LightActor->CreateCom<WRENDERER>(L"DIRMESH", L"DebugMesh");
+		m_LightActor->TRANS()->WPOS(Dir);
+		m_LightActor->TRANS()->WROTADDX(45.0f);
+	}
+
+	//1
+	{
+		m_LightActor = SCENE()->CreateActor();
+		float4 Dir = WVECTOR(-1.0f, 1.0f, 1.0f);
+		Dir *= 100.0f;
+		m_LightCom = m_LightActor->CreateCom<WLight>(1);
+		m_LightCom->SetDifColor({ 0.48f, 0.95f, 1.0f, 1.0f });
+		WPTR<WRENDERER> NewRender = m_LightActor->CreateCom<WRENDERER>(L"DIRMESH", L"DebugMesh");
+		m_LightActor->TRANS()->WPOS(Dir);
+		m_LightActor->TRANS()->WROTADDX(45.0f);
+		m_LightActor->TRANS()->WROTADDY(90.0f);
+	}
+
+	//2
+	{
+		m_LightActor = SCENE()->CreateActor();
+		float4 Dir = WVECTOR(1.0f, 1.0f, 1.0f);
+		Dir *= 100.0f;
+		m_LightCom = m_LightActor->CreateCom<WLight>(2);
+		m_LightCom->SetDifColor({ 0.89f, 0.35f, 0.25f, 1.0f });
+		WPTR<WRENDERER> NewRender = m_LightActor->CreateCom<WRENDERER>(L"DIRMESH", L"DebugMesh");
+		m_LightActor->TRANS()->WPOS(Dir);
+		m_LightActor->TRANS()->WROTADDX(45.0f);
+		m_LightActor->TRANS()->WROTADDY(-90.0f);
+	}
+
+
+
+	{
+		m_LightCom->SetAmbColor({ -0.6933f, -0.6933f,-0.6933f });
+	}
+#pragma endregion
+
+
+	/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////스폰용////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+
+	NextSpawn(SPAWN_STATE::SPAWN_NONE);
+
+
+	//=========== UI============== 뎁스 문제 아직 안고쳐짐 뒤에 크리에이트 되는것들 전부 가려지게됨
+	/*{
+		float fix = 0.78f;
+		UIActor = SCENE()->CreateActor();
+		UIActor->TRANS()->WSCALE({ 12.8f * fix , 7.2f * fix, 3.0f });
+		UIActor->TRANS()->WPOS({ 0.0f, 4.0f, 0.0f });
+		UI_RANDER = UIActor->CreateCom<W3DUI>(L"UI_DUMMY.png");
+		UI_RANDER->Create3DUIAni(L"UI", L"UI_DUMMY.png", 0, 0, 1.0f, false);
+		UI_RANDER->Change3DUIAni(L"UI");
+	}*/
+
+	{
+		float fix = 0.78f;
+		UIActor = SCENE()->CreateActor();
+		UIActor->TRANS()->WSCALE({ 1280.0f  , 720.0f , 3.0f });
+		UIActor->TRANS()->WPOS({ 0.0f, 0.0f, -11.0f });
+		WPTR<WSPRITERENDERER> UI_RENDER = UIActor->CreateCom<WSPRITERENDERER>(L"UI_DUMMY.png",(int)RENDERORDER::RENDERORDER_UI);
+		UI_RENDER -> SPRITE(L"UI_DUMMY.png");
+	}
+}
+
+
+void STAGE_03_PLAY::Update()
+{
+	//if (WGAMEINPUT::Press(L"AMBDOWN"))
+	//{
+	//	int a = 0;
+	//	m_LightCom->SetAmbColor({
+	//		m_LightCom->GetAmbColor().x - WGAMETIME::DeltaTime(1.0F),
+	//		m_LightCom->GetAmbColor().y - WGAMETIME::DeltaTime(1.0F),
+	//		m_LightCom->GetAmbColor().z - WGAMETIME::DeltaTime(1.0F) });
+	//}
+
+	//if (WGAMEINPUT::Press(L"AMBUP"))
+	//{
+	//	int a = 0;
+	//	m_LightCom->SetAmbColor({
+	//		m_LightCom->GetAmbColor().x + WGAMETIME::DeltaTime(1.0F),
+	//		m_LightCom->GetAmbColor().y + WGAMETIME::DeltaTime(1.0F),
+	//		m_LightCom->GetAmbColor().z + WGAMETIME::DeltaTime(1.0F) });
+	//}
+
+	//W3DDEBUG::DrawDebugText(L" LIGHT AMB X : %f, LIGHT AMB Y %f, LIGHT AMB Z %f", m_LightCom->GetAmbColor().x, m_LightCom->GetAmbColor().y, m_LightCom->GetAmbColor().z);
+
+	if (WGAMEINPUT::Down(L"CHANGE_PISTOL"))
+	{
+		weaptype = 1;
+	}
+	if (WGAMEINPUT::Down(L"CHANGE_SHOTGUN"))
+	{
+		weaptype = 2;
+	}
+	if (WGAMEINPUT::Down(L"CHANGE_KATANA"))
+	{
+		weaptype = 3;
+	}
+
+
+	if (3 == weaptype)
+	{
+
+		if (WGAMEINPUT::Down(L"FIRE"))
+		{
+			shakeit = true;
+		}
+
+		if (true == shakeit)
+		{
+			swingtime += WGAMETIME::DeltaTime();
+		}
+
+		if (0.3f <= swingtime && 0.4f > swingtime)
+		{
+			std::random_device rd; std::mt19937 gen(rd());
+			std::uniform_int_distribution<int> dis(1, 8);
+
+
+			handling_x = 0.05f * dis(gen);
+			handling_z = 0.05f * dis(gen);
+
+		}
+		if (0.4f <= swingtime)
+		{
+			shakeit = false;
+			handling_x = 0.0f;
+			handling_z = 0.0f;
+			swingtime = 0.0f;
+		}
+	}
+
+	if (2 == weaptype)
+	{
+		if (WGAMEINPUT::Free(L"FIRE"))
+		{
+			shakeit = false;
+		}
+		if (WGAMEINPUT::Press(L"FIRE"))
+		{
+			shakeit = true;
+		}
+
+		if (true == shakeit)
+		{
+			((unsigned int)time(nullptr));
+			int Random = rand() % 5;
+
+
+			handling_x = 0.02f * Random;
+			handling_z = 0.02f * Random;
+		}
+
+		if (false == shakeit)
+		{
+			handling_x = 0.0f;
+			handling_z = 0.0f;
+		}
+	}
+
+	if (1 == weaptype)
+	{
+		if (WGAMEINPUT::Free(L"FIRE"))
+		{
+			shakeit = false;
+		}
+		if (WGAMEINPUT::Press(L"FIRE"))
+		{
+			shakeit = true;
+		}
+
+		if (true == shakeit)
+		{
+			std::random_device rd; std::mt19937 gen(rd());
+			std::uniform_int_distribution<int> dis(1, 8);
+
+
+			handling_x = 0.01f * dis(gen);
+			handling_z = 0.01f * dis(gen);
+		}
+
+		if (false == shakeit)
+		{
+			handling_x = 0.0f;
+			handling_z = 0.0f;
+		}
+	}
+
+
+
+	// 게임용
+	player_x = WGAME_PLAYER::MainPlayer()->TRANS()->WPOS().x;
+	player_z = WGAME_PLAYER::MainPlayer()->TRANS()->WPOS().z;
+	WVECTOR pos = { player_x + 3.0f + handling_x + WGAMEINPUT::MousePos3D().x * 0.01f,9.0f, player_z - 6.0f + handling_z + WGAMEINPUT::MousePos3D().y * 0.01f };
+	FreeCam->TRANS()->WPOS(pos);
+
+
+
+
+	WVECTOR Mix = { WGAMEINPUT::MousePos3D().x + player_x + handling_x,
+		9.0f,
+		WGAMEINPUT::MousePos3D().y + player_z + handling_z };
+	
+
+	m_LineFilter->Distance.x = WVECTOR::Distance(Mix, FreeCam->TRANS()->WPOS());
+
+	//float qq = Mix.x;
+	//float ww = Mix.x;
+	//float ee = Mix.x;
+
+	//float aa = FreeCam->TRANS()->WPOS().x;
+	//float ss = FreeCam->TRANS()->WPOS().x;
+	//float dd = FreeCam->TRANS()->WPOS().x;
+
+	//W3DDEBUG::DrawDebugText(L"PLAYER X %f, Y %f, Z %f, ROT_X %f, ROT_Y %f, ROT_Z %f",
+	//	qq, ww, ee,
+	//	aa, ss, dd);
+
+	//=========== UI==============
+	float UItracker_X = PLAYERActor->TRANS()->WPOS().x;
+	float UItracker_Z = PLAYERActor->TRANS()->WPOS().z;
+
+	//UIActor->TRANS()->WPOS({ UItracker_X + WGAMEINPUT::MousePos3D().x * 0.01f + handling_x + 1.25f  ,4.0f ,UItracker_Z + WGAMEINPUT::MousePos3D().y * 0.01f + handling_z - 2.1f });
+	//--------------------------
+
+
+
+
+	//--------------------------플레이어 위치 디버깅용------------------------
+		// 디버깅 위치 전송용
+	DEBUG_POS_PLAYER = PLAYERActor->TRANS()->WPOS();
+	DEBUG_ROT_PLAYER = PLAYERActor->TRANS()->WROT();
+
+	// 디버깅 디스플레이
+	if (true == DEBUG_SWITCH)
+	{
+		W3DDEBUG::DrawDebugText(L"PLAYER X %f, Y %f, Z %f, ROT_X %f, ROT_Y %f, ROT_Z %f",
+			DEBUG_POS_PLAYER.x, DEBUG_POS_PLAYER.y, DEBUG_POS_PLAYER.z,
+			DEBUG_ROT_PLAYER.x, DEBUG_ROT_PLAYER.y, DEBUG_ROT_PLAYER.z);
+	}
+
+	//------------------------------------------------------------------------
+	if (WGAMEINPUT::Down(L"DEBUG_MOD"))
+	{
+		DEBUG_SWITCH = !DEBUG_SWITCH;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////스폰용////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+	if (WGAMEINPUT::Down(L"MISSION_START"))
+	{
+		IsSpawnStart = true;
+		WGAMESOUND::Play(L"BGM", L"RUINER_THEME.mp3");
+		WGAMESOUND::Play(L"ANA", L"HER.mp3");
+	}
+	if (IsSpawnStart == true)
+	{
+		SPAWNER();
+	}
+	switch (Spawn_State)
+	{
+	case SPAWN_STATE::SPAWN_NONE:
+		SPAWN_NONE();
+		break;
+	case SPAWN_STATE::SPAWN_1:
+		SPAWN_1();
+		break;
+	case SPAWN_STATE::SPAWN_2:
+		SPAWN_2();
+		break;
+	case SPAWN_STATE::SPAWN_3:
+		SPAWN_3();
+		break;
+	case SPAWN_STATE::SPAWN_4:
+		SPAWN_4();
+		break;
+	case SPAWN_STATE::SPAWN_5:
+		SPAWN_5();
+		break;
+	case SPAWN_STATE::SPAWN_6:
+		SPAWN_6();
+		break;
+	case SPAWN_STATE::SPAWN_7:
+		SPAWN_7();
+		break;
+	case SPAWN_STATE::SPAWN_8:
+		SPAWN_8();
+		break;
+	case SPAWN_STATE::SPAWN_9:
+		SPAWN_9();
+		break;
+	case SPAWN_STATE::SPAWN_10:
+		SPAWN_10();
+		break;
+	case SPAWN_STATE::SPAWN_11:
+		SPAWN_11();
+		break;
+	case SPAWN_STATE::SPAWN_12:
+		SPAWN_12();
+		break;
+	case SPAWN_STATE::SPAWN_13:
+		SPAWN_13();
+		break;
+	case SPAWN_STATE::SPAWN_14:
+		SPAWN_14();
+		break;
+	case SPAWN_STATE::SPAWN_15:
+		SPAWN_15();
+		break;
+	case SPAWN_STATE::SPAWN_16:
+		SPAWN_16();
+		break;
+	case SPAWN_STATE::SPAWN_17:
+		SPAWN_17();
+		break;
+	case SPAWN_STATE::SPAWN_18:
+		SPAWN_18();
+		break;
+	case SPAWN_STATE::SPAWN_19:
+		SPAWN_19();
+		break;
+	case SPAWN_STATE::SPAWN_20:
+		SPAWN_20();
+		break;
+	case SPAWN_STATE::SPAWN_21:
+		SPAWN_21();
+		break;
+	case SPAWN_STATE::SPAWN_22:
+		SPAWN_22();
+		break;
+	case SPAWN_STATE::SPAWN_23:
+		SPAWN_23();
+		break;
+	case SPAWN_STATE::SPAWN_24:
+		SPAWN_24();
+		break;
+	case SPAWN_STATE::SPAWN_25:
+		SPAWN_25();
+		break;
+	case SPAWN_STATE::SPAWN_26:
+		SPAWN_26();
+		break;
+	case SPAWN_STATE::SPAWN_27:
+		SPAWN_27();
+		break;
+	case SPAWN_STATE::SPAWN_28:
+		SPAWN_28();
+		break;
+	case SPAWN_STATE::SPAWN_29:
+		SPAWN_29();
+		break;
+	case SPAWN_STATE::SPAWN_30:
+		SPAWN_30();
+		break;
+	case SPAWN_STATE::SPAWN_31:
+		SPAWN_31();
+		break;
+	case SPAWN_STATE::SPAWN_32:
+		SPAWN_32();
+		break;
+	case SPAWN_STATE::SPAWN_33:
+		SPAWN_33();
+		break;
+	case SPAWN_STATE::SPAWN_34:
+		SPAWN_34();
+		break;
+	case SPAWN_STATE::SPAWN_35:
+		SPAWN_35();
+		break;
+	case SPAWN_STATE::SPAWN_36:
+		SPAWN_36();
+		break;
+	case SPAWN_STATE::SPAWN_37:
+		SPAWN_37();
+		break;
+	case SPAWN_STATE::SPAWN_38:
+		SPAWN_38();
+		break;
+	case SPAWN_STATE::SPAWN_39:
+		SPAWN_39();
+		break;
+	case SPAWN_STATE::SPAWN_40:
+		SPAWN_40();
+		break;
+	case SPAWN_STATE::SPAWN_41:
+		SPAWN_41();
+		break;
+	case SPAWN_STATE::SPAWN_42:
+		SPAWN_42();
+		break;
+	case SPAWN_STATE::SPAWN_43:
+		SPAWN_43();
+		break;
+	case SPAWN_STATE::SPAWN_44:
+		SPAWN_44();
+		break;
+	case SPAWN_STATE::SPAWN_45:
+		SPAWN_45();
+		break;
+	case SPAWN_STATE::SPAWN_46:
+		SPAWN_46();
+		break;
+	case SPAWN_STATE::SPAWN_47:
+		SPAWN_47();
+		break;
+	case SPAWN_STATE::SPAWN_48:
+		SPAWN_48();
+		break;
+	case SPAWN_STATE::SPAWN_49:
+		SPAWN_49();
+		break;
+	case SPAWN_STATE::SPAWN_50:
+		SPAWN_50();
+		break;
+	case SPAWN_STATE::SPAWN_51:
+		SPAWN_51();
+		break;
+	case SPAWN_STATE::SPAWN_52:
+		SPAWN_52();
+		break;
+	case SPAWN_STATE::SPAWN_53:
+		SPAWN_53();
+		break;
+	case SPAWN_STATE::SPAWN_54:
+		SPAWN_54();
+		break;
+	case SPAWN_STATE::SPAWN_55:
+		SPAWN_55();
+		break;
+	case SPAWN_STATE::SPAWN_56:
+		SPAWN_56();
+		break;
+	case SPAWN_STATE::SPAWN_57:
+		SPAWN_57();
+		break;
+	case SPAWN_STATE::SPAWN_58:
+		SPAWN_58();
+		break;
+	case SPAWN_STATE::SPAWN_59:
+		SPAWN_59();
+		break;
+	case SPAWN_STATE::SPAWN_60:
+		SPAWN_60();
+		break;
+	case SPAWN_STATE::SPAWN_61:
+		SPAWN_61();
+		break;
+	case SPAWN_STATE::SPAWN_62:
+		SPAWN_62();
+		break;
+	case SPAWN_STATE::SPAWN_63:
+		SPAWN_63();
+		break;
+	case SPAWN_STATE::SPAWN_64:
+		SPAWN_64();
+		break;
+	case SPAWN_STATE::SPAWN_END:
+		SPAWN_END();
+		break;
+
+
+	default:
+		break;
+	}
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////스폰용////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
+// 스폰 변환 함수
+void STAGE_03_PLAY::NextSpawn(SPAWN_STATE _SPAWN_STATE)
+{
+	Spawn_State = _SPAWN_STATE;
+}
+
+
+void STAGE_03_PLAY::SPAWNER()
+{
+	spawntime += WGAMETIME::DeltaTime();
+
+
+	if (spawncontrol * 1 <= spawntime && spawncontrol * 2 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_1);
+	}
+	else if (spawncontrol * 2 <= spawntime && spawncontrol * 3 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_2);
+	}
+	else if (spawncontrol * 3 <= spawntime && spawncontrol * 4 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_3);
+	}
+	else if (spawncontrol * 4 <= spawntime && spawncontrol * 5 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_4);
+	}
+	else if (spawncontrol * 5 <= spawntime && spawncontrol * 6 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_5);
+	}
+	else if (spawncontrol * 6 <= spawntime && spawncontrol * 7 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_6);
+	}
+	else if (spawncontrol * 7 <= spawntime && spawncontrol * 8 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_7);
+	}
+	else if (spawncontrol * 8 <= spawntime && spawncontrol * 9 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_8);
+	}
+	else if (spawncontrol * 9 <= spawntime && spawncontrol * 10 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_9);
+	}
+	else if (spawncontrol * 10 <= spawntime && spawncontrol * 11 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_10);
+	}
+	else if (spawncontrol * 11 <= spawntime && spawncontrol * 12 > spawntime)
+	{
+		//WGAMESCENE::ChangeScene(L"STAGE_04_END");
+		NextSpawn(SPAWN_STATE::SPAWN_11);
+	}
+	else if (spawncontrol * 12 <= spawntime && spawncontrol * 13 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_12);
+	}
+	else if (spawncontrol * 13 <= spawntime && spawncontrol * 14 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_13);
+	}
+	else if (spawncontrol * 14 <= spawntime && spawncontrol * 15 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_14);
+	}
+	else if (spawncontrol * 15 <= spawntime && spawncontrol * 16 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_15);
+	}
+	else if (spawncontrol * 16 <= spawntime && spawncontrol * 17 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_16);
+	}
+	else if (spawncontrol * 17 <= spawntime && spawncontrol * 18 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_17);
+	}
+	else if (spawncontrol * 18 <= spawntime && spawncontrol * 19 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_18);
+	}
+	else if (spawncontrol * 19 <= spawntime && spawncontrol * 20 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_19);
+	}
+	else if (spawncontrol * 20 <= spawntime && spawncontrol * 21 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_20);
+	}
+	else if (spawncontrol * 21 <= spawntime && spawncontrol * 22 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_21);
+	}
+	else if (spawncontrol * 22 <= spawntime && spawncontrol * 23 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_22);
+	}
+	else if (spawncontrol * 23 <= spawntime && spawncontrol * 24 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_23);
+	}
+	else if (spawncontrol * 24 <= spawntime && spawncontrol * 25 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_24);
+	}
+	else if (spawncontrol * 25 <= spawntime && spawncontrol * 26 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_25);
+	}
+	else if (spawncontrol * 26 <= spawntime && spawncontrol * 27 > spawntime)
+	{
+		//NextSpawn(SPAWN_STATE::SPAWN_26);
+	}
+	else if (spawncontrol * 27 <= spawntime && spawncontrol * 28 > spawntime)
+	{
+		//NextSpawn(SPAWN_STATE::SPAWN_27);
+	}
+	else if (spawncontrol * 28 <= spawntime && spawncontrol * 29 > spawntime)
+	{
+		WGAMESCENE::ChangeScene(L"STAGE_04_END");
+		//NextSpawn(SPAWN_STATE::SPAWN_28);
+	}
+	else if (spawncontrol * 29 <= spawntime && spawncontrol * 30 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_29);
+	}
+	else if (spawncontrol * 30 <= spawntime && spawncontrol * 31 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_30);
+	}
+	else if (spawncontrol * 31 <= spawntime && spawncontrol * 32 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_31);
+	}
+	else if (spawncontrol * 32 <= spawntime && spawncontrol * 33 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_32);
+	}
+	else if (spawncontrol * 33 <= spawntime && spawncontrol * 34 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_33);
+	}
+	else if (spawncontrol * 34 <= spawntime && spawncontrol * 35 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_34);
+	}
+	else if (spawncontrol * 35 <= spawntime && spawncontrol * 36 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_35);
+	}
+	else if (spawncontrol * 36 <= spawntime && spawncontrol * 37 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_36);
+	}
+	else if (spawncontrol * 37 <= spawntime && spawncontrol * 38 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_37);
+	}
+	else if (spawncontrol * 38 <= spawntime && spawncontrol * 39 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_38);
+	}
+	else if (spawncontrol * 39 <= spawntime && spawncontrol * 40 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_39);
+	}
+	else if (spawncontrol * 40 <= spawntime && spawncontrol * 41 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_40);
+	}
+	else if (spawncontrol * 41 <= spawntime && spawncontrol * 42 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_41);
+	}
+	else if (spawncontrol * 42 <= spawntime && spawncontrol * 43 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_42);
+	}
+	else if (spawncontrol * 43 <= spawntime && spawncontrol * 44 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_43);
+	}
+	else if (spawncontrol * 44 <= spawntime && spawncontrol * 45 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_44);
+	}
+	else if (spawncontrol * 45 <= spawntime && spawncontrol * 46 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_45);
+	}
+	else if (spawncontrol * 46 <= spawntime && spawncontrol * 47 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_46);
+	}
+	else if (spawncontrol * 47 <= spawntime && spawncontrol * 48 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_47);
+	}
+	else if (spawncontrol * 48 <= spawntime && spawncontrol * 49 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_48);
+	}
+	else if (spawncontrol * 49 <= spawntime && spawncontrol * 50 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_49);
+	}
+	else if (spawncontrol * 50 <= spawntime && spawncontrol * 51 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_50);
+	}
+	else if (spawncontrol * 51 <= spawntime && spawncontrol * 52 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_51);
+	}
+	else if (spawncontrol * 52 <= spawntime && spawncontrol * 53 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_52);
+	}
+	else if (spawncontrol * 53 <= spawntime && spawncontrol * 54 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_53);
+	}
+	else if (spawncontrol * 54 <= spawntime && spawncontrol * 55 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_54);
+	}
+	else if (spawncontrol * 55 <= spawntime && spawncontrol * 56 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_55);
+	}
+	else if (spawncontrol * 56 <= spawntime && spawncontrol * 57 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_56);
+	}
+	else if (spawncontrol * 57 <= spawntime && spawncontrol * 58 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_57);
+	}
+	else if (spawncontrol * 58 <= spawntime && spawncontrol * 59 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_58);
+	}
+	else if (spawncontrol * 59 <= spawntime && spawncontrol * 60 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_59);
+	}
+	else if (spawncontrol * 60 <= spawntime && spawncontrol * 61 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_60);
+	}
+	else if (spawncontrol * 61 <= spawntime && spawncontrol * 62 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_61);
+	}
+	else if (spawncontrol * 62 <= spawntime && spawncontrol * 63 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_62);
+	}
+	else if (spawncontrol * 63 <= spawntime && spawncontrol * 64 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_63);
+	}
+	else if (spawncontrol * 64 <= spawntime && spawncontrol * 65 > spawntime)
+	{
+		NextSpawn(SPAWN_STATE::SPAWN_64);
+	}
+
+
+
+
+}
+
+void STAGE_03_PLAY::SPAWN_NONE()
+{
+
+}
+void STAGE_03_PLAY::SPAWN_1()
+{
+	if (spawn_once_A == true)
+	{
+		WGAMESOUND::Play(L"GETHIM3.mp3");
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_TRIADA_MELEE>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+
+		spawn_once_A = false;
+	}
+}
+void STAGE_03_PLAY::SPAWN_2()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_TRI_WHITE>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_3()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_TRI_WHITE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_4()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+
+}
+void STAGE_03_PLAY::SPAWN_5()
+{
+	if (spawn_once_A == true)
+	{
+		WGAMESOUND::Play(L"GETHIM1.mp3");
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_6()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_JUNK_GUARD>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_7()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_TRI_RANGE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_GUARD1>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_GUARD3>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_8()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_GUARD1>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_GUARD3>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_9()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_TRI_WHITE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_TRI_WHITE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_TRI_WHITE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_10()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_0);
+			ENEMY->CreateCom<ENEMY_TRIADA_BOSS>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_11()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_12()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_JUNK_GUARD>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_13()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_GUARD5>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_GUARD5>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_GUARD5>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_JUNK_GUARD>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_14()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_JUNK_GUARD>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_15()
+{
+	if (spawn_once_A == true)
+	{
+		WGAMESOUND::Play(L"GETHIM2.mp3");
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_JUNK_GUARD>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_9);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_GUARD2>();
+		}
+
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_16()
+{
+	if (spawn_once_B == true)
+	{
+
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_0);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_17()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_18()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_GUARD4>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_19()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_GUARD3>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_10);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_20()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_21()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_22()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_6);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_12);
+			ENEMY->CreateCom<ENEMY_EGZO_RIFLE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_23()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_0);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_3);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR2>();
+		}
+
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_24()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_5);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR2>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_2);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR2>();
+		}
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_8);
+			ENEMY->CreateCom<ENEMY_EGZO_TERMINATOR2>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_25()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS(SPAWN_Z_0);
+			ENEMY->CreateCom<ENEMY_TRIADA_BOSS>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_26()
+{
+	if (spawn_once_A == true)
+	{
+
+
+		int a = 0;
+		//// 스테이지 끝
+
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_27()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_28()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_29()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_30()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_31()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_32()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_33()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_34()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_35()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_36()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_37()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_38()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_39()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_40()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_41()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_42()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_43()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_44()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_45()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_46()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_47()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_48()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_49()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_50()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_51()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_52()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_53()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_54()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_55()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_56()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_57()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_58()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_59()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_60()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_61()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_62()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_63()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_64()
+{
+	if (spawn_once_A == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_A = false;
+		spawn_once_B = true;
+	}
+}
+void STAGE_03_PLAY::SPAWN_END()
+{
+	if (spawn_once_B == true)
+	{
+		{
+			WPTR<WGAMEACTOR>ENEMY = SCENE()->CreateActor();
+			ENEMY->TRANS()->WPOS({ 1.0f, 0.0f, 5.0f });
+			ENEMY->CreateCom<ENEMY_EGZO_MELEE>();
+		}
+
+		spawn_once_B = false;
+		spawn_once_A = true;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////스폰용////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+void STAGE_03_PLAY::AllActorLoad()
+{
+
+	Load(L"0");
+	Load(L"1");
+	Load(L"2");
+	Load(L"3");
+	Load(L"4");
+	Load(L"5");
+	Load(L"6");
+	Load(L"7");
+	Load(L"8");
+	Load(L"9");
+	Load(L"10");
+	Load(L"11");
+
+
+
+
+}
+
+
+void STAGE_03_PLAY::Load(WGAMESTRING _FolderName)
+{
+	WGAMEDIRECTORY Dic;
+	Dic.MoveParent(L"Wah3DX");
+	Dic.Move(L"RES");
+	Dic.Move(L"STATICMESH");
+	Dic.Move(_FolderName);
+	auto FileList = Dic.DirAllFile();
+	STATICACTORDATA Data;
+
+
+	for (auto& _File : FileList)
+	{
+		WGAMEFILE LoadFile = WGAMEFILE(Dic.PlusFileName(_File.FileName()), L"rb");
+
+		if (false == LoadFile.IsOpen())
+		{
+			return;
+		}
+
+		LoadFile.LoadValue(Data);
+		CreateStaticMesh(Data);
+	}
+
+
+}
+
+void STAGE_03_PLAY::CreateStaticMesh(STATICACTORDATA _Data)
+{
+	size_t a = sizeof(_Data.m_ActorType);
+	size_t b = sizeof(_Data.m_MeshData);
+
+	WPTR<WGAMEACTOR> NewActor = nullptr;
+	WGAMESTRING _Str = std::to_wstring(_Data.m_MeshData.m_INDEX.x);
+
+	switch (_Data.m_ActorType.x)
+	{
+	case 0:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_cablepack_goingdown_long>(_Str);
+		break;
+
+	case 1:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_cables_flow_4>(_Str);
+		break;
+
+	case 2:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_capsule_simple>(_Str);
+		break;
+
+	case 3:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_checkpoint_building>(_Str);
+		break;
+
+	case 4:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_checkpoint_bumper_B>(_Str);
+		break;
+
+	case 5:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_1_A>(_Str);
+		break;
+
+	case 6:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_1_B>(_Str);
+		break;
+
+	case 7:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_1_C>(_Str);
+		break;
+
+	case 8:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_1_D>(_Str);
+		break;
+
+	case 9:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_base_raid>(_Str);
+		break;
+
+	case 10:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_damaged_2>(_Str);
+		break;
+
+	case 11:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_damaged_3>(_Str);
+		break;
+
+	case 12:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_container_opened_1>(_Str);
+		break;
+
+	case 13:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_Cylinder_001>(_Str);
+		break;
+
+	case 14:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_Cylinder_Brush2_StaticMesh>(_Str);
+		break;
+
+	case 15:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_Cylinder_Brush3_StaticMesh>(_Str);
+		break;
+
+	case 16:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_eight>(_Str);
+		break;
+
+	case 17:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_eight_big>(_Str);
+		break;
+
+	case 18:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_engine_2_A>(_Str);
+		break;
+
+	case 19:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_Engine1>(_Str);
+		break;
+
+	case 20:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_big_pipes_1>(_Str);
+		break;
+
+	case 21:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_block_big>(_Str);
+		break;
+
+	case 22:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_block_small>(_Str);
+		break;
+
+	case 23:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_blue_block_A>(_Str);
+		break;
+
+	case 24:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_concrete_wall_high>(_Str);
+		break;
+
+	case 25:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_concrete_wall_low>(_Str);
+		break;
+
+	case 26:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_pipe_cooler_F2>(_Str);
+		break;
+
+	case 27:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_plasticfloor>(_Str);
+		break;
+
+	case 28:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_transformer>(_Str);
+		break;
+
+	case 29:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables>(_Str);
+		break;
+
+	case 30:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables_4s>(_Str);
+		break;
+
+	case 31:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables_small1>(_Str);
+		break;
+
+	case 32:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables_small2>(_Str);
+		break;
+
+	case 33:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables_straight>(_Str);
+		break;
+
+	case 34:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables2>(_Str);
+		break;
+
+	case 35:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables3>(_Str);
+		break;
+
+	case 36:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_farm_wallbox_cables4>(_Str);
+		break;
+
+	case 37:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_floor_smooth_1>(_Str);
+		break;
+
+	case 38:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_corner_left>(_Str);
+		break;
+
+	case 39:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_down>(_Str);
+		break;
+
+	case 40:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_exhaust>(_Str);
+		break;
+
+	case 41:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_straight_broken>(_Str);
+		break;
+
+	case 42:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_straight_broken2>(_Str);
+		break;
+
+	case 43:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_high_pipe_straight_long>(_Str);
+		break;
+
+	case 44:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_cables_medium_1>(_Str);
+		break;
+
+	case 45:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_cables_medium_2>(_Str);
+		break;
+
+	case 46:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_cables_medium_3>(_Str);
+		break;
+
+	case 47:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_cables_medium_4>(_Str);
+		break;
+
+	case 48:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_container_1>(_Str);
+		break;
+
+	case 49:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_container_2>(_Str);
+		break;
+
+	case 50:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_container_2_half>(_Str);
+		break;
+
+	case 51:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_crate_bigger>(_Str);
+		break;
+
+	case 52:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_crate_bigger_opened>(_Str);
+		break;
+
+	case 53:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_pipes_left>(_Str);
+		break;
+
+	case 54:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_medical_pipes_right>(_Str);
+		break;
+
+	case 55:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_pipe_cooler_mommy_A>(_Str);
+		break;
+
+	case 56:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_sewer_hatch_closed>(_Str);
+		break;
+
+	case 57:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_terminal_cables_01>(_Str);
+		break;
+
+	case 58:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_terminal_cables_02>(_Str);
+		break;
+
+	case 59:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<TEST_COL_MAP>(_Str);
+		break;
+
+	case 60:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<TEST_MAP>(_Str);
+		break;
+
+	case 61:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_train_car_B_bottom>(_Str);
+		break;
+
+	case 62:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_wall_armored_A>(_Str);
+		break;
+
+	case 63:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_wall_armored_B>(_Str);
+		break;
+
+	case 64:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_wall_armored_gate_A>(_Str);
+		break;
+
+	case 65:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_wall_loop>(_Str);
+		break;
+
+	case 66:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_Wall_Loop_002>(_Str);
+		break;
+
+	case 67:
+		NewActor = SCENE()->CreateActor();
+		NewActor->TRANS()->WSCALE(_Data.m_MeshData.m_SCALE);
+		NewActor->TRANS()->WROT(_Data.m_MeshData.m_ROT);
+		NewActor->TRANS()->WPOS(_Data.m_MeshData.m_POS);
+		NewActor->CreateComName<PROP_yellow_box>(_Str);
+		break;
+
+	default:
+		break;
+	}
+
+
+}

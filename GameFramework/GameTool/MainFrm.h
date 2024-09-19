@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "ChildView.h"
+
 
 class CMainFrame : public CFrameWnd
 {
@@ -32,7 +32,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	CChildView		m_wndView;
+	//CChildView		m_wndView;
 	CSplitterWnd	m_SWnd;
 
 protected:

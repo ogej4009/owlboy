@@ -13,3 +13,4 @@ float4 CalBump(float4 _ViewNormal, float4 _BiNormal, float4 _Tangent, float2 _Uv
 
     return TexNormal;
 }
+

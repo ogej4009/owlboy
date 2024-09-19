@@ -88,14 +88,14 @@ void UICam::Init()
 	{
 		m_Actor_Top_Border = GetScene()->CreateActor();
 		m_Actor_Top_Border->GetTrans()->SetWPos({ 0.0f, TOP_BORDER_START_POS_Y, -9.0f});
-		m_Render_Top_Border = m_Actor_Top_Border->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_UI);
+		m_Render_Top_Border = m_Actor_Top_Border->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_UI);
 		m_Render_Top_Border->SetSprite(L"sprDark_32x32.png");
 		m_Render_Top_Border->SetWScale({ 10.0f, 1.0f, 1.0f });
 	}
 	{
 		m_Actor_Bot_Border = GetScene()->CreateActor();
 		m_Actor_Bot_Border->GetTrans()->SetWPos({ 0.0f, BOT_BORDER_START_POS_Y, -9.0f });
-		m_Render_Bot_Border = m_Actor_Bot_Border->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_UI);
+		m_Render_Bot_Border = m_Actor_Bot_Border->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_UI);
 		m_Render_Bot_Border->SetSprite(L"sprDark_32x32.png");
 		m_Render_Bot_Border->SetWScale({ 10.0f, 1.0f, 1.0f });
 	}

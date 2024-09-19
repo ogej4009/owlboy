@@ -201,8 +201,8 @@ int GameTileMap::CalIndex(int2 _Coord)
 //
 //			m_mapAllTile[Index.Key].Key.Arr[0] = CenterX + HInterX;
 //			m_mapAllTile[Index.Key].Key.Arr[1] = CenterY + HInterY;
-//			m_mapAllTile[Index.Key].Index = m_Index;
-//			m_Index++;
+//			m_mapAllTile[Index.Key].Index = Index;
+//			Index++;
 //		}
 //	}
 //}

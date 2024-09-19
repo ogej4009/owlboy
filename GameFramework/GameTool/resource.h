@@ -45,6 +45,10 @@
 #define IDC_TILE_SEL_BTN                1043
 #define IDC_BUTTON1                     1044
 #define IDC_BUTTON_CAP                  1044
+#define IDC_BUTTONSAVE                  1044
+#define IDC_LISTMAPSAVE                 1045
+#define IDC_LIST2                       1046
+#define IDC_LISTMAPSELECT               1046
 #define ID_BUTTON32786                  32786
 #define ID_BUTTON_NAME                  32786
 #define ID_FILE                         32791
@@ -66,7 +70,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        373
 #define _APS_NEXT_COMMAND_VALUE         32805
-#define _APS_NEXT_CONTROL_VALUE         1045
-#define _APS_NEXT_SYMED_VALUE           323
+#define _APS_NEXT_CONTROL_VALUE         1047
+#define _APS_NEXT_SYMED_VALUE           324
 #endif
 #endif

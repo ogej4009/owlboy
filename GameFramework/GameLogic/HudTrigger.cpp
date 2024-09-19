@@ -93,7 +93,7 @@ void HudTrigger::Init(GameString _Name)
 	{
 		ValueData::PIXEL_SCALE = 0.01f;
 		ValueData::PIXEL_RATIO = 1.0f / ValueData::PIXEL_SCALE;
-		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_UI);
+		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_UI);
 		m_Render->SetLScale({ 20.0f * ValueData::PIXEL_SCALE , 36.0f * ValueData::PIXEL_SCALE , 1.0f });
 		m_Anim = GetActor()->CreateCom<GameAnimation>(m_Render);
 	}

@@ -11,9 +11,7 @@
 
 void GameDevice::MaterialInit()
 {
-	///////////////////////////////////////// 한번더 추가 
-	// PaperBurn
-
+	
 
 	{
 		CPtr<GameMaterial> MAT = GameMaterial::Create(L"EmissionMap");
@@ -104,7 +102,6 @@ void GameDevice::MaterialInit()
 		MAT->SetBlend(L"AlphaBlend");
 	}
 
-
 	{
 		CPtr<GameMaterial> MAT = GameMaterial::Create(L"EmissionBloomCheck");
 		MAT->SetVtxShader(L"VS_EmissionBloomCheck");
@@ -128,7 +125,7 @@ void GameDevice::MaterialInit()
 		MAT->SetVtxShader(L"VS_Emission");
 		MAT->SetPixShader(L"PS_Emission");
 		MAT->SetRasterizer(L"Back");
-		MAT->SetDepthStencil(L"ZeroDepth"); // 
+		MAT->SetDepthStencil(L"ZeroDepth"); 
 		MAT->SetBlend(L"AlphaBlend");
 	}
 
@@ -150,16 +147,6 @@ void GameDevice::MaterialInit()
 		MAT->SetBlend(L"AlphaBlend");
 	}
 
-
-
-
-
-	// Sprite2D	Particle
-
-
-
-
-	//////////////////////////////////////////////// 추가했습니다 .
 	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"DebugMesh");
 		Material->SetVtxShader(L"VS_DebugMesh");
@@ -212,15 +199,6 @@ void GameDevice::MaterialInit()
 	}
 
 	{
-		CPtr<GameMaterial> Material = GameMaterial::Create(L"Dash");
-		Material->SetVtxShader(L"VS_Dash");
-		Material->SetPixShader(L"PS_Dash");
-		Material->SetRasterizer(L"Back");
-		Material->SetDepthStencil(L"DefaultDepth");
-		Material->SetBlend(L"AlphaBlend");
-	}
-
-	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"DeferredStatic");
 		Material->SetVtxShader(L"VS_DeferredStatic");
 		Material->SetPixShader(L"PS_DeferredStatic");
@@ -238,29 +216,31 @@ void GameDevice::MaterialInit()
 		Material->SetBlend(L"AlphaBlend");
 	}
 
+	{ // SkyBox에 대해 
+		CPtr<GameMaterial> Material = GameMaterial::Create(L"DeferredFront");
+		Material->SetVtxShader(L"VS_DeferredFront");
+		Material->SetPixShader(L"PS_DeferredFront");
+		Material->SetRasterizer(L"Front");
+		Material->SetDepthStencil(L"DefaultDepth");
+		Material->SetBlend(L"AlphaBlend");
+	}
+
+	// 테스트 
+
+	{
+		CPtr<GameMaterial> Material = GameMaterial::Create(L"Dash");
+		Material->SetVtxShader(L"VS_Dash");
+		Material->SetPixShader(L"PS_Dash");
+		Material->SetRasterizer(L"Back");
+		Material->SetDepthStencil(L"DefaultDepth");
+		Material->SetBlend(L"AlphaBlend");
+	}
+
 	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"Grid");
 		Material->SetVtxShader(L"VS_Grid");
 		Material->SetPixShader(L"PS_Grid");
 		Material->SetRasterizer(L"None");
-		Material->SetDepthStencil(L"DefaultDepth");
-		Material->SetBlend(L"AlphaBlend");
-	}
-
-	//{
-	//	CPtr<GameMaterial> Material = GameMaterial::Create(L"Sprite2D"); // Frame L"Default"
-	//	Material->SetVtxShader(L"VS_Sprite2D");
-	//	Material->SetPixShader(L"PS_Sprite2D");
-	//	Material->SetRasterizer(L"Back");
-	//	Material->SetDepthStencil(L"DefaultDepth"); // Material->SetDepthStencil(L"AlwaysDepth");
-	//	Material->SetBlend(L"AlphaBlend");
-	//}
-
-	{
-		CPtr<GameMaterial> Material = GameMaterial::Create(L"UI");
-		Material->SetVtxShader(L"VS_UI");
-		Material->SetPixShader(L"PS_UI");
-		Material->SetRasterizer(L"Back");
 		Material->SetDepthStencil(L"DefaultDepth");
 		Material->SetBlend(L"AlphaBlend");
 	}
@@ -284,20 +264,7 @@ void GameDevice::MaterialInit()
 	//	Material->SetBlend(L"AlphaBlend");
 	//}
 
-#pragma region SKY_BOX 
-	{
-		CPtr<GameMaterial> Material = GameMaterial::Create(L"DeferredFront");
-		Material->SetVtxShader(L"VS_DeferredFront");
-		Material->SetPixShader(L"PS_DeferredFront");
-		Material->SetRasterizer(L"Front");
-		Material->SetDepthStencil(L"DefaultDepth");
-		Material->SetBlend(L"AlphaBlend");
-	}
-
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	// 기본 
 
 	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"TileMap");
@@ -309,15 +276,17 @@ void GameDevice::MaterialInit()
 	}
 
 	{
-		CPtr<GameMaterial> Material = GameMaterial::Create(L"Default");
-		Material->SetVtxShader(L"VS_Default");
-		Material->SetPixShader(L"PS_Default");
-		//Material->SetRasterizer(L"Back");
+		CPtr<GameMaterial> Material = GameMaterial::Create(L"Sprite"); // UI&RECT 
+		Material->SetVtxShader(L"VS_Sprite"); 
+		Material->SetPixShader(L"PS_Sprite"); 
+		//Material->SetRasterizer(L"Back"); //UI
 		Material->SetRasterizer(L"None");
 		//Material->SetDepthStencil(L"AlwaysDepth");
 		Material->SetDepthStencil(L"DefaultDepth");
 		Material->SetBlend(L"AlphaBlend");
 	}
+
+	// 이펙트 
 
 	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"ExGradien"); //ExGradien
@@ -373,6 +342,7 @@ void GameDevice::MaterialInit()
 		Material->SetBlend(L"AlphaBlend");
 	}
 
+	// 렌더타겟 
 	{
 		CPtr<GameMaterial> Material = GameMaterial::Create(L"TargetMergePlus"); 
 		Material->SetVtxShader(L"VS_TargetMerge");
@@ -391,12 +361,8 @@ void GameDevice::MaterialInit()
 		Material->SetBlend(L"AlphaBlend");
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 }
+
+
 #pragma warning( pop )
+

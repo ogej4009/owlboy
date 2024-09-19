@@ -1,18 +1,9 @@
 #include "LightBase.hlsli"
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 #include "RenderBase.hlsli"
 
-struct Vtx3D_Out
-{
-    float4 Pos : SV_Position;
-    float4 Uv : TEXCOORD0;
-    float4 UvCoords1 : TEXCOORD1;
-    float4 UvCoords2 : TEXCOORD2;
-    float4 UvCoords3 : TEXCOORD3;
-    float4 Color : COLOR;
-};
 
-struct BaseVtx_In
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -24,14 +15,19 @@ struct BaseVtx_In
     int4 Index : BLENDINDICES;
 };
 
+struct VtxOut
+{
+    float4 Pos : SV_Position;
+    float4 Uv : TEXCOORD0;
+    float4 UvCoords1 : TEXCOORD1;
+    float4 UvCoords2 : TEXCOORD2;
+    float4 UvCoords3 : TEXCOORD3;
+    float4 Color : COLOR;
+};
+
 cbuffer TransData : register(b0)
 {
-    TransDataBase MatrixData;
-}
-
-cbuffer RenderOption : register(b1)
-{
-    RenderOptionBase RenderOptionData;
+    TransData MatrixData;
 }
 
 cbuffer CutBuffer : register(b3)
@@ -41,11 +37,11 @@ cbuffer CutBuffer : register(b3)
     float4 CutBuffer3;
 };
 
-Vtx3D_Out VS_Fire(BaseVtx_In _In)
+VtxOut VS_Fire(VtxIn _In)
 {
     _In.Normal.w = 0.0f;
 
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
     Out.Pos = mul(_In.Pos, MatrixData.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
@@ -80,7 +76,7 @@ Texture2D fireTexture : register(t1);
 SamplerState Smp : register(s0);
 SamplerState Smp2 : register(s1);
 
-DeferredOut PS_Fire(Vtx3D_Out _In)
+DeferredOut PS_Fire(VtxOut _In)
 {
     float4 noise1;
     float4 noise2;

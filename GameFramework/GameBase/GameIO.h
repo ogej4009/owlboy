@@ -6,8 +6,7 @@
 #pragma region 프로그래머 기본소양
 /*
 	디버깅
-	파일입출력
-	문자열
+	파일입출력+문자열
 */
 #pragma endregion
 

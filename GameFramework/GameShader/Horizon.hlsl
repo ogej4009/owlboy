@@ -1,10 +1,11 @@
 #include "RenderBase.hlsli"
 
+
 struct VtxIn
 {
-    float4 Pos : SHA_INIT_POSITION;
-    float4 Uv : SHA_INIT_TEXCOORD;
-    float4 Color : SHA_INIT_COLOR;
+    float4 Pos : POSITION;
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
 };
 
 struct VtxOut
@@ -16,32 +17,35 @@ struct VtxOut
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase TDB;
+    TransData TD;
 }
 
 cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase ROB;
+    RenderOption RO;
 }
 
 cbuffer CutData : register(b1)
 {
-    SprCutDataBase SCDB;
+    CutData CD;
 };
-
 
 VtxOut VS_Horizon(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;
-    Out.Pos = mul(_In.Pos, TDB.WVP);
+    
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
-    float XSize = SCDB.SprCutData.z;
-    float YSize = SCDB.SprCutData.w;
-    float XStart = SCDB.SprCutData.x;
-    float YStart = SCDB.SprCutData.y;
+    
+    float XSize = CD.Data.z;
+    float YSize = CD.Data.w;
+    float XStart = CD.Data.x;
+    float YStart = CD.Data.y;
+    
     Out.Uv.y = Out.Uv.y;
-    Out.Uv.x = Out.Uv.x * SCDB.SprCutData.y - SCDB.SprCutData.x;
+    Out.Uv.x = Out.Uv.x * CD.Data.y - CD.Data.x;
+    
     return Out;
 }
 

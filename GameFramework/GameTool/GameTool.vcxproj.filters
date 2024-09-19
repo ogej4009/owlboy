@@ -18,6 +18,7 @@
     <None Include="res\GameTool.rc2">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="GameTool.aps" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\GameTool.ico">
@@ -42,7 +43,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="Dlg0.cpp" />
     <ClCompile Include="Dlg1.cpp" />
     <ClCompile Include="Dlg2.cpp" />
@@ -55,9 +55,17 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="RView.cpp" />
     <ClCompile Include="LevelDesignViewer.cpp" />
+    <ClCompile Include="MainDlg.cpp" />
+    <ClCompile Include="LevelDesignViewer_Dlg0.cpp" />
+    <ClCompile Include="LevelDesignViewer_Dlg1.cpp" />
+    <ClCompile Include="LevelDesignViewer_Dlg2.cpp" />
+    <ClCompile Include="LevelDesignViewer_Dlg3.cpp" />
+    <ClCompile Include="LevelDesignViewer_Dlg4.cpp" />
+    <ClCompile Include="LevelDesignViewer_TileMap.cpp" />
+    <ClCompile Include="LevelDesignViewer_Obj.cpp" />
+    <ClCompile Include="VIEW\ChildView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChildView.h" />
     <ClInclude Include="Dlg0.h" />
     <ClInclude Include="Dlg1.h" />
     <ClInclude Include="Dlg2.h" />
@@ -72,5 +80,7 @@
     <ClInclude Include="RView.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="LevelDesignViewer.h" />
+    <ClInclude Include="MainDlg.h" />
+    <ClInclude Include="VIEW\ChildView.h" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 
-struct TransDataBase
+struct TransData
 {
     matrix POS;
     matrix SCALE;
@@ -15,7 +15,7 @@ struct TransDataBase
     matrix WVP;
 };
 
-struct RenderOptionBase
+struct RenderOption
 {
     int IsDifTexture;
     int IsNormalTexture;
@@ -28,7 +28,7 @@ struct RenderOptionBase
     float4 BasicColor;
 };
 
-struct SprCutDataBase
+struct CutData
 {
-    float4 SprCutData;
+    float4 Data;
 };

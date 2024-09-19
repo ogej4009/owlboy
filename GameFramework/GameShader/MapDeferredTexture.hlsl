@@ -1,6 +1,8 @@
 #include "BumpBase.hlsli"
+#include "RenderBase.hlsli"
 
-struct Vtx3D_In
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -12,7 +14,7 @@ struct Vtx3D_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
@@ -25,18 +27,7 @@ struct Vtx3D_Out
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
 cbuffer MapOption : register(b3)
@@ -52,7 +43,7 @@ cbuffer MapOption : register(b3)
 Texture2D WTex : register(t0);
 SamplerState Smp : register(s0);
 
-Vtx3D_Out VS_MapDeferredTexture(Vtx3D_In _In)
+VtxOut VS_MapDeferredTexture(VtxIn _In)
 {
     float2 YValueUv = float2(_In.Uv.x / XCount, _In.Uv.y / ZCount);
     float2 RightUv = float2(YValueUv.x + PixelUv.x * PixelRatio, YValueUv.y);
@@ -77,19 +68,19 @@ Vtx3D_Out VS_MapDeferredTexture(Vtx3D_In _In)
     _In.Normal.w = 0.0f;
     
     
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
 
-    Out.Pos = mul(_In.Pos, WVP);
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
-    Out.ViewPos = mul(_In.Pos, WV);
-    Out.ViewNormal = normalize(mul(_In.Normal, WV));
+    Out.ViewPos = mul(_In.Pos, TD.WV);
+    Out.ViewNormal = normalize(mul(_In.Normal, TD.WV));
 
     _In.BiNormal.w = 0.0f;
-    Out.ViewBiNormal = normalize(mul(_In.BiNormal, WV));
+    Out.ViewBiNormal = normalize(mul(_In.BiNormal, TD.WV));
 
     _In.Tangent.w = 0.0f;
-    Out.ViewTangent = normalize(mul(_In.Tangent, WV));
+    Out.ViewTangent = normalize(mul(_In.Tangent, TD.WV));
 
     return Out;
 }
@@ -118,7 +109,7 @@ cbuffer RenderOption : register(b8)
 Texture2D BaseTex : register(t0);
 Texture2D NormalTexture : register(t1);
 
-DeferredOut PS_MapDeferredTexture(Vtx3D_Out _In)
+DeferredOut PS_MapDeferredTexture(VtxOut _In)
 {
     DeferredOut Out = (DeferredOut) 0;
     Out.DifColor = BaseTex.Sample(Smp, _In.Uv.xy);

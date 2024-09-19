@@ -38,7 +38,6 @@ void SkinningTex(inout float4 _Pos, inout float4 _Normal, inout float4 _Weight, 
     return;
 }
 
-
 void SkinningPos(inout float4 _Pos, inout float4 _Weight, inout int4 _Indices, Texture2D _FrameAniTex)
 {
     float4 CalPos = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -62,3 +61,4 @@ void SkinningPos(inout float4 _Pos, inout float4 _Weight, inout int4 _Indices, T
 
     return;
 }
+

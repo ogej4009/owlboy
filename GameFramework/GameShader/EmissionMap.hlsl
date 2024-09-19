@@ -1,7 +1,8 @@
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 #include "RenderBase.hlsli"
 
-struct Vtx3D_In
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -13,7 +14,7 @@ struct Vtx3D_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
 };
@@ -23,43 +24,32 @@ struct DeferredOut
     float4 OutColor : SV_Target5;
 };
 
-cbuffer RenderOption : register(b7)
+cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase RenderOptionData;
+    RenderOption RO;
 }
 
 Texture2D FrameAniTex : register(t0);
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
-Vtx3D_Out VS_EmissionMap(Vtx3D_In _In)
+VtxOut VS_EmissionMap(VtxIn _In)
 {
-    if (0 != RenderOptionData.IsAni)
+    if (0 != RO.IsAni)
     {
         SkinningPos(_In.Pos, _In.Weight, _In.Index, FrameAniTex);
     }
     
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
-    Out.Pos = mul(_In.Pos, WVP);    
+    VtxOut Out = (VtxOut) 0;
+    Out.Pos = mul(_In.Pos, TD.WVP);
     
     return Out;
 }
 
-DeferredOut PS_EmissionMap(Vtx3D_Out _In)
+DeferredOut PS_EmissionMap(VtxOut _In)
 {
     DeferredOut Out = (DeferredOut) 0.0f;
     Out.OutColor.xw = 1.0f;

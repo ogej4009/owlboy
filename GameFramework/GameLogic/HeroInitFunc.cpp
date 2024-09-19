@@ -8,7 +8,7 @@ void Hero::RenderInit()
 	{
 		ValueData::PIXEL_SCALE = 0.01f;
 		ValueData::PIXEL_RATIO = 1.0f / ValueData::PIXEL_SCALE;
-		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_ACTOR);
+		m_Render = GetActor()->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_ACTOR);
 		m_Render->SetLScale({ 112.0f * ValueData::PIXEL_SCALE , 98.0f * ValueData::PIXEL_SCALE , 1.0f });
 		m_Anim = GetActor()->CreateCom<GameAnimation>(m_Render);
 	}
@@ -20,7 +20,7 @@ void Hero::ColInit()
 	{
 		ValueData::PIXEL_SCALE = 0.01f;
 		ValueData::PIXEL_RATIO = 1.0f / ValueData::PIXEL_SCALE;
-		m_Col = GetActor()->CreateCom<GameCol>((int)COLLISION_ORDER::CO_PLAYER);
+		m_Col = GetActor()->CreateCom<GameCol>((int)eCOLLISION_ORDER::CO_PLAYER);
 		m_Col->SetWScale({ 20.0f * ValueData::PIXEL_SCALE, 60.0f * ValueData::PIXEL_SCALE, 1.0f });
 		m_Col->ColType(COLTYPE::SPHERE2D);
 		m_Col->PushStayFunc(this, &Hero::ColTriggerStay);
@@ -31,7 +31,7 @@ void Hero::DebugInit()
 {
 	for (size_t i = 0; i < 4; i++)
 	{
-		m_DebugRender[i] = GetActor()->CreateCom<GameSpriteRenderer>((int)RENDER_ORDER::RO_COL_LEVEL);
+		m_DebugRender[i] = GetActor()->CreateCom<GameSpriteRenderer>((int)eRENDER_ORDER::RO_COL_LEVEL);
 		m_DebugRender[i]->SetLPos({ m_DirFrameSensor[i].X, m_DirFrameSensor[i].Y, -8.0f });
 		m_DebugRender[i]->SetLScale({ 5.0f * ValueData::PIXEL_SCALE , 5.0f * ValueData::PIXEL_SCALE, 1.0f });
 		m_DebugRender[i]->SetSprite(L"sprCircle_100x100.png");

@@ -6,36 +6,36 @@
 class MeshCreateData
 {
 public:
-	//	GameString  m_MeshName;
-	int4		m_Index;
-	CVector		m_Scale;
-	CVector		m_Rot;
-	CVector		m_Pos;
+	GameString Name;
+	int4	Index;
+	CVector	Scale;
+	CVector	Rot;
+	CVector	Pos;
 };
 
 class MeshActorData
 {
 public:
-	int4				m_ActorType;
-	MeshCreateData		m_MeshData;
+	int4			Type;
+	MeshCreateData	Data;
 };
-
 
 class LightCreateData
 {
 public:
-	int4		m_Type;
-	CVector		m_Scale;
-	CVector		m_Rot;
-	CVector		m_Pos;
-	CVector		m_AmbColor;
-	CVector		m_SpecPow;
-	CVector		m_LightPower;
-	CVector		m_LightDir;
-	CVector		m_LIghtDirInv;
+	int4	Type;
+	CVector	Scale;
+	CVector	Rot;
+	CVector	Pos;
+	CVector	AmbColor;
+	CVector	SpecPow;
+	CVector	LightPower;
+	CVector	LightDir;
+	CVector	LIghtDirInv;
 };
 
 
+class GameActor;
 class FreeCam;
 class DesignCam;
 class GameTileMap;
@@ -57,69 +57,60 @@ public:
 		float Dummy2;
 	};
 	CVector PaperBurnTestCBuffer;
+	CPtr<GameActor> m_FogActor;
 
 public:
 	int SEL_TILESPR_INDEX;
 
 public:
-	CPtr<GameActor> m_TileMapActor;
-	CPtr<GameActor> TILERENDERER;
 
-	CPtr<GameActor> m_DesignCamActor;
-	CPtr<GameActor> m_CamActor;
+	// 광원
 	CPtr<GameActor> m_LightActor;
-	CPtr<GameActor> m_PlayerActor;
-	CPtr<GameActor> m_ColMapActor;
-	CPtr<GameActor> m_MapActor;
-	CPtr<GameActor> m_FogActor;
+	CPtr<GameLight> m_LightCom;
 
+	// 관리구조 
 	std::map<GameActor*, MeshActorData> m_StaticActorData;
 	std::vector<MeshCreateData> m_AllMeshData;
 	std::map<GameActor*, MeshCreateData> m_AniMeshComData;
 	std::map<int, LightCreateData> m_LightCreateMeshComData;
 	std::map<int, CPtr<GameLight>> m_LightMeshComData;
 
-	CPtr<GameActor>		GridActor;
-	CPtr<GameRenderer>	GridRender;
-
-	CPtr<GameTileRenderer> TILERENDERCOM;
-	CPtr<GameTileMap> m_TileMapCom;
-
-	CPtr<DesignCam> m_DesignCamCom;
-	CPtr<GameCamera> m_CamCom;
-	CPtr<GameLight> m_LightCom;
-	/*
-	CPtr<GameBloomFilter> m_BloomFilterCom;
-	CPtr<GameOutLineFilter> m_OutLineFilterCom;
-	CPtr<GameBoneAnimationComEx> m_BoneAniComEx;
-	CPtr<GameFogFilter> m_FogFilterCom;
-	*/
 	
 	CVector m_ScreenPos3DToWorldPos;
 
-public:
-	CPtr<GameActor> m_FreeCamActor;
-	CPtr<FreeCam>	m_FreeCamCom;
+	// 타일맵
+	CPtr<GameActor> m_GridActor;
+	CPtr<GameRenderer> m_GridRender;
+	CPtr<GameActor> m_TileRenderActor;
+	CPtr<GameTileRenderer> m_TileRenderCom;
+	CPtr<GameActor> m_TileMapActor;
+	CPtr<GameTileMap> m_TileMapCom;
 
-public:
+	// 카메라
+	CPtr<GameActor> m_CamActor;
+	CPtr<GameCamera> m_CamCom;
+	CPtr<GameActor> m_DesignCamActor;
+	CPtr<DesignCam> m_DesignCamCom;
+	CPtr<GameActor> m_FreeCamActor;
+	CPtr<FreeCam> m_FreeCamCom;
+
+	// 관리구조 
 	static int OneMapObj;
 	static std::map<GameActor*, MapObjData> AllMapObjData;
 	static std::map<GameString*, SaveMapObjData> AllSaveMapObjData;
 	static LevelDesignViewer* pViewer;
 
+
 public:
+	// 타일맵함수 
 	static void ClearMapObj();
 	static void AddSelMapObj(int _Select, CVector _Pos);
-	static void ColMapObj(GameCol* _Cursor, GameCol* _Obj);
+	static void ColDeleteMapObj(GameCol* _Cursor, GameCol* _Obj);
 
-public:
-	static LevelDesignViewer* G_pViewer()
-	{
-		return pViewer;
-	}
+	// 엔티티함수
 
+	// MISC함수 
 
-public:
 	void InteractionUpdate();
 	void TextDebugUpdate();
 	void TargetDebugUpdate();
@@ -129,6 +120,21 @@ public:
 	void CreateStaticMesh();
 	void FillInAllLightValue();
 
+
+
+
+
+
+
+
+
+public:
+	void ViewDlg0();
+	void ViewDlg1();
+	void ViewDlg2();
+	void ViewDlg3();
+	void ViewDlg4();
+
 public:
 	void Progress();
 
@@ -137,11 +143,11 @@ public:
 	void Update() override;
 	void SceneChangeStart() override;
 	void SceneChangeEnd() override;
-	void SceneDebugDisplay();
+	void DebugText();
 
 public:
-	void FileCreate();
-	void FileDelete();
+	void File_In();
+	void File_Out();
 
 public:
 	LevelDesignViewer();

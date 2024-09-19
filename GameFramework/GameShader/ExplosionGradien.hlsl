@@ -19,43 +19,42 @@ struct VtxOut
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase TDB;
+    TransData TD;
 }
 
 cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase ROB;
+    RenderOption RO;
 }
 
 cbuffer CutData : register(b1)
 {
-    SprCutDataBase SCDB;
+    CutData CD;
 };
 
 
 VtxOut VS_ExGradien(VtxIn _In)
 {
     VtxOut Out = (VtxOut) 0;
-    Out.Pos = mul(_In.Pos, TDB.WVP);
+    
+    Out.Pos = mul(_In.Pos, TD.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
-    float XSize = SCDB.SprCutData.z;
-    float YSize = SCDB.SprCutData.w;
-    float XStart = SCDB.SprCutData.x;
-    float YStart = SCDB.SprCutData.y;
+    
+    float XSize = CD.Data.z;
+    float YSize = CD.Data.w;
+    float XStart = CD.Data.x;
+    float YStart = CD.Data.y;
+    
     Out.Uv.x = Out.Uv.x;
-    Out.Uv.y = Out.Uv.y * SCDB.SprCutData.x - SCDB.SprCutData.y;
+    Out.Uv.y = Out.Uv.y * CD.Data.x - CD.Data.y;
+    
     return Out;
 }
 
 cbuffer DrawColor : register(b0)
 {
     float4 Color;
-}
-
-cbuffer RenderOption : register(b1)
-{
-    int4 Option;
 }
 
 Texture2D Tex : register(t0);
@@ -65,7 +64,7 @@ float4 PS_ExGradien(VtxOut _In) : SV_Target0
 {
     float4 ReturnColor = Tex.Sample(Smp, _In.Uv.xy);
 
-    if (Option.x == 0)
+    if (RO.IsDifTexture == 0)
     {
         ReturnColor.xyz *= Color.xyz;
         ReturnColor.a *= Color.a;

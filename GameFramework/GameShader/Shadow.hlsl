@@ -1,6 +1,6 @@
 #include "LightBase.hlsli"
 #include "RenderBase.hlsli"
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 
 struct VtxShadow_In
 {
@@ -20,14 +20,14 @@ struct VtxShadow_Out
     float4 vPorjPos : POSITION;
 };
 
-cbuffer RenderOption : register(b7)
+cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase RenderOptionData;
+    RenderOption RO;
 }
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase MatrixData;
+    TransData TD;
 }
 
 Texture2D FrameAniTex : register(t0);
@@ -36,13 +36,13 @@ VtxShadow_Out VS_Shadow(VtxShadow_In _In)
 {
     _In.vPOSITION.w = 1.0f;
 
-    if (0 != RenderOptionData.IsAni)
+    if (0 != RO.IsAni)
     {
         SkinningPos(_In.vPOSITION, _In.vWEIGHT, _In.vINDEX, FrameAniTex);
     }
 
     VtxShadow_Out Out = (VtxShadow_Out) 0.0f;
-    Out.vPos = mul(_In.vPOSITION, MatrixData.WVP);
+    Out.vPos = mul(_In.vPOSITION, TD.WVP);
     Out.vPorjPos = Out.vPos;
     return Out;
 }

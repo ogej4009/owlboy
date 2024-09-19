@@ -14,7 +14,7 @@
 
 void DemoScene::Init()
 {
-	//GetScene()->ColLink((UINT)COLLISION_ORDER::CO_PLAYER, (int)COLLISION_ORDER::CO_ENEMIES);
+	//GetScene()->ColLink((UINT)eCOLLISION_ORDER::CO_PLAYER, (int)eCOLLISION_ORDER::CO_ENEMIES);
 }
 
 void DemoScene::Update()
@@ -56,9 +56,9 @@ void DemoScene::SceneChangeStart()
 	{
 		// 액터
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEF_POS);
+		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEFAULT_POS);
 		// 등록부
-		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)RENDER_ORDER::RO_ACTOR, (UINT)RENDER_ORDER::RO_COL_LEVEL);
+		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(0, (UINT)eRENDER_ORDER::RO_ACTOR, (UINT)eRENDER_ORDER::RO_COL_LEVEL);
 		NewCam->SetCamSize({ 6.4f, 3.6f });
 		NewCam->SetMode(CAMMODE::PERS);
 		// 컴포넌트 
@@ -70,9 +70,9 @@ void DemoScene::SceneChangeStart()
 	{
 		// 액터
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEF_POS);
+		NewActor->GetTrans()->SetWPos(ValueData::CAM_DEFAULT_POS);
 		// 등록부
-		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(1, (UINT)RENDER_ORDER::RO_UI);
+		CPtr<GameCamera> NewCam = NewActor->CreateCom<GameCamera>(1, (UINT)eRENDER_ORDER::RO_UI);
 		NewCam->SetCamSize({ 6.4f, 3.6f });
 		NewCam->SetMode(CAMMODE::ORTH);
 		// 컴포넌트 
@@ -98,13 +98,13 @@ void DemoScene::SceneChangeStart()
 		CVector Coord;
 		Coord.X = ValueData::STAGE_SCALE.X * 0.5f;
 		Coord.Y = ValueData::STAGE_SCALE.Y * -0.5f;
-		Coord.Z = ValueData::DEBUG_DEFAULT_Z_ORDER;
+		Coord.Z = ValueData::COL_LEVEL_DEFAULT_Z_ORDER;
 
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
 		NewActor->GetTrans()->SetWScale(ValueData::STAGE_SCALE);
 		NewActor->GetTrans()->SetWPos(Coord);
 
-		m_Debug = NewActor->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_COL_LEVEL);
+		m_Debug = NewActor->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_COL_LEVEL);
 		m_Debug->SetSprite(ValueData::STAGE_NAME);
 		m_Debug->SetSrcSizeOfTexture(ValueData::STAGE_NAME);
 		m_Debug->Off();
@@ -114,7 +114,7 @@ void DemoScene::SceneChangeStart()
 	// 플레이어
 	{
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos(ValueData::PLAYER_DEFAULT_POS_INSTAGE);
+		NewActor->GetTrans()->SetWPos(ValueData::HERO_DEFAULT_POS_INSTAGE);
 		NewActor->CreateCom<Hero>();
 	}
 
@@ -122,7 +122,7 @@ void DemoScene::SceneChangeStart()
 	//{
 	//	CPtr<GameActor> NewActor = GetScene()->CreateActor();
 	//	NewActor->GetTrans()->SetWPos({ Hero::MainPlayer->GetTrans()->GetWPos().X, Hero::MainPlayer->GetTrans()->GetWPos().Y, -9.8f });
-	//	CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)RENDER_ORDER::RO_ACTOR);
+	//	CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_ACTOR);
 	//	NewRender->SetSprite(L"sprCircleFade_400x400.png");
 	//	NewRender->SetSrcSizeOfTexture(L"sprCircleFade_400x400.png");
 	//	CPtr<CircleFade> NewFade = NewActor->CreateCom<CircleFade>();
@@ -148,7 +148,20 @@ void DemoScene::SceneChangeStart()
 
 
 
+	//{
+	//	// 사각형 하나 띄우려는 녀석.
+	//	WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
 
+	//	NewActor->TRANS()->LPOS({ 0.0f, 0.0f, -10.0f });
+	//	WPTR<WCAM> NewCam = NewActor->CreateCom<WCAM>(0, (int)0);
+	//	NewCam->MODE(CAMMODE::PERS);
+	//	NewCam->CAMSIZE({ 12.8f, 7.2f });
+	//	m_LineFilter = NewCam->AddFilter<WOutLineFilter>(10);
+	//	m_FogFilter = NewCam->AddFilter<WFogFilter>(10);
+	//	m_WMotionBlurFilter = NewCam->AddFilter<WMotionBlur>(10);
+	//	m_MapFilterCom = NewCam->AddFilter<WMapBloomFilter>(10);
+	//	FreeCam = NewActor->CreateCom<WFREECAM>(10.0f);
+	//}
 
 
 
@@ -205,7 +218,7 @@ void DemoScene::SceneValueDataInit()
 {
 	ValueData::STAGE_NAME = L"sprDemoColLevel_1280x720.png"; // 이름 
 	ValueData::STAGE_SCALE = { 1280.0f * 0.01f, 720.0f * 0.01f, 1.0f }; // TEX -> GET 크기 
-	ValueData::PLAYER_DEFAULT_POS_INSTAGE = { 0.0f, 0.0f, ValueData::PLAYER_DEFAULT_Z_ORDER }; // 위치 
+	ValueData::HERO_DEFAULT_POS_INSTAGE = { 0.0f, 0.0f, ValueData::HERO_DEFAULT_Z_ORDER }; // 위치 
 }
 
 DemoScene::DemoScene()
@@ -215,3 +228,45 @@ DemoScene::DemoScene()
 DemoScene::~DemoScene()
 {
 }
+
+// INIT() <--------
+//{
+//	WGAMEDIRECTORY Dic;
+//	Dic.MoveParent(L"Wah3DX");
+//	Dic.Move(L"RES");
+//	Dic.Move(L"MOVIE");
+//	WGAMEMOVIE::Play(Dic.PlusFileName(L"END.avi"));
+//}
+
+
+//
+//
+//void STAGE_04_END::Update()
+//{
+//
+//	if (true == WGAMEINPUT::Down(L"SCENECHANGE"))
+//	{
+//		next = true;
+//		int a = 0;
+//	}
+//
+//	if (true == WGAMEINPUT::Down(L"SCENECHANGE") && true == next)
+//	{
+//		{
+//			WGAMEDIRECTORY Dic;
+//			Dic.MoveParent(L"Wah3DX");
+//			Dic.Move(L"RES");
+//			Dic.Move(L"MOVIE");
+//			WGAMEMOVIE::Play(Dic.PlusFileName(L"END.avi"));
+//		}
+//		int a = 0;
+//	}
+//	//if (true == WGAMEINPUT::Down(L"SCENECHANGE")/*&& false == WGAMEMOVIE::IsPlay()*/)
+//	//{
+//
+//	//	next = true;
+//	//	int a = 0;
+//	//}
+//
+//}
+//

@@ -1,8 +1,9 @@
 #include "LightBase.hlsli"
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
 #include "RenderBase.hlsli"
 
-struct BaseVtx_In
+
+struct VtxIn
 {
     float4 Pos : POSITION;
     float4 Uv : TEXCOORD;
@@ -14,7 +15,7 @@ struct BaseVtx_In
     int4 Index : BLENDINDICES;
 };
 
-struct Vtx3D_Out
+struct VtxOut
 {
     float4 Pos : SV_Position;
     float4 Uv : TEXCOORD;
@@ -25,12 +26,12 @@ struct Vtx3D_Out
 
 cbuffer TransData : register(b0)
 {
-    TransDataBase MatrixData;
+    TransData MatrixData;
 }
 
-cbuffer RenderOption : register(b7)
+cbuffer RenderOptionData : register(b7)
 {
-    RenderOptionBase RenderOptionData;
+    RenderOption RO;
 }
 
 cbuffer DashDirBuffer : register(b6)
@@ -40,17 +41,17 @@ cbuffer DashDirBuffer : register(b6)
 
 Texture2D FrameAniTex : register(t0);
 
-Vtx3D_Out VS_Dash(BaseVtx_In _In)
+VtxOut VS_Dash(VtxIn _In)
 {
     _In.Pos.w = 1.0F;
     _In.Normal.w = 0.0f;
 
-    if (0 != RenderOptionData.IsAni)
+    if (0 != RO.IsAni)
     {
         SkinningTex(_In.Pos, _In.Normal, _In.Weight, _In.Index, FrameAniTex);
     }
 
-    Vtx3D_Out Out = (Vtx3D_Out) 0;
+    VtxOut Out = (VtxOut) 0;
     Out.Pos = mul(_In.Pos, MatrixData.WVP);
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
@@ -72,10 +73,10 @@ struct DeferredOut
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 
-DeferredOut PS_Dash(Vtx3D_Out _In)
+DeferredOut PS_Dash(VtxOut _In)
 {
     DeferredOut Out = (DeferredOut) 0;
-    Out.DifColor = RenderOptionData.BasicColor;
+    Out.DifColor = RO.BasicColor;
     Out.NorColor = _In.ViewNormal;
     Out.PosColor = _In.ViewPos;
     Out.DepColor.x = _In.ViewPos.z;

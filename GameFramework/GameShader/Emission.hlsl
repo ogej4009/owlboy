@@ -1,4 +1,6 @@
-#include "AnimBase.hlsli"
+#include "AnimationBase.hlsli"
+#include "RenderBase.hlsli"
+
 
 struct Vtx3D_In
 {
@@ -26,18 +28,7 @@ Texture2D FrameAniTex : register(t0);
 
 cbuffer TransData : register(b0)
 {
-    matrix POS;
-    matrix SCALE;
-    matrix ROT;
-    matrix REVOL;
-    matrix PARENT;
-    matrix LWORLD;
-    matrix WWORLD;
-    matrix VIEW;
-    matrix PROJ;
-    matrix WV;
-    matrix VP;
-    matrix WVP;
+    TransData TD;
 }
 
 Vtx3D_Out VS_Emission(Vtx3D_In _In)
@@ -45,7 +36,7 @@ Vtx3D_Out VS_Emission(Vtx3D_In _In)
     SkinningPos(_In.Pos, _In.Weight, _In.Index, FrameAniTex);
 
     Vtx3D_Out Out = (Vtx3D_Out) 0;
-    Out.Pos = mul(_In.Pos, WVP);
+    Out.Pos = mul(_In.Pos, TD.WVP);
     return Out;
 }
 
