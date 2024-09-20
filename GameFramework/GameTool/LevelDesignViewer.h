@@ -49,6 +49,9 @@ class LevelDesignViewer : public SceneComponent // MapToolEditor
 	friend class Dlg4;
 
 public:
+	static LevelDesignViewer* pViewer;
+
+public:
 	struct FogBufferData
 	{
 		float FogStart;
@@ -59,8 +62,6 @@ public:
 	CVector PaperBurnTestCBuffer;
 	CPtr<GameActor> m_FogActor;
 
-public:
-	int SEL_TILESPR_INDEX;
 
 public:
 
@@ -76,6 +77,7 @@ public:
 	std::map<int, CPtr<GameLight>> m_LightMeshComData;
 
 	
+	int SEL_TILESPR_INDEX;
 	CVector m_ScreenPos3DToWorldPos;
 
 	// 타일맵
@@ -98,33 +100,32 @@ public:
 	static int OneMapObj;
 	static std::map<GameActor*, MapObjData> AllMapObjData;
 	static std::map<GameString*, SaveMapObjData> AllSaveMapObjData;
-	static LevelDesignViewer* pViewer;
 
 
 public:
 	// 타일맵함수 
 	static void ClearMapObj();
 	static void AddSelMapObj(int _Select, CVector _Pos);
-	static void ColDeleteMapObj(GameCol* _Cursor, GameCol* _Obj);
+	static void DeleteMapObj(GameCol* _Cursor, GameCol* _Obj);
 
 	// 엔티티함수
+	static void ClearEntity();
+	static void AddSelEntity(int _Select, CVector _Pos);
+	static void DeleteEntity(GameCol* _Cursor, GameCol* _Obj);
 
-	// MISC함수 
+	// 백드롭함수 (옵션)
+	static void ClearBackDrop();
+	static void AddSelBackDrop(int _Select, CVector _Pos);
+	static void DeleteBackDrop(GameCol* _Cursor, GameCol* _Obj);
 
-	void InteractionUpdate();
-	void TextDebugUpdate();
-	void TargetDebugUpdate();
+public:
+	void CtrlUpdate();
+	void DebugTargetUpdate();
 	
 public:
 	void CreateAnimationMesh();
 	void CreateStaticMesh();
 	void FillInAllLightValue();
-
-
-
-
-
-
 
 
 

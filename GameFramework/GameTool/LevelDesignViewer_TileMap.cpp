@@ -24,9 +24,11 @@ void LevelDesignViewer::AddSelMapObj(int _Select, CVector _Pos)
 	{
 	case 0:
 	{
-		NewActor = GetScene()->CreateActor();
-		NewActor->GetTrans()->SetWPos2d(_Pos, -1.0f);
-		NewActor->GetTrans()->SetWScale({ 1.28f, 1.28f, 1.0f });
+		{
+			NewActor = GetScene()->CreateActor();
+			NewActor->GetTrans()->SetWPos2d(_Pos, -1.0f);
+			NewActor->GetTrans()->SetWScale({ 1.28f, 1.28f, 1.0f });
+		}
 	}
 	
 		// NewActor->CreateCom
@@ -45,7 +47,7 @@ void LevelDesignViewer::AddSelMapObj(int _Select, CVector _Pos)
 
 }
 
-void LevelDesignViewer::ColDeleteMapObj(GameCol* _Cursor, GameCol* _Obj)
+void LevelDesignViewer::DeleteMapObj(GameCol* _Cursor, GameCol* _Obj)
 {
 	if (true == GameInput::Down(L"DELETE"))
 	{

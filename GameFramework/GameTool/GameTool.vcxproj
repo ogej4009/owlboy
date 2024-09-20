@@ -218,6 +218,8 @@
     <ClCompile Include="Dlg2.cpp" />
     <ClCompile Include="Dlg3.cpp" />
     <ClCompile Include="Dlg4.cpp" />
+    <ClCompile Include="LevelDesignViewer_RenderTarget.cpp" />
+    <ClCompile Include="LevelDesignViewer_Text.cpp" />
     <ClCompile Include="RView.cpp" />
     <ClCompile Include="GameTool.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -230,7 +232,7 @@
     <ClCompile Include="LevelDesignViewer_Dlg3.cpp" />
     <ClCompile Include="LevelDesignViewer_Dlg4.cpp" />
     <ClCompile Include="LevelDesignViewer_IO.cpp" />
-    <ClCompile Include="LevelDesignViewer_Obj.cpp" />
+    <ClCompile Include="LevelDesignViewer_Entity.cpp" />
     <ClCompile Include="LevelDesignViewer_TileMap.cpp" />
     <ClCompile Include="LView.cpp" />
     <ClCompile Include="MainDlg.cpp" />

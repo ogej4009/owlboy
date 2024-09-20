@@ -62,8 +62,9 @@
     <ClCompile Include="LevelDesignViewer_Dlg3.cpp" />
     <ClCompile Include="LevelDesignViewer_Dlg4.cpp" />
     <ClCompile Include="LevelDesignViewer_TileMap.cpp" />
-    <ClCompile Include="LevelDesignViewer_Obj.cpp" />
-    <ClCompile Include="VIEW\ChildView.cpp" />
+    <ClCompile Include="LevelDesignViewer_Entity.cpp" />
+    <ClCompile Include="LevelDesignViewer_Text.cpp" />
+    <ClCompile Include="LevelDesignViewer_RenderTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dlg0.h" />
@@ -81,6 +82,5 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="LevelDesignViewer.h" />
     <ClInclude Include="MainDlg.h" />
-    <ClInclude Include="VIEW\ChildView.h" />
   </ItemGroup>
 </Project>

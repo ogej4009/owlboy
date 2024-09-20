@@ -230,9 +230,8 @@ void LevelDesignViewer::Update()
 {
 
 
-	InteractionUpdate();
-	TextDebugUpdate();
-	TargetDebugUpdate();
+	CtrlUpdate();
+	DebugTargetUpdate();
 	DebugText();
 
 	//////////////////////////////////////////////////////
@@ -261,64 +260,9 @@ void LevelDesignViewer::SceneChangeEnd()
 	//File_Out();
 }
 
-void LevelDesignViewer::DebugText()
-{
-	wchar_t Arr[256];
-
-	swprintf_s(Arr
-		, L"[MousePos] X : %f, Y : %f"
-		, GameWin::MainObj()->MousePos().X
-		, GameWin::MainObj()->MousePos().Y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,10 }, CVector::WHITE);
-
-	swprintf_s(Arr
-		, L"[MousePos3D] X : %f, Y : %f, Z : %f"
-		, GameWin::MainObj()->MousePosVec3D().X
-		, GameWin::MainObj()->MousePosVec3D().Y
-		, GameWin::MainObj()->MousePosVec3D().Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,30 }, CVector::WHITE);
-
-	swprintf_s(Arr
-		, L"[MouseScreenOrth] X : %f, Y : %f"
-		, GetScene()->MainCam()->CamOrthMousePos2d().X
-		, GetScene()->MainCam()->CamOrthMousePos2d().Y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,50 }, CVector::WHITE);
-
-	swprintf_s(Arr
-		, L"[MouseWorldOrth] X : %f, Y : %f"
-		, GetScene()->MainCam()->OrthWorldMousePos2d().X
-		, GetScene()->MainCam()->OrthWorldMousePos2d().Y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,70 }, CVector::WHITE);
-
-	swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-		, m_DesignCamActor->GetTrans()->GetWPos().X
-		, m_DesignCamActor->GetTrans()->GetWPos().Y
-		, m_DesignCamActor->GetTrans()->GetWPos().Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
-
-	swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
-		, m_DesignCamCom->GetCamSize().X
-		, m_DesignCamCom->GetCamSize().Y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
-
-	swprintf_s(Arr, L"[ScreenPos3DToWorldPos] X : %f, Y : %f, Z : %f"
-		, m_ScreenPos3DToWorldPos.X
-		, m_ScreenPos3DToWorldPos.Y
-		, m_ScreenPos3DToWorldPos.Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,130 }, CVector::WHITE);
-
-}
 
 
-
-void LevelDesignViewer::InteractionUpdate()
+void LevelDesignViewer::CtrlUpdate()
 {
 	
 	m_ScreenPos3DToWorldPos = m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D());
@@ -385,55 +329,6 @@ void LevelDesignViewer::InteractionUpdate()
 	}
 }
 
-void LevelDesignViewer::TextDebugUpdate()
-{
-	//GameDebugPlus::DrawDebugText(L"PLAYER POS : %f %f %f"
-	//	, m_PlayerActor->GetTrans()->GetWPos().X
-	//	, m_PlayerActor->GetTrans()->GetWPos().Y
-	//	, m_PlayerActor->GetTrans()->GetWPos().Z);
-
-	PaperBurnTestCBuffer.W = PaperBurnTestCBuffer.W - sin(GameTime::DeltaTime(0.5f));
-
-	CVector DEBUG_POS = GetScene()->MainCam()->GetTrans()->GetWPos();
-	CVector DEBUG_ROT = GetScene()->MainCam()->GetTrans()->GetWRot();
-
-	GameDebugPlus::DrawDebugText(L"X %f, Y %f, Z %f, ROT_X %f, ROT_Y %f, ROT_Z %f"
-		, DEBUG_POS.X
-		, DEBUG_POS.Y
-		, DEBUG_POS.Z
-		, DEBUG_ROT.X
-		, DEBUG_ROT.Y
-		, DEBUG_ROT.Z
-	);
-
-	GameDebugPlus::DrawDebugText(L" LIGHT AMB X : %f, LIGHT AMB Y %f, LIGHT AMB Z %f"
-		, m_LightCom->GetAmbColor().X
-		, m_LightCom->GetAmbColor().Y
-		, m_LightCom->GetAmbColor().Z
-	);
-
-}
-
-void LevelDesignViewer::TargetDebugUpdate()
-{
-#pragma region DEBUGTEXTURE RENDERTARGET
-	float Ratio = 2.0f;
-	CVector Scale = { 128 * Ratio , 72 * Ratio };
-
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(0), Scale, CVector{ (640.0f - Scale.X), 360, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(1), Scale, CVector{ (640.0f - Scale.X), 360 - Scale.Y, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(2), Scale, CVector{ (640.0f - Scale.X), 360 - Scale.Y * 2, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(3), Scale, CVector{ (640.0f - Scale.X), 360 - Scale.Y * 3, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(6), Scale, CVector{ (640.0f - Scale.X * 2.0F), 360 - Scale.Y * 3, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->GbufferTarget()->Texture(7), Scale, CVector{ (640.0f - Scale.X), 360 - Scale.Y * 4, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_LightCom->ShadowTarget()->Texture(0), CVector{ Scale.X, Scale.X }, CVector{ (640.0f - Scale.X * 2.0f), (360 - Scale.Y * 4) + Scale.X - Scale.Y, 0.0f }, CVector::BLACK);
-	////GameDebugPlus::DrawDebugTexture(m_BloomFilterCom->OutTarget->Texture(0), Scale, CVector{ (640.0f - Scale.X * 2.0f), 360, 0.0f }, CVector::BLACK);
-	//GameDebugPlus::DrawDebugTexture(m_FreeCamCom->DeferredLightTarget()->Texture(3), Scale, CVector{ (640.0f - Scale.X * 2.0f), 360 - Scale.Y * 1, 0.0f }, CVector::BLACK);
-	
-	// 포그 필터 
-	// GameDebugPlus::DrawDebugTexture( ) 
-#pragma endregion
-}
 
 
 
@@ -443,6 +338,9 @@ void LevelDesignViewer::CreateAnimationMesh()
 	
 
 }
+
+
+
 void LevelDesignViewer::CreateStaticMesh() 
 {
 	//NewActor = nullptr;
