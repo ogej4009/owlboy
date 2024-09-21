@@ -14,8 +14,6 @@
 #include <FreeCam.h>
 
 
-
-int LevelDesignViewer::OneMapObj = 0;
 LevelDesignViewer* LevelDesignViewer::pViewer = nullptr;
 std::map<GameActor*, MapObjData> LevelDesignViewer::AllMapObjData;
 std::map<GameString*, SaveMapObjData> LevelDesignViewer::AllSaveMapObjData;
@@ -53,8 +51,6 @@ void LevelDesignViewer::Init()
 	// COLLISION(충돌연결)
 	GetScene()->ColLink(0,1); // 예시
 
-
-	SEL_TILESPR_INDEX = 0;
 
 	// 키설정  
 	if (nullptr == GameInput::FindKey(L"SELECT"))
@@ -103,7 +99,6 @@ void LevelDesignViewer::Init()
 	}*/
 
 
-
 	size_t Size = sizeof(ObjectLightData);
 	int XX = 0;
 
@@ -148,33 +143,7 @@ void LevelDesignViewer::Init()
 	//	NewRender->SetSrcSizeOfTexture(L"TestGrid.png");
 	//}
 
-	/* 
-	{
-		WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
-		WPTR<WRENDERER> NewRender = NewActor->CreateCom<WRENDERER>(L"GRIDMESH", L"GRID");
-		NewRender->CBUFFER(L"WWTRANSDATA", NewRender->PTRANSDATANEEDS(), CBUFFERMODE::CB_LINK);
-		NewActor->TRANS()->WSCALE({ 10000.0F, 10000.0F, 10000.0F });
-	}
-	*/
 
-
-
-#pragma region SPHERE
-	/*{
-		WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
-		WPTR<WRENDERER> NewRender = NewActor->CreateCom<WRENDERER>(L"SPHERE", L"Defferd");
-		NewActor->TRANS()->LPOS({ -2.0F, 2.0F, 2.0F });
-		NewRender->ShadowOn();
-	}
-	{
-		WPTR<WGAMEACTOR> NewActor = SCENE()->CreateActor();
-		WPTR<WRENDERER> NewRender = NewActor->CreateCom<WRENDERER>(L"SPHERE", L"Foward");
-		NewRender->GetRenderPlayer(0)->RenderOption.IsDifTexture = false;
-		NewRender->GetRenderPlayer(0)->RenderOption.IsNormalTexture = true;
-		NewRender->TEXTURE(L"NormalTexture", L"BumpTest.png");
-		NewActor->TRANS()->LPOS({ 2.0F, 2.0F, 2.0F });
-	}*/
-#pragma endregion
 
 
 #pragma region PLAYER 유저
@@ -197,14 +166,6 @@ void LevelDesignViewer::Init()
 	//}
 #pragma endregion
 
-
-	/* 
-	{
-		HPTR<HGAMEACTOR> ParticleActor = SCENE()->CreateActor();
-		HPTR<HPaticleCompoent> ParticleCom = ParticleActor->CreateCom<HPaticleCompoent>();
-
-	}
-	*/
 
 #pragma region LIGHT 
 	{
@@ -332,40 +293,6 @@ void LevelDesignViewer::CtrlUpdate()
 
 
 
-void LevelDesignViewer::CreateAnimationMesh()
-{
-
-	
-
-}
-
-
-
-void LevelDesignViewer::CreateStaticMesh() 
-{
-	//NewActor = nullptr;
-
-	//WGAMESTRING _Str = std::to_wstring(_FbxObjectData.MeshData.Index.x);
-
-	////////////////////// 스케일값은 고정한다. 
-	//if (_FbxObjectData.ActorType.x == (int)MESHDATATYPE::PROP_cablepack_goingdown_long)
-	//{
-	//	NewActor = SCENE()->CreateActor();
-	//	NewActor->CreateComName<PROP_cablepack_goingdown_long>(_Str);
-	//	// 
-	//}
-	//else if (_FbxObjectData.ActorType.x == (int)MESHDATATYPE::PROP_cables_flow_4)
-	//{
-	//	NewActor = SCENE()->CreateActor();
-	//	NewActor->CreateComName<PROP_cables_flow_4>(_Str);
-	//	// 
-	//}
-
-
-	//m_StaticActorData.insert(std::map<WGAMEACTOR*, MeshActorData>::value_type(NewActor, _FbxObjectData));
-
-}
-
 
 void LevelDesignViewer::FillInAllLightValue()
 {
@@ -400,48 +327,14 @@ void LevelDesignViewer::FillInAllLightValue()
 
 
 
-//
-//void WTOOLMAPSCENE::Update()
-//{
-//	W3DDEBUG::DrawDebugText(L"MouseX %f MouseY %f ", WGAMEWINDOW::MAINOBJ()->MousePos().X, WGAMEWINDOW::MAINOBJ()->MousePos().Y);
-//	W3DDEBUG::DrawDebugText(L"MouseScreenOrthX %f MouseScreenOrthY %f ", SCENE()->MainCam()->CamOrthMousePos2D().X, SCENE()->MainCam()->CamOrthMousePos2D().Y);
-//	W3DDEBUG::DrawDebugText(L"MouseWorldOrthX %f MouseWorldOrthY %f ", SCENE()->MainCam()->OrthWorldMousePos2D().X, SCENE()->MainCam()->OrthWorldMousePos2D().Y);
-//
-//	if (WRightView::number == L"" || m_ImageName == WRightView::number)
-//	{
-//
-//	}
-//	else
-//	{
-//		m_ImageName = WRightView::number;
-//		RENDERCHANGE(m_ImageName);
-//	}
-//
-//	/*if (true == WGAMEINPUT::Down(L"MAPONOFF"))
-//	{
-//		if (true == MAPRENDER->IsUpdate())
-//		{
-//			MAPRENDER->Off();
-//		}
-//		else
-//		{
-//			MAPRENDER->On();
-//		}
-//	}*/
-//	if (true == WGAMEINPUT::Down(L"MAPONOFF"))
-//	{
-//		if (false == W3DDEBUG::Debug())
-//		{
-//			W3DDEBUG::DebugOn();
-//			MAP_RENDER->SPRITE(m_ImageName + "_LINE.png");
-//		}
-//		else
-//		{
-//			W3DDEBUG::DebugOn();
-//			MAP_RENDER->SPRITE(m_ImageName + ".png");
-//		}
-//	}
-//
+
+
+
+
+
+
+
+
 //
 //	if (true == WGAMEINPUT::Down(L"MONSTERPICK"))
 //	{
@@ -472,182 +365,32 @@ void LevelDesignViewer::FillInAllLightValue()
 
 
 
-/* 
-
-
-
-void WTOOLMAPSCENE::CreateMonster(int _SelectIndex, WVECTOR _Pos)
-{
-	// 어떤 데이터
-	MONSTERDATA Data;
-
-	// 어떤 액터
-	WPTR<WGAMEACTOR> NewMonster = nullptr;
-
-	// 해당위치에 추가
-	Data.Type = _SelectIndex;
-
-	switch (_SelectIndex)
-	{
-	case 0:
-	{
-		// 몬스터 액터를 생성하고, 위치에 그냥 놓는다.
-		//
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.28f,1.28f,1.0f });
-		}
-		// 어떤 몬스터를 생성한다.
-		NewMonster->CreateCom<WBIGSKUILLMONSTER>();
-	}
-	break;
-
-	case 1:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WLITTLEGHOST>();
-	}
-	break;
-	case 2:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WBANSHMONSTER>();
-	}
-	break;
-	case 3:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WSKELDOG>();
-	}
-	break;
-
-	case 4:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WMINOTAURS>();
-	}
-	break;
-
-	case 5:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WSNAKE>();
-	}
-	break;
-
-	case 6:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WWYVERN>();
-	}
-	break;
-
-	case 7:
-	{
-		NewMonster = SCENE()->CreateActor();
-		NewMonster->TRANS()->WPOS2D(_Pos, -1.0F);
-		{
-			NewMonster->TRANS()->WSCALE({ 1.0f,1.0f,1.0f });
-			WPTR<WSPRITERENDERER> MONSTERRERRENDER = NewMonster->CreateCom<WSPRITERENDERER>((int)RENDERORDER::RENDERORDER_ACTOR);
-			MONSTERRERRENDER->LPOS({ 0, 0, 0 });
-		}
-		NewMonster->CreateCom<WGIANTBAT>();
-	}
-	break;
-
-	default:
-		break;
-	}
-
-	Data.Pos = _Pos;
-
-	// 생성한 몬스터는 여기에 집어넣는다.
-	m_MonsterData.insert(std::map<WGAMEACTOR*, MONSTERDATA>::value_type(NewMonster, Data));
-}
-
-*/
 
 
 
 
 
 
-//
-//
-//void HTOOLMAPSCENE::PlayerUpdate()
+//void WTOOLMAPSCENE::DebugTargetUdpate()
 //{
-//	if (HGAMEINPUT::Press(L"L"))
-//	{
-//		PlayerActor->TRANS()->LROTADDY(360.0f * HGAMETIME::DeltaTime());
-//
-//		// PlayerActor->TRANS()->WMOVE(PlayerActor->TRANS()->WLEFT());
-//	}
-//
-//	if (HGAMEINPUT::Press(L"R"))
-//	{
-//		PlayerActor->TRANS()->LROTADDY(-360.0f * HGAMETIME::DeltaTime());
-//		// PlayerActor->TRANS()->WMOVE(PlayerActor->TRANS()->WRIGHT());
-//	}
-//
-//	if (HGAMEINPUT::Press(L"F"))
-//	{
-//		PlayerActor->TRANS()->WMOVE(PlayerActor->TRANS()->WFORWARD() * HGAMETIME::DeltaTime(20.0F));
-//	}
-//
-//	if (HGAMEINPUT::Press(L"B"))
-//	{
-//		PlayerActor->TRANS()->WMOVE(PlayerActor->TRANS()->WBACK() * HGAMETIME::DeltaTime(20.0F));
-//	}
-//
-//	int2 Index = Map->Index(PlayerActor->TRANS()->WPOS());
-//
-//	H3DDEBUG::DrawDebugText(L"Index %d %d", Index.x, Index.y);
-//
-//
-//	HVECTOR Pos = PlayerActor->TRANS()->WPOS();
-//	Pos.y = Map->YHeight(PlayerActor->TRANS()->WPOS());
-//	PlayerActor->TRANS()->WPOS(Pos);
+//#pragma region DEBUGTEXTURE RENDERTARGET
+//	float Ratio = 2.0f;
+//	WVECTOR Scale = { 128 * Ratio, 72 * Ratio };
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(0), Scale, WVECTOR{ (640.0f - Scale.x), 360, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(1), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(2), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 2, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(3), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 3, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(6), Scale, WVECTOR{ (640.0f - Scale.x * 2.0F), 360 - Scale.y * 3, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(7), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 4, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_LightCom->ShadowTarget()->Texture(0), WVECTOR{ Scale.x, Scale.x }, WVECTOR{ (640.0f - Scale.x * 2.0f), (360 - Scale.y * 4) + Scale.x - Scale.y, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_BloomFilterCom->OutTarget->Texture(0), Scale, WVECTOR{ (640.0f - Scale.x * 2.0f), 360, 0.0f }, WVECTOR::BLACK);
+//	W3DDEBUG::DrawDebugTexture(m_CamCom->DefferdLightTarget()->Texture(3), Scale, WVECTOR{ (640.0f - Scale.x * 2.0f), 360 - Scale.y * 1, 0.0f }, WVECTOR::BLACK);
+//	// 포그 필터 
+//	// W3DDEBUG::DrawDebugTexture( ) 
+//#pragma endregion
 //}
 
 
-//
 //void HTOOLMAPSCENE::Update()
 //{
 //	PlayerUpdate();
@@ -691,7 +434,18 @@ void WTOOLMAPSCENE::CreateMonster(int _SelectIndex, WVECTOR _Pos)
 //	HRightView::View->CurFrame(AniCom->CurAni()->m_CurFrame);
 //
 //}
-//
+
+
+
+
+
+
+
+
+
+
+
+
 //void HTOOLMAPSCENE::CreateFBXObject(MeshCreateData _FbxObjectData)
 //{
 //	HPTR<HFBX> TestFbx = HFBX::Find(_FbxObjectData.m_MeshName);
@@ -736,26 +490,13 @@ void WTOOLMAPSCENE::CreateMonster(int _SelectIndex, WVECTOR _Pos)
 //	W3DDEBUG::DrawDebugText(L" LIGHT AMB X : %f, LIGHT AMB Y %f, LIGHT AMB Z %f", m_LightCom->GetAmbColor().x, m_LightCom->GetAmbColor().y, m_LightCom->GetAmbColor().z);
 //
 //}
-//
-//void WTOOLMAPSCENE::DebugTargetUdpate()
-//{
-//#pragma region DEBUGTEXTURE RENDERTARGET
-//	float Ratio = 2.0f;
-//	WVECTOR Scale = { 128 * Ratio, 72 * Ratio };
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(0), Scale, WVECTOR{ (640.0f - Scale.x), 360, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(1), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(2), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 2, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(3), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 3, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(6), Scale, WVECTOR{ (640.0f - Scale.x * 2.0F), 360 - Scale.y * 3, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->GbufferTarget()->Texture(7), Scale, WVECTOR{ (640.0f - Scale.x), 360 - Scale.y * 4, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_LightCom->ShadowTarget()->Texture(0), WVECTOR{ Scale.x, Scale.x }, WVECTOR{ (640.0f - Scale.x * 2.0f), (360 - Scale.y * 4) + Scale.x - Scale.y, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_BloomFilterCom->OutTarget->Texture(0), Scale, WVECTOR{ (640.0f - Scale.x * 2.0f), 360, 0.0f }, WVECTOR::BLACK);
-//	W3DDEBUG::DrawDebugTexture(m_CamCom->DefferdLightTarget()->Texture(3), Scale, WVECTOR{ (640.0f - Scale.x * 2.0f), 360 - Scale.y * 1, 0.0f }, WVECTOR::BLACK);
-//	// 포그 필터 
-//	// W3DDEBUG::DrawDebugTexture( ) 
-//#pragma endregion
-//}
-//
+
+
+
+
+
+
+
 //
 //void WTOOLMAPSCENE::CreateAnimationMesh(MeshCreateData _FbxObjectData)
 //{
@@ -784,111 +525,47 @@ void WTOOLMAPSCENE::CreateMonster(int _SelectIndex, WVECTOR _Pos)
 //	}
 //}
 
-//void WTOOLMAPSCENE::DeleteAnimationMesh(WGAMESTRING _Name)
-//{
-//	// 스위치문을 이용해서 이름을 비교하고 씬에 선언한 멤버변수를 지웁니다. 
-//}
-//
-//
-//
-//void WTOOLMAPSCENE::DeleteStaticMesh(WGAMESTRING _Name)
-//{
-//	// 스위치문을 이용해서 이름을 비교하고 씬에 선언한 멤버변수를 지웁니다. 
-//}
-//
-//
-//
-//void WTOOLMAPSCENE::FillInAllLightValue()
-//{
-//	LightCreateData LightObjData;
-//
-//	for (int i = 0; i < m_LightMeshComData.size(); i++)
-//	{
-//		std::map<int, WPTR<WLight>>::iterator Find;
-//		Find = m_LightMeshComData.find(i);
-//		if (m_LightMeshComData.end() == Find)
-//		{
-//			return;
-//		}
-//
-//		LightObjData.m_Type.x = i;
-//		LightObjData.m_Scale = Find->second->ACTOR()->TRANS()->WSCALE();
-//		LightObjData.m_Rot = Find->second->ACTOR()->TRANS()->WROT();
-//		LightObjData.m_Pos = Find->second->ACTOR()->TRANS()->WPOS();
-//		LightObjData.m_AmbColor = Find->second->GetAmbColor();
-//		LightObjData.m_SpecPow = Find->second->GetSpecPow();
-//		LightObjData.m_LightPower = Find->second->GetLightPower();
-//		LightObjData.m_LightDir = Find->second->GetLightDir();
-//		LightObjData.m_LIghtDirInv = Find->second->GetLightDirInv();
-//
-//		m_LightCreateMeshComData.insert(std::map<int, LightCreateData>::value_type(i, LightObjData));
-//	}
-//
-//}
-//
-//
-//void WTOOLMAPSCENE::ActorComAll()
-//{
-//	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 여기서부터~
-//
-//#pragma region MAP
-//	{
-//		m_MapActor = SCENE()->CreateActor();
-//		m_MapActor->CreateCom<TEST_MAP>();
-//		m_MapActor->TRANS()->WPOS({ -22.35f, 0.0f, 13.6f });
-//	}
-//#pragma endregion
-//	//
-//	//#pragma region COLMAP
-//	//	{
-//	//		m_ColMapActor = SCENE()->CreateActor();
-//	//		m_ColMapActor->CreateCom<TEST_COL_MAP>();
-//	//	}
-//	//#pragma endregion
-//	//
-//	//#pragma region PROP_cablepack_goingdown_long
-//	//	{
-//	//		WPTR<WGAMEACTOR> PROP_cablepack_goingdown_long_Actor = SCENE()->CreateActor();
-//	//		PROP_cablepack_goingdown_long_Actor->CreateCom<PROP_cablepack_goingdown_long>();
-//	//		PROP_cablepack_goingdown_long_Actor->TRANS()->WPOS({ 100.0f, 0.0f, 200.0f });
-//	//		//PROP_cablepack_goingdown_long_Actor->TRANS()->WROT({ 90.0f, 0.0f, 0.0f });
-//	//		PROP_cablepack_goingdown_long_Actor->TRANS()->WSCALE({ 0.1f, 0.1f, 0.1f });
-//	//	}
-//	//#pragma endregion
-//	//
-//	//#pragma region PROP_cables_flow_4
-//	//	{
-//	//		WPTR<WGAMEACTOR> PROP_cables_flow_4_Actor = SCENE()->CreateActor();
-//	//		PROP_cables_flow_4_Actor->CreateCom<PROP_cables_flow_4>();
-//	//		PROP_cables_flow_4_Actor->TRANS()->WPOS({ 100.0f, 0.0f, 200.0f });
-//	//		//PROP_cables_flow_4_Actor->TRANS()->WROT({ 90.0f, 0.0f, 0.0f });
-//	//		PROP_cables_flow_4_Actor->TRANS()->WSCALE({ 0.1f, 0.1f, 0.1f });
-//	//	}
-//	//#pragma endregion
-//	//
-//}
 
 
 
 
 
 
+void LevelDesignViewer::AddSelMapObj(int _Select, CVector _Pos)
+{
+	MapObjData Data;
 
+	CPtr<GameActor> NewActor = nullptr;
 
+	Data.Type = _Select;
 
+	switch (_Select)
+	{
+	case 0:
+	{
+		//NewActor = GetScene()->CreateActor();
+		//NewActor->GetTrans()->SetWPos2d(_Pos, -1.0f);
+		//NewActor->GetTrans()->SetWScale({ 1.28f, 1.28f, 1.0f });	
+	}
 
+	// NewActor->CreateCom
+	// <4가지유형의오브젝트가있다.>
+	// (int를 줄거다.valuedata혹은 enumdata헤더에 이름을 int로 나열해놓았다. );
 
+	break;
+	case 1:
+	{
 
+	}
+	default:
+		break;
+	}
 
+	Data.Pos = _Pos;
+	// Data.Name = _Name;
 
+	AllMapObjData.insert(std::map<GameActor*, MapObjData>::value_type(NewActor, Data));
 
-
-
-
-
-
-
-
-
+}
 
 

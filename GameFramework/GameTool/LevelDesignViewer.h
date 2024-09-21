@@ -71,14 +71,14 @@ public:
 
 	// 관리구조 
 	std::map<GameActor*, MeshActorData> m_StaticActorData;
-	std::vector<MeshCreateData> m_AllMeshData;
 	std::map<GameActor*, MeshCreateData> m_AniMeshComData;
+	std::vector<MeshCreateData> m_AllMeshData;
 	std::map<int, LightCreateData> m_LightCreateMeshComData;
 	std::map<int, CPtr<GameLight>> m_LightMeshComData;
 
-	
-	int SEL_TILESPR_INDEX;
+	// 월드좌표 
 	CVector m_ScreenPos3DToWorldPos;
+	int m_Index;
 
 	// 타일맵
 	CPtr<GameActor> m_GridActor;
@@ -97,10 +97,8 @@ public:
 	CPtr<FreeCam> m_FreeCamCom;
 
 	// 관리구조 
-	static int OneMapObj;
 	static std::map<GameActor*, MapObjData> AllMapObjData;
 	static std::map<GameString*, SaveMapObjData> AllSaveMapObjData;
-
 
 public:
 	// 타일맵함수 
@@ -126,8 +124,6 @@ public:
 	void CreateAnimationMesh();
 	void CreateStaticMesh();
 	void FillInAllLightValue();
-
-
 
 public:
 	void ViewDlg0();
