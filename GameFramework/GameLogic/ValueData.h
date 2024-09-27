@@ -39,6 +39,7 @@ public:
 	static CVector HERO_DEFAULT_POS_INSTAGE;
 	static float HERO_DEFAULT_Z_ORDER;
 	static float COL_LEVEL_DEFAULT_Z_ORDER;
+	static CPtr<GameTexture> FIND_TEXTURE;
 };
 
 bool OverCheck(CVector Pos);

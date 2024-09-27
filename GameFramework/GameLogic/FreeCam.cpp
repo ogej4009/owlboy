@@ -1,53 +1,55 @@
 #include "FreeCam.h"
-#include <GameActor.h>
-#include <GameCamera.h>
 #include <GameDebug.h> 
-#include <GameInput.h>
-#include <GameTransform.h>
-#include <GameTime.h>
-#include <GameRenderer.h>
 
-void FreeCam::CamInitialization()
+
+void FreeCam::CamReset()
 {
 	GetTrans()->SetWPos(m_FixedPos);
 	GetTrans()->SetWRot(m_FixedRot);
 	m_Cam->SetCamFov(m_FixedFov);
 }
 
-void FreeCam::CamAcceleration()
+void FreeCam::CamAccel()
 {
-	m_Speed += 0.1f;
+	m_MoveSpeed += FREECAM_MOVESPEED_ARGU;
+
+	if (m_MoveSpeed >= FREECAM_MOVESPEED_MAX)
+	{
+		m_MoveSpeed = FREECAM_MOVESPEED_MAX;
+	}
 }
 
-void FreeCam::CamSpeedInit()
+void FreeCam::CamDecel()
 {
-	m_Speed -= 0.1f;
+	m_MoveSpeed -= FREECAM_MOVESPEED_ARGU;
 
-	if (m_Speed <= 0.0f)
+	if (m_MoveSpeed <= FREECAM_MOVESPEED_MIN)
 	{
-		m_Speed = 0.0f;
+		m_MoveSpeed = FREECAM_MOVESPEED_MIN;
 	}
 }
 
 void FreeCam::CamZoomIn()
 {
-	if (m_Cam->GetCamFov() <= 1.0f)
+	if (m_Cam->GetCamFov() <= FREECAM_FOV_MIN)
 	{
 		return;
 	}
-	m_Cam->SetCamFov(m_Cam->GetCamFov() - 0.1f);
+
+	m_Cam->SetCamFov(m_Cam->GetCamFov() - GameTime::DeltaTime(FREECAM_FOV_ARGU)); 
 }
 
 void FreeCam::CamZoomOut()
 {
-	m_Cam->SetCamFov(m_Cam->GetCamFov() + 0.1f);
+	if (m_Cam->GetCamFov() >= FREECAM_FOV_MAX)
+	{
+		return;
+	}
+
+	m_Cam->SetCamFov(m_Cam->GetCamFov() + GameTime::DeltaTime(FREECAM_FOV_ARGU)); 
 }
 
 void FreeCam::Init()
-{
-}
-
-void FreeCam::Init(float _Speed)
 {
 	if (nullptr == GetActor()->FindComType<GameCamera>())
 	{
@@ -55,18 +57,22 @@ void FreeCam::Init(float _Speed)
 	}
 
 	m_Cam = GetActor()->FindComType<GameCamera>();
-	m_Speed = _Speed;
-	m_RotSpeed = 200.0f;
+
+	m_MoveSpeed = FREECAM_MOVESPEED;
+	m_RotSpeed = FREECAM_ROTSPEED;
+	m_HMoveSpeed = FREECAM_HMOVESPEED;
+	m_HRotSpeed = FREECAM_HROTSPEED;
 
 	m_StartPos = GetTrans()->GetWPos();
 	m_StartRot = GetTrans()->GetWRot();
 	m_StartFov = m_Cam->GetCamFov();
-	m_FixedPos = { 0.0f, 9.0f, -9.0f };
-	m_FixedRot = { 45.0f, 0.0f, 0.0f };
-	m_FixedFov = 45.0f;
 
-	//if (false == GameInput::FindKey(L"CAM_LEFT"))
-	//{
+	m_FixedPos = { 0.0f, 0.0f, FREECAM_DEF_POS_Z };
+	m_FixedRot = { FREECAM_DEF_ROT_X, 0.0f, 0.0f };
+	m_FixedFov = FREECAM_FOV; 
+
+	if (nullptr == GameInput::FindKey(L"CAM_LEFT"))
+	{
 		GameInput::CreateKey(L"CAM_LEFT", VK_NUMPAD4);
 		GameInput::CreateKey(L"CAM_RIGHT", VK_NUMPAD6);
 		GameInput::CreateKey(L"CAM_UP", VK_NUMPAD8);
@@ -74,65 +80,94 @@ void FreeCam::Init(float _Speed)
 		GameInput::CreateKey(L"CAM_FORWARD", VK_NUMPAD7);
 		GameInput::CreateKey(L"CAM_BACK", VK_NUMPAD9);
 		GameInput::CreateKey(L"CAM_ROT", VK_NUMPAD5);
-		GameInput::CreateKey(L"CAM_INIT", VK_NUMPAD0);
-		GameInput::CreateKey(L"CAM_SPEED_ACCEL", '+');
-		GameInput::CreateKey(L"CAM_SPEED_DOWN", '-');
+		GameInput::CreateKey(L"CAM_RESET", VK_NUMPAD0);
 		GameInput::CreateKey(L"CAM_ZOOM_IN", VK_NUMPAD1);
 		GameInput::CreateKey(L"CAM_ZOOM_OUT", VK_NUMPAD3);
-	//}
+		GameInput::CreateKey(L"CAM_SPEED_ACC", VK_SHIFT);
+		GameInput::CreateKey(L"CAM_SPEED_DEC", VK_CONTROL);
+	}
+	else
+	{
+		int Test = 0;
+	}
+
 }
+
 
 void FreeCam::Update()
 {
+
+	GetTrans()->GetTransDataPlus().Pos =  GetTrans()->GetWPos();
+
 	if (true == GameInput::Press(L"CAM_LEFT"))
 	{
-		GetTrans()->LMove(GetTrans()->WLeft() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WLeft() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
 	if (true == GameInput::Press(L"CAM_RIGHT"))
 	{
-		GetTrans()->LMove(GetTrans()->WRight() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WRight() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
 	if (true == GameInput::Press(L"CAM_UP"))
 	{
-		GetTrans()->LMove(GetTrans()->WUp() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WUp() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
 	if (true == GameInput::Press(L"CAM_DOWN"))
 	{
-		GetTrans()->LMove(GetTrans()->WDown() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WDown() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
 	if (true == GameInput::Press(L"CAM_FORWARD"))
 	{
-		GetTrans()->LMove(GetTrans()->WForward() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WForward() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
 	if (true == GameInput::Press(L"CAM_BACK"))
 	{
-		GetTrans()->LMove(GetTrans()->WBack() * GameTime::DeltaTime(m_Speed));
+		GetTrans()->LMove(GetTrans()->WBack() * GameTime::DeltaTime(m_HMoveSpeed));
 	}
 
-	if (true == GameInput::Press(L"CAM_ROT"))
-	{
-		GetTrans()->WRotAddY(GameInput::MouseDir3D().X * GameTime::DeltaTime(m_RotSpeed));
-		GetTrans()->WRotAddX(-GameInput::MouseDir3D().Y * GameTime::DeltaTime(m_RotSpeed));
+	if (true == GameInput::Press(L"CAM_ROT") && GameInput::Press(L"CAM_UP"))
+	{		
+		CVector Dir;
+		Dir = GameInput::MouseDir3D();
+		GetTrans()->WRotAddX(-360.0f * GameTime::DeltaTime(m_HRotSpeed));
 	}
 
-	if (true == GameInput::Down(L"CAM_INIT"))
+	if (true == GameInput::Press(L"CAM_ROT") && GameInput::Press(L"CAM_DOWN"))
 	{
-		CamInitialization();
+		CVector Dir;
+		Dir = GameInput::MouseDir3D();
+		GetTrans()->WRotAddX(360.0f * GameTime::DeltaTime(m_HRotSpeed));
 	}
 
-	if (true == GameInput::Press(L"CAM_SPEED_ACCEL"))
+	if (true == GameInput::Press(L"CAM_ROT") && GameInput::Press(L"CAM_LEFT"))
 	{
-		CamAcceleration();
+		CVector Dir;
+		Dir = GameInput::MouseDir3D();
+		GetTrans()->WRotAddY(-GameTime::DeltaTime(m_HRotSpeed));
+		GetTrans()->WRotAddX(GameTime::DeltaTime(m_HRotSpeed));
+		// GetTrans()->WRotAddY(Dir.x * GameTime::DeltaTime(m_HRotSpeed));
+		// GetTrans()->WRotAddX(-Dir.y * GameTime::DeltaTime(m_HRotSpeed));		
+		// GetTrans()->LRotAddY(-360.0f * GameTime::DeltaTime(m_HRotSpeed));
 	}
 
-	if (true == GameInput::Press(L"CAM_SPEED_DOWN"))
+	if (true == GameInput::Press(L"CAM_ROT") && GameInput::Press(L"CAM_RIGHT"))
 	{
-		CamSpeedInit();
+		CVector Dir;
+		Dir = GameInput::MouseDir3D();
+		GetTrans()->WRotAddY(GameTime::DeltaTime(m_HRotSpeed));
+		GetTrans()->WRotAddX(-GameTime::DeltaTime(m_HRotSpeed));
+		// GetTrans()->WRotAddY(Dir.x * GameTime::DeltaTime(m_HRotSpeed));
+		// GetTrans()->WRotAddX(-Dir.y * GameTime::DeltaTime(m_HRotSpeed));
+		// GetTrans()->LRotAddY(360.0f * GameTime::DeltaTime(m_HRotSpeed));
+	}
+
+	if (true == GameInput::Down(L"CAM_RESET"))
+	{
+		CamReset();
 	}
 
 	if (true == GameInput::Press(L"CAM_ZOOM_IN"))
@@ -144,17 +179,16 @@ void FreeCam::Update()
 	{
 		CamZoomOut();
 	}
+
+
 }
 
 FreeCam::FreeCam()
 {
 }
 
-FreeCam::FreeCam(float _Speed)
-{
-	m_Speed = _Speed;
-}
-
 FreeCam::~FreeCam()
 {
 }
+
+

@@ -172,6 +172,7 @@
     <ClInclude Include="FreeCam.h" />
     <ClInclude Include="FrontShader.h" />
     <ClInclude Include="Fruit.h" />
+    <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameUnity.h" />
     <ClInclude Include="Gate.h" />
     <ClInclude Include="Gawk.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Shorts0.h" />
     <ClInclude Include="Spider.h" />
     <ClInclude Include="Spikeball.h" />
+    <ClInclude Include="StageBase.h" />
     <ClInclude Include="SteamBomb.h" />
     <ClInclude Include="DesignCam.h" />
     <ClInclude Include="Torque.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="FreeCam.cpp" />
     <ClCompile Include="FrontShader.cpp" />
     <ClCompile Include="Fruit.cpp" />
+    <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Gawk.cpp" />
     <ClCompile Include="Gnome.cpp" />
@@ -272,6 +275,7 @@
     <ClCompile Include="Shorts0.cpp" />
     <ClCompile Include="Spider.cpp" />
     <ClCompile Include="Spikeball.cpp" />
+    <ClCompile Include="StageBase.cpp" />
     <ClCompile Include="SteamBomb.cpp" />
     <ClCompile Include="DesignCam.cpp" />
     <ClCompile Include="Torque.cpp" />

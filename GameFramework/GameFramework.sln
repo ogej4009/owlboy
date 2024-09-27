@@ -42,6 +42,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2022", "thirdparty\DirectXTK-main\DirectXTK_Desktop_2022.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameTool", "GameTool\GameTool.vcxproj", "{CEB9FEA4-D2D5-49ED-A882-30E40722563C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03BEAA48-8128-4EE5-A1C5-7F076E88C010} = {03BEAA48-8128-4EE5-A1C5-7F076E88C010}
+		{C0F377A3-24F7-4E8B-B230-8EFA2D62D7EF} = {C0F377A3-24F7-4E8B-B230-8EFA2D62D7EF}
+		{CD0D229C-0979-4878-98CD-93F2C71B5ACA} = {CD0D229C-0979-4878-98CD-93F2C71B5ACA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

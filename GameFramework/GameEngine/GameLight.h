@@ -8,7 +8,7 @@
 // HLight가 생긴곳에 방향을 알수있는 오브젝트도 만들어주세요.
 class GameLight : public ActorComponent
 {
-	friend class XTransform;
+	friend class GameTransform;
 
 private:
 	std::list<LightData*> DataList;

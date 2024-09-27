@@ -73,10 +73,10 @@ void TutorScene::SceneChangeStart()
 	}
 
 	// UI 
-	{
-		CPtr<GameActor> NewActor = GetScene()->CreateActor();
-		NewActor->CreateCom<Cursor>();
-	}
+	//{
+	//	CPtr<GameActor> NewActor = GetScene()->CreateActor();
+	//	NewActor->CreateCom<Cursor>();
+	//}
 
 	// ÇÈ¼¿Ãæµ¹
 	{
@@ -89,8 +89,8 @@ void TutorScene::SceneChangeStart()
 		NewActor->GetTrans()->SetWScale(ValueData::STAGE_SCALE);
 		NewActor->GetTrans()->SetWPos(Coord);
 
-		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>((UINT)eRENDER_ORDER::RO_COL_LEVEL);
-		NewRender->SetSprite(ValueData::STAGE_NAME);
+		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>(ValueData::STAGE_NAME, (UINT)eRENDER_ORDER::RO_COL_LEVEL);
+		//NewRender->SetSprite(ValueData::STAGE_NAME);
 		NewRender->Off();
 	}
 

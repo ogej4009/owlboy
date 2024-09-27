@@ -44,6 +44,11 @@ private:
 	virtual void DeferredMergeNextEffect() {}
 };
 
+
+
+
+
+
 class GameTexture;
 class GameRenderPlayer;
 class GameRenderTarget;

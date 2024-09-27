@@ -1,6 +1,8 @@
 #include "GameDevice.h"
 #include "GameDebugPlus.h"
 #include "GameRenderTarget.h"
+
+
 bool GameDevice::bDefResInit = false;
 
 GameDevice::GameDevice()

@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="DreamScene.cpp" />
     <ClCompile Include="DungeonLv1.cpp" />
     <ClCompile Include="DungeonLv2.cpp" />
@@ -163,8 +162,6 @@
     <ClCompile Include="VellieScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DemoScene.h" />
-    <ClInclude Include="DemoSceneObjUnity.h" />
     <ClInclude Include="DreamScene.h" />
     <ClInclude Include="DungeonLv1.h" />
     <ClInclude Include="DungeonLv2.h" />
@@ -184,10 +181,6 @@
     <ClInclude Include="TutorScene.h" />
     <ClInclude Include="TutorSceneObjUnity.h" />
     <ClInclude Include="VellieScene.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="PLAYSTAGE1.txt" />
-    <Text Include="텍스트.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

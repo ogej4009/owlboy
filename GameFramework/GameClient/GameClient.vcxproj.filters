@@ -91,12 +91,6 @@
     <Filter Include="소스 파일\STAGE\10">
       <UniqueIdentifier>{86fd8b77-6411-4033-899b-e8403d8e33aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="데모">
-      <UniqueIdentifier>{42ab3921-ce61-426a-b3fb-70fefa5f1f97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="타일맵">
-      <UniqueIdentifier>{4e58c702-cca0-4bdf-80c1-0996d0535ade}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Epilogue.cpp">
@@ -155,9 +149,6 @@
     </ClCompile>
     <ClCompile Include="mainsrc.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DemoScene.cpp">
-      <Filter>데모</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,17 +209,5 @@
     <ClInclude Include="TutorSceneObjUnity.h">
       <Filter>헤더 파일\STAGE\0</Filter>
     </ClInclude>
-    <ClInclude Include="DemoSceneObjUnity.h">
-      <Filter>데모</Filter>
-    </ClInclude>
-    <ClInclude Include="DemoScene.h">
-      <Filter>데모</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="텍스트.txt">
-      <Filter>타일맵</Filter>
-    </Text>
-    <Text Include="PLAYSTAGE1.txt" />
   </ItemGroup>
 </Project>

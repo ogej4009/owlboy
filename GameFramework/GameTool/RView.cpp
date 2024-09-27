@@ -6,7 +6,7 @@
 #include "RView.h"
 
 #include <GameScene.h>
-#include "LevelDesignViewer.h"
+#include "LevelDesignTool.h"
 
 
 IMPLEMENT_DYNCREATE(RView, CFormView)
@@ -65,7 +65,7 @@ int RView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	MDlg.Create(IDD_RView, this);
 	MDlg.ShowWindow(SW_SHOW);
 
-	GameScene::Create<LevelDesignViewer>(L"MAP");
+	GameScene::Create<LevelDesignTool>(L"MAP");
 	GameScene::ChangeScene(L"MAP");
 
 	return 0;

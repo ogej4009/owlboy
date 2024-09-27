@@ -27,8 +27,8 @@ void CircleFade::Update()
 			m_Mode = FADEIO::MAX;
 		}
 		Move(CVector::FORWARD, m_Speed);
-		/*m_Speed += GameTime::DeltaTime(0.01f);
-		m_Render->SetAlpha(m_Speed);
+		/*m_MoveSpeed += GameTime::DeltaTime(0.01f);
+		m_Render->SetAlpha(m_MoveSpeed);
 		m_Render->Off();*/
 		break;
 	case FADEIO::FADEOUT:
@@ -37,8 +37,8 @@ void CircleFade::Update()
 			m_Mode = FADEIO::MAX;
 		}
 		Move(CVector::BACK, m_Speed);
-		/*m_Speed -= GameTime::DeltaTime(0.01f);
-		m_Render->SetAlpha(m_Speed);
+		/*m_MoveSpeed -= GameTime::DeltaTime(0.01f);
+		m_Render->SetAlpha(m_MoveSpeed);
 		m_Render->Off();*/
 		break;
 	case FADEIO::MAX:

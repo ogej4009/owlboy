@@ -1,5 +1,9 @@
 #pragma once
 #include "GameUnity.h"
+
+#pragma comment(lib, "GameBase.lib")
+#pragma comment(lib, "GameEngine.lib")
+
 class ScrollCam : public ActorComponent
 {
 	CPtr<GameCamera> m_Cam;

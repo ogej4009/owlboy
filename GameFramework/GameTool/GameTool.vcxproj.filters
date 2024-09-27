@@ -49,22 +49,21 @@
     <ClCompile Include="Dlg3.cpp" />
     <ClCompile Include="Dlg4.cpp" />
     <ClCompile Include="GameTool.cpp" />
-    <ClCompile Include="LevelDesignViewer_IO.cpp" />
+    <ClCompile Include="LevelDesignTool_IO.cpp" />
     <ClCompile Include="LView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="RView.cpp" />
-    <ClCompile Include="LevelDesignViewer.cpp" />
+    <ClCompile Include="LevelDesignTool.cpp" />
     <ClCompile Include="MainDlg.cpp" />
-    <ClCompile Include="LevelDesignViewer_Dlg0.cpp" />
-    <ClCompile Include="LevelDesignViewer_Dlg1.cpp" />
-    <ClCompile Include="LevelDesignViewer_Dlg2.cpp" />
-    <ClCompile Include="LevelDesignViewer_Dlg3.cpp" />
-    <ClCompile Include="LevelDesignViewer_Dlg4.cpp" />
-    <ClCompile Include="LevelDesignViewer_TileMap.cpp" />
-    <ClCompile Include="LevelDesignViewer_Entity.cpp" />
-    <ClCompile Include="LevelDesignViewer_Text.cpp" />
-    <ClCompile Include="LevelDesignViewer_RenderTarget.cpp" />
+    <ClCompile Include="LevelDesignTool_Dlg0.cpp" />
+    <ClCompile Include="LevelDesignTool_Dlg1.cpp" />
+    <ClCompile Include="LevelDesignTool_Dlg2.cpp" />
+    <ClCompile Include="LevelDesignTool_Dlg3.cpp" />
+    <ClCompile Include="LevelDesignTool_Dlg4.cpp" />
+    <ClCompile Include="LevelDesignTool_Ctrl.cpp" />
+    <ClCompile Include="LevelDesignTool_Text.cpp" />
+    <ClCompile Include="LevelDesignTool_RenderTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dlg0.h" />
@@ -80,7 +79,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="RView.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="LevelDesignViewer.h" />
+    <ClInclude Include="LevelDesignTool.h" />
     <ClInclude Include="MainDlg.h" />
   </ItemGroup>
 </Project>

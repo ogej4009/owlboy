@@ -79,7 +79,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //{
 //	UpdateData(TRUE);
 //
-//	if (0 == WTOOLMAPSCENE::Inst->m_StaticActorData.size())
+//	if (0 == WTOOLMAPSCENE::Inst->m_mapAllActorData.size())
 //	{
 //		return;
 //	}
@@ -104,7 +104,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //
 //
 //
-//	for (auto& Var : WTOOLMAPSCENE::Inst->m_StaticActorData)
+//	for (auto& Var : WTOOLMAPSCENE::Inst->m_mapAllActorData)
 //	{
 //		if (Var.second.m_ActorType.x != Name || Var.second.m_MeshData.m_Index.x != Num)
 //		{
@@ -159,7 +159,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //	CString StrNumber;
 //
 //	// 찾기 
-//	for (auto& _VAR : WTOOLMAPSCENE::Inst->m_StaticActorData)
+//	for (auto& _VAR : WTOOLMAPSCENE::Inst->m_mapAllActorData)
 //	{
 //		StrNumber.Format(_T("%d"), _VAR.second.m_MeshData.m_Index.x);
 //		// 데이터들 중에서 현재 커서에 해당하는 이름과 비교해서 
@@ -218,14 +218,14 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //	{
 //		return;
 //	}
-//	MeshActorData Data;
+//	CActorData Data;
 //	CString FBXNAME;
 //	int MESHINDEX = (int)_wtof(m_ActorIndexCtrlS);
 //	m_StaticLoadListCtrl.GetText(CURIDX, FBXNAME);
 //	Data.m_ActorType.x = CURIDX;
 //	Data.m_MeshData.m_Index.x = MESHINDEX;
 //	// 꼭 필요한 함수입니다. 
-//	WTOOLMAPSCENE::Inst->CreateStaticMesh(Data);
+//	WTOOLMAPSCENE::Inst->BackdropUpdate(Data);
 //	m_StaticSetListCtrl.AddString(FBXNAME);
 //
 //
@@ -253,7 +253,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 
 
 //
-//for (auto& _VAR : WTOOLMAPSCENE::Inst->m_LightCreateMeshComData)
+//for (auto& _VAR : WTOOLMAPSCENE::Inst->m_mapAllLightData)
 //{
 //	if (_VAR.second.m_Type.x == SELECTONE)
 //	{
@@ -274,7 +274,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //{
 //	UpdateData(TRUE);
 //
-//	if (0 == WTOOLMAPSCENE::Inst->m_LightCreateMeshComData.size())
+//	if (0 == WTOOLMAPSCENE::Inst->m_mapAllLightData.size())
 //	{
 //		return;
 //	}
@@ -295,7 +295,7 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //	FILENAME += L".LIGHTSAVE";
 //	WGAMEFILE SaveFile = WGAMEFILE(DIC.PlusFileName(FILENAME), L"wb");
 //
-//	for (auto& Var : WTOOLMAPSCENE::Inst->m_LightCreateMeshComData)
+//	for (auto& Var : WTOOLMAPSCENE::Inst->m_mapAllLightData)
 //	{
 //		SaveFile.SaveValue(Var.second.m_Type);
 //		SaveFile.SaveValue(Var.second.m_Scale);
@@ -312,13 +312,13 @@ void Dlg0::OnBnClickedBdUpdateBtn()
 //}
 
 
-//std::map<WGAMEACTOR*, MeshCreateData> m_StaticMeshComData;
-//std::map<WGAMEACTOR*, MeshActorData> m_StaticActorData;
-//std::vector<MeshCreateData> m_AllMeshData;
+//std::map<WGAMEACTOR*, CActorBaseData> m_StaticMeshComData;
+//std::map<WGAMEACTOR*, CActorData> m_mapAllActorData;
+//std::vector<CActorBaseData> m_vecAllActorBaseData;
 //WPTR<WGAMEACTOR> NewActor;
-//std::map<WGAMEACTOR*, MeshCreateData> m_AniMeshComData;
-//std::map<int, LightCreateData> m_LightCreateMeshComData;
-//std::map<int, WPTR<WLight>> m_LightMeshComData;
+//std::map<WGAMEACTOR*, CActorBaseData> m_mapAllActorBaseData;
+//std::map<int, CLightData> m_mapAllLightData;
+//std::map<int, WPTR<WLight>> m_mapAllLight;
 
 
 

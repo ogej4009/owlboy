@@ -77,7 +77,7 @@ void LIGHTVIEW::OnBnClickedLightloadbtn()
 {
 	// 콤보박스에 살아있는 빛컴포넌트들의 인덱스를 추가합니다.
 	ComboboxAddString();
-	WTOOLMAPSCENE::Inst->FillInAllLightValue();
+	WTOOLMAPSCENE::Inst->LightValueUpdate();
 }
 
 */

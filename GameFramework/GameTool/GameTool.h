@@ -8,7 +8,7 @@
 #endif
 
 #include "resource.h"       // 주 기호입니다.
-#include "LevelDesignViewer.h"
+#include "LevelDesignTool.h"
 
 // CGameToolApp:
 // 이 클래스의 구현에 대해서는 GameTool.cpp을(를) 참조하세요.
@@ -19,7 +19,7 @@ class CGameToolApp : public CWinApp
 public:
 	CGameToolApp() noexcept;
 
-	LevelDesignViewer* CMapTool;
+	LevelDesignTool* CMapTool;
 // 재정의입니다.
 public:
 	virtual BOOL InitInstance();

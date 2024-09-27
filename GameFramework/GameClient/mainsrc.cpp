@@ -4,12 +4,15 @@
 #include <GameDebugPlus.h>
 //#include <GameSound.h> 
 #include <GameUnity.h>
-#include "DemoScene.h"
+
+
 #include "Intro.h"
+#include "TutorScene.h"
 
 #pragma comment(lib, "GameBase.lib")
 #pragma comment(lib, "GameEngine.lib")
 #pragma comment(lib, "GameLogic.lib")
+
 
 int __stdcall EntityLoad()
 {
@@ -37,10 +40,6 @@ int __stdcall EntityLoad()
 		GameSprite::Create(L"sprBorder_690x404.png", 1, 1);
 
 
-		//sprBorder_690x404
-
-
-
 	}
 
 	{
@@ -61,7 +60,6 @@ int __stdcall EntityLoad()
 		}
 	}
 
-
 	{
 		GameDirectory Dic;
 		Dic.MoveParent(L"GameFramework");
@@ -69,7 +67,6 @@ int __stdcall EntityLoad()
 		Dic.Move(L"tex");
 		Dic.Move(L"Global");
 		Dic.Move(L"Trigger");
-
 		auto FileList = Dic.DirAllFile();
 		for (auto& _File : FileList)
 		{
@@ -82,26 +79,20 @@ int __stdcall EntityLoad()
 		GameSprite::Create(L"sprBtnRTeleport_47x31_2x1.png", 2, 1);
 		GameSprite::Create(L"sprKeyTeleportGunner_52x48_2x1.png", 2, 1);
 		GameSprite::Create(L"sprKeyFly_20x36_2x1.png", 2, 1);
-
-
 	}
 
 	{
 		GameDirectory Dic;
-
 		Dic.MoveParent(L"GameFramework");
 		Dic.Move(L"resource");
 		Dic.Move(L"tex");
 		Dic.Move(L"Global");
 		Dic.Move(L"Otus");
-
 		auto FileList = Dic.DirAllFile();
-
 		for (auto& _File : FileList)
 		{
 			GameTexture::Load(_File);
 		}
-
 		GameSprite::Create(L"sprOtusStand_112x96_13x1.png", 13, 1);
 		GameSprite::Create(L"sprOtusRun_112x96_12x1.png", 12, 1);
 		GameSprite::Create(L"sprOtusJumpFall_112x96_5x2.png", 5, 2);
@@ -217,16 +208,18 @@ int __stdcall Start()
 	//		_ljGameSound::Load(_File);
 	//	}
 	//	_ljGameSound::Play(L"25. Owl Temple.mp3");
-	//} Win
+	//}
 #pragma endregion
+
 
 	EntityLoad();
 
-
-	GameScene::Create<DemoScene>(L"DEMO");
 	GameScene::Create<Intro>(L"INTRO");
+	GameScene::Create<TutorScene>(L"TUTOR");
+
 
 	GameScene::ChangeScene(L"INTRO");
+
 	return 1;
 }
 
@@ -241,14 +234,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nCmdShow)
 {
-#pragma region 체크 사항
-	/*
-		4byte leak을 체크한다.
-		_ljGameWin -> m_AllObj를 확인한다.
-		_ljGameDevice -> m_AllObj를 확인한다.
-		FirstObj 를 통해서 처음 만들어진 _ljGameWin, _ljGameDevice 를 쓰는 순간을 확인한다.
-	*/
-#pragma endregion
 
 	new int();
 	GameWin::Create(L"MainWindow");

@@ -114,7 +114,6 @@ public:
 	void Init(const GameString& Name, int Order);
 	void Update() override;
 	void Render(CPtr<GameCamera> _Cam) override;
-	//void RenderUpdate(CPtr<GameCamera> _Cam) override;
 
 public:
 	GameSpriteRenderer();

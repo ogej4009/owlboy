@@ -103,8 +103,8 @@ void Dlg3::OnBnClickedTileSelBtn()
 		m_bDlg3Trigger = true;
 	}
 
-	//LevelDesignViewer::GetMainMapToolEditor()->TileTrigger(m_bDlg3Trigger); 
-	//LevelDesignViewer::GetMainMapToolEditor()->TileInit(nCurSel);
+	//LevelDesignTool::GetMainMapToolEditor()->TileTrigger(m_bDlg3Trigger); 
+	//LevelDesignTool::GetMainMapToolEditor()->TileInit(nCurSel);
 
 
 }

@@ -5,6 +5,8 @@
 #include <GameObjTFuncMgr.h>
 #include <GameWin.h>
 
+
+
 #pragma comment(lib, "GameBase.lib")
 
 #pragma region 디바이스 
@@ -14,7 +16,7 @@
 */
 #pragma endregion
 
-class GameRenderTarget; 
+class GameRenderTarget;
 class GameDevice : public GameFirstObjMgr<GameDevice>
 {
 public:
@@ -101,8 +103,8 @@ public:
 	}
 
 private:
-	CPtr<GameRenderTarget>		m_BackBufferRenderTarget;
-	CPtr<GameRenderTarget>		m_UserDataTarget;
+	CPtr<GameRenderTarget> m_BackBufferRenderTarget;
+	CPtr<GameRenderTarget> m_UserDataTarget;
 
 public:
 	CPtr<GameRenderTarget> BackBufferRenderTarget();
