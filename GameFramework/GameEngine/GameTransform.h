@@ -73,6 +73,7 @@ protected:
 
 	CTransData m_DefTD;
 	CTransDataGrid m_GridTD;
+	CTransDataLevel m_LevelTD;
 
 	GameTransform* m_Parent;
 	std::list<GameTransform*> m_ChildList;
@@ -117,6 +118,23 @@ public:
 		return &m_GridTD;
 	}
 	
+
+public:
+	CTransDataLevel GetTransDataLV()
+	{
+		return m_LevelTD;
+	}
+
+	const CTransDataLevel& CRTransDataLV()
+	{
+		return m_LevelTD;
+	}
+
+	CTransDataLevel* PTransDataLV()
+	{
+		return &m_LevelTD;
+	}
+
 
 public:
 	GameTransform();

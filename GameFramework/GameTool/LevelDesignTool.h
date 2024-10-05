@@ -75,7 +75,7 @@ public:
 	std::vector<CActorBaseData> m_vecAllActorBaseData;
 	std::map<int, CLightData> m_mapAllLightData;
 	std::map<int, CPtr<GameLight>> m_mapAllLight;
-	static std::map<GameActor*, MapObjData> AllMapObjData;
+	static std::map<GameActor*, MapObjData> AllMapObjData; // MAPDATA
 	static std::map<GameString*, SaveMapObjData> AllSaveMapObjData;
 
 	// ¿ùµåÁÂÇ¥ 
@@ -96,6 +96,8 @@ public:
 	CPtr<GameActor> m_FreeCamActor;
 	CPtr<FreeCam> m_FreeCamCom;
 
+
+	int2 TestCoord;
 
 public:
 	// Å¸ÀÏ¸ÊÇÔ¼ö 
@@ -138,6 +140,10 @@ public:
 	void ViewDlg2();
 	void ViewDlg3();
 	void ViewDlg4();
+
+public:
+	void RayColFunc(GameCol* _This, GameCol* _Other);
+	//void ToolColFunc(GameCol* _This, GameCol* _Other);
 
 public:
 	void Progress();

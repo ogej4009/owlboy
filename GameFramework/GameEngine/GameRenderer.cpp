@@ -272,34 +272,30 @@ void GameRenderer::RpUpdate(int _Index)
 }
 
 
-std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileMap(const CPtr<GameMesh>& _Mesh, const GameString& _MatName, int _INDEX)
+std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileMap(const CPtr<GameMesh>& _Mesh, const GameString& _MatName, int _Index)
 {
-	// 랜더플레이어 리스트를 건든다. 
-	// 옵션을 건드려서 
-	// 이것의 내용을 만든다. 
-	// 
+
 	std::vector<CPtr<GameRenderPlayer>> NewList;
 	
-	CPtr<GameSprite> COLSPR = GameSprite::Find(L"ColLevel2.png");
-	CPtr<GameTexture> ERRORTEX = GameTexture::Find(L"ErrorTile.png");
+	CPtr<GameSprite> LEVEL = GameSprite::Find(L"ColLevel2.png");
 
-	for (size_t i = 0; i < _INDEX; i++)
+	for (size_t i = 0; i < _Index; i++)
 	{
 		CPtr<GameRenderPlayer> RP = CreateRenderPlayer(_Mesh, _MatName);
-		RP->SetTexture(L"ErrorTile", ERRORTEX);
-		RP->m_RenderOption.IsDifTexture = false;
+		RP->SetTexture(L"SrcTex", LEVEL->Tex());
+		RP->m_RenderOption.IsDifTexture = true;
 
 		if (false == RP->m_RenderOption.IsDifTexture)
 		{
-			RP->SetTexture(L"SrcTex", COLSPR->Tex());
+			RP->SetTexture(L"SrcTex", LEVEL->Tex());
 			RP->SetSampler(L"SrcSmp", L"LWSMP");
-			CVector SprCutData = COLSPR->SpriteData(0);
+			CVector SprCutData = LEVEL->SpriteData(0);
 			RP->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
 		}
 		NewList.push_back(RP);
 
 		// 이거는 등록 
-		if (0 <= _INDEX)
+		if (0 <= _Index)
 		{
 			std::list<TextureData*> List = RP->AllTextureData(L"ErrorTile");
 			for (auto Setter : List)

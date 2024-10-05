@@ -11,7 +11,14 @@
 
 void GameDevice::MaterialInit()
 {
-	
+	{
+		CPtr<GameMaterial> MAT = GameMaterial::Create(L"TileRender");
+		MAT->SetVtxShader(L"VS_TileRender");
+		MAT->SetPixShader(L"PS_TileRender");
+		MAT->SetRasterizer(L"None");
+		MAT->SetDepthStencil(L"DefaultDepth");
+		MAT->SetBlend(L"AlphaBlend");
+	}
 
 	{
 		CPtr<GameMaterial> MAT = GameMaterial::Create(L"EmissionMap");

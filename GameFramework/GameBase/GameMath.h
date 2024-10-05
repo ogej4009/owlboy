@@ -1459,6 +1459,97 @@ public:
 };
 
 
+class CTransDataLevel
+{
+public:
+	union
+	{
+		struct
+		{
+			CMatrix POS;
+			CMatrix SCALE;
+			CMatrix ROT;
+			CMatrix REVO;
+			CMatrix PARENT;
+			CMatrix LWORLD;
+			CMatrix WWORLD;
+			CMatrix VIEW;
+			CMatrix PROJ;
+			CMatrix WV;
+			CMatrix VP;
+			CMatrix WVP;
+		};
+		CMatrix	ARRMAT[(int)MRX_BASE::MRX_MAX];
+	};
+
+public:
+	void CalUnitMatrix()
+	{
+		for (auto& _Value : ARRMAT)
+		{
+			_Value.UnitMat();
+		}
+	}
+
+	void CalTransposMat()
+	{
+		for (auto& _Value : ARRMAT)
+		{
+			_Value.TRANSPOSE();
+		}
+	}
+
+	void CalLWorld()
+	{
+		LWORLD = SCALE * ROT * POS * REVO;
+	}
+
+	void CalWWorld()
+	{
+		WWORLD = LWORLD * PARENT;
+	}
+
+	void SetVP(CMatrix _VIEW, CMatrix _PROJ)
+	{
+		VIEW = _VIEW;
+		PROJ = _PROJ;
+	}
+
+	/* 데이터 수정, 업데이트의 편의성을 위한 방식 */
+	void CalWVP()
+	{
+		WV = WWORLD * VIEW;
+		VP = VIEW * PROJ;
+		WVP = WWORLD * VIEW * PROJ;
+	}
+
+	void SetWWorldForTile(CMatrix _Mat)
+	{
+		WWORLD = _Mat;
+	}
+
+public:
+	void CalTransData()
+	{
+		CalLWorld();
+		CalWWorld();
+		CalWVP();
+	}
+
+public:
+	CTransDataLevel() : LWORLD()
+	{
+	}
+
+	CTransDataLevel(const CTransDataLevel& _Other)
+	{
+		memcpy_s(this, sizeof(CTransDataLevel), &_Other, sizeof(CTransDataLevel));
+	}
+
+	~CTransDataLevel()
+	{
+	}
+};
 
 
 class CTransDataGrid

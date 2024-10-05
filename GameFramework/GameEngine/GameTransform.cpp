@@ -43,7 +43,7 @@ GameTransform::GameColStarter::GameColStarter()
 GameTransform::GameTransform()
 	: m_LPos(CVector::ZERO), m_LScale(CVector::ONE), m_LRot(CVector::ZERO)
 	, m_WPos(CVector::ZERO), m_WScale(CVector::ONE), m_WRot(CVector::ZERO)
-	, m_DefTD(), CalMatrixCheck{ true, }, m_Parent(nullptr), m_GridTD()
+	, m_DefTD(), CalMatrixCheck{ true, }, m_Parent(nullptr), m_GridTD(), m_LevelTD()
 {
 	memset(&CalMatrixCheck, 1, sizeof(CalMatrixCheck));
 	
@@ -56,6 +56,8 @@ GameTransform::GameTransform()
 	m_GridTD.CalUnitMat(); // 추가 
 	m_GridTD.FloatSetting(10.0f, 50.0f, 0.05f, 0.1f); // 추가 
 
+	///////////////////////////////////////// 레벨디자인 
+	m_LevelTD.CalUnitMatrix();
 
 }
 
@@ -224,9 +226,15 @@ void GameTransform::CamUpdate(CPtr<GameCamera> _Cam)
 	m_DefTD.VIEW = _Cam->m_View;
 	m_DefTD.CalWVP();
 
+	/////////////////////////////////////////////// 
 	m_GridTD.Pos = _Cam->GetTrans()->GetWPos();
 	m_GridTD.Pos.Y = 0.0f;
 
+	/////////////////////////////////////////////// 
+	m_LevelTD.WWORLD.ArrV[3] = _Cam->GetTrans()->GetWPos();
+	m_LevelTD.PROJ = _Cam->m_Proj;
+	m_LevelTD.VIEW = _Cam->m_View;
+	m_LevelTD.CalWVP();
 }
 
 void GameTransform::ColCheck()
@@ -449,6 +457,11 @@ void GameTransform::LightUpdate(const LightData& _Light)
 	m_DefTD.PROJ = _Light.m_Proj;
 	m_DefTD.VIEW = _Light.m_View;
 	m_DefTD.CalWVP();
+
+	//////////////////////////////////
+	m_LevelTD.PROJ = _Light.m_Proj;
+	m_LevelTD.VIEW = _Light.m_View;
+	m_LevelTD.CalWVP();
 
 }
 

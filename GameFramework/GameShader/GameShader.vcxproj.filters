@@ -37,6 +37,7 @@
     <FxCompile Include="YellowLight.hlsl" />
     <FxCompile Include="OutLine.hlsl" />
     <FxCompile Include="OutLineDraw.hlsl" />
+    <FxCompile Include="TileRender.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include=".h">
@@ -59,5 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="UI2d.txt" />
+    <Text Include="분석.txt" />
   </ItemGroup>
 </Project>

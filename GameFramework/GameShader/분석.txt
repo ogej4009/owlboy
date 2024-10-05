@@ -1,0 +1,319 @@
+////////////////////////////////////////////////// 코드 분석 
+#include "BumpBase.hlsli"
+#include "RenderBase.hlsli"
+
+점에 대해 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+struct VtxIn
+{
+    float4 Pos : POSITION;
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
+    float4 Normal : NORMAL;
+    float4 BiNormal : BINORMAL;
+    float4 Tangent : TANGENT;
+    float4 Weight : BLENDWEIGHT;
+    int4 Index : BLENDINDICES;
+};
+
+struct VtxOut
+{
+    float4 Pos : SV_Position;
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
+    float4 ViewPos : POSITION;
+    float4 ViewNormal : NORMAL;
+    float4 ViewBiNormal : BINORMAL;
+    float4 ViewTangent : TANGENT;
+};
+
+
+
+cbuffer TransData : register(b0)
+{
+    TransData TD;
+}
+
+cbuffer MapOption : register(b3)
+{
+    float XCount;
+    float ZCount;
+    float PixelRatio;
+    float YScale;
+    float4 PixelUv;
+    float4 PixelScale;
+}
+
+Texture2D WTex : register(t0);
+SamplerState Smp : register(s0);
+
+
+버텍스 쉐이더 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+VtxOut VS_MapDeferredTexture(VtxIn _In)
+{
+    float2 YValueUv = float2(_In.Uv.x / XCount, _In.Uv.y / ZCount);
+    float2 RightUv = float2(YValueUv.x + PixelUv.x * PixelRatio, YValueUv.y);
+    float2 ForwardUv = float2(YValueUv.x, YValueUv.y - PixelUv.y * PixelRatio);
+
+    float4 MapColor = WTex.SampleLevel(Smp, YValueUv.xy, 0);
+    float4 ColorRight = WTex.SampleLevel(Smp, RightUv.xy, 0);
+    float4 ColorForward = WTex.SampleLevel(Smp, ForwardUv.xy, 0);
+
+    float4 Pos = _In.Pos;
+    float4 Right = float4(Pos.x + PixelScale.x * PixelRatio, 0.0f, Pos.z, 0.0f);
+    float4 Forward = float4(Pos.x, 0.0f, Pos.z + PixelScale.y * PixelRatio, 0.0f);
+   
+    _In.Pos.y = MapColor.x;
+    Pos.y = MapColor.x * YScale;
+    Right.y = ColorRight.x * YScale;
+    Forward.y = ColorForward.x * YScale;
+
+    _In.Normal.xyz = normalize(cross(Forward.xyz - Pos.xyz, Right.xyz - Pos.xyz));
+
+    Pos.w = 1.0f;
+    _In.Normal.w = 0.0f;
+    
+    
+    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 여기 값 채운다. 
+
+
+    VtxOut Out = (VtxOut) 0;
+
+    Out.Pos = mul(_In.Pos, TD.WVP);
+    Out.Uv = _In.Uv;
+    Out.Color = _In.Color;
+    Out.ViewPos = mul(_In.Pos, TD.WV);
+    Out.ViewNormal = normalize(mul(_In.Normal, TD.WV));
+
+    _In.BiNormal.w = 0.0f;
+    Out.ViewBiNormal = normalize(mul(_In.BiNormal, TD.WV));
+
+    _In.Tangent.w = 0.0f;
+    Out.ViewTangent = normalize(mul(_In.Tangent, TD.WV));
+
+    return Out;
+}
+
+
+
+
+결과값 컬러 
+
+struct DeferredOut
+{
+    float4 DifColor : SV_Target0;
+    float4 PosColor : SV_Target1;
+    float4 NorColor : SV_Target2;
+    float4 DepColor : SV_Target3;
+};
+
+cbuffer RenderOption : register(b8)
+{
+    int IsDifTexture;
+    int IsNormalTexture;
+    int IsOutLine;
+    int IsShadow;
+    int IsAni;
+    int IsDummy0;
+    int IsDummy1;
+    int IsDummy2;
+    float4 BasicColor;
+}
+
+
+
+
+Texture2D BaseTex : register(t0);
+Texture2D NormalTexture : register(t1);
+
+
+
+
+DeferredOut PS_MapDeferredTexture(VtxOut _In)
+{
+    DeferredOut Out = (DeferredOut) 0;
+    Out.DifColor = BaseTex.Sample(Smp, _In.Uv.xy);
+    Out.NorColor = _In.ViewNormal;
+    Out.PosColor = _In.ViewPos;
+    Out.DepColor.x = _In.ViewPos.z;
+    Out.DepColor.w = Out.PosColor.w = Out.NorColor.w = 1.0f;
+    return Out;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "RenderBase.hlsli"
+
+struct VtxIn
+{
+    float4 Pos : POSITION; 
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
+};
+
+struct VtxOut
+{
+    float4 Pos : SV_Position;
+    float4 Uv : TEXCOORD;
+    float4 Color : COLOR;
+};
+
+cbuffer TransData : register(b0)
+{
+    TransData TD;
+}
+
+cbuffer RenderOptionData : register(b7)
+{
+    RenderOption RO;
+}
+
+cbuffer CutData : register(b1)
+{
+    CutData CD;
+};
+
+VtxOut VS_Sprite(VtxIn _In)
+{
+    VtxOut Out = (VtxOut) 0;
+    
+    Out.Pos = mul(_In.Pos, TD.WVP);
+    Out.Uv = _In.Uv;
+    Out.Color = _In.Color;
+    
+    float XSize = CD.Data.z;
+    float YSize = CD.Data.w;
+    float XStart = CD.Data.x;
+    float YStart = CD.Data.y;
+    
+    Out.Uv.x = (Out.Uv.x * XSize) + XStart;
+    Out.Uv.y = (Out.Uv.y * YSize) + YStart;
+    
+    return Out;
+}
+
+cbuffer DrawColor : register(b0) 
+{
+    float4 Color; 
+}
+
+struct DeferredOut
+{
+    float4 DifColor : SV_Target0;
+    float4 PosColor : SV_Target1;
+    float4 NorColor : SV_Target2;
+    float4 DepColor : SV_Target3;
+};
+
+Texture2D Tex : register(t0);
+SamplerState Smp : register(s0);
+
+DeferredOut PS_Sprite(VtxOut _Out) : SV_Target0
+{
+   //NormalOut Out;
+   //Out.NormalColor = Tex.Sample(Smp, _Out.Uv.xy);
+   //if (Option.x == 0)
+   //{
+   //    Out.NormalColor.xyz *= Color.xyz;
+   //    Out.NormalColor.a *= Color.a;
+   //}
+   //else
+   //{
+   //    if (Out.NormalColor.x != 0 || Out.NormalColor.y != 0 || Out.NormalColor.z != 0)
+   //    {
+   
+   //        Out.NormalColor.xyz = Color.xyz;
+   //        Out.NormalColor.a = Color.a;
+   //    }
+   //}
+   
+    DeferredOut Out = (DeferredOut) 0;
+
+    Out.DifColor = Tex.Sample(Smp, _Out.Uv.xy);
+
+    Out.PosColor.x = 0.5f;
+    Out.PosColor.y = 0.5f;
+    Out.PosColor.z = 0.5f;
+
+    Out.NorColor.x = 0.5f;
+    Out.NorColor.y = 0.5f;
+    Out.NorColor.z = 0.5f;
+
+    Out.DepColor.x = 0.5f;
+    Out.DepColor.y = 0.5f;
+    Out.DepColor.z = 0.5f;
+    
+    // 1, 1, 1 * 1, 0, 0 == 1, 1, 1
+    Out.DifColor.xyz *= Color.xyz;
+    
+    if (0 != Out.DifColor.a)
+    {
+        Out.DifColor.a = Color.a;
+    }
+
+    return Out;
+   
+}
+
+/*
+float4 PS_Frame(Vtx2D_Out _In) : SV_Target0
+{
+    float4 Color = Tex.Sample(Smp, _In.Uv.xy);
+    float4 RedColor = { 1.0f, 0.0f, 0.0f, 1.0f };
+   
+    if (_In.Uv.x <= 0.01 || _In.Uv.x >= 0.99)
+    {
+        int a = 0;
+        return RedColor;     
+    }
+
+    if (_In.Uv.y <= 0.01 || _In.Uv.y >= 0.99)
+    {
+        int a = 0;
+        return RedColor;
+    }
+    
+    Color.xyz *= RenderColor.xyz;
+    
+    if (0 != Color.a)
+    {
+        Color.a = RenderColor.a;
+    }
+  
+    return Color;
+}
+
+*/

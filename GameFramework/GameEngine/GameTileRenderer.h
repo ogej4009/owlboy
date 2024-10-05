@@ -10,6 +10,9 @@ class TILE
 public:
 	int2 KEY;
 	unsigned int INDEX;
+	// 트랜스데이터 CTransData CTransDataLV
+	// 랜더플레이어 GameRenderPlayer* RP
+	// TILE(int _Index, GameRenderPlayer* _RP) : RP(_RP), INDEX(_Index)
 };
 
 
@@ -31,15 +34,17 @@ private:
 	CPtr<GameMesh> m_Mesh;
 	CPtr<GameTransform> m_Trans;
 	CPtr<GameRenderer> m_Render;
-	CPtr<GameRenderPlayer> m_RP;
+	CPtr<GameRenderPlayer> RP;
 	std::vector<Vtx2D> m_VecVtx;
 	std::vector<CPtr<GameRenderPlayer>> RPList;
 	CVector m_SprCutData;
 	CVector m_SprDrawColor;
 	int m_SprRenderOption[4];
-	std::map<__int64, TILE> m_mapAllTile;
+	std::map<__int64, TILE*> m_mapAllTile;
 	std::list<TILE*> m_listAllTile;
+	int m_BaseTextureIndex;
 	int m_SprIndex;
+
 	CVector MapSize;
 
 public:
@@ -60,6 +65,12 @@ public:
 	{
 		MapSize = _Size;
 	}
+
+	CVector GetMapSize()
+	{
+		return MapSize;
+	}
+
 
 public:
 	void Init() override;

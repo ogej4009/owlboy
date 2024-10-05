@@ -16,40 +16,104 @@ GameTileRenderer::~GameTileRenderer()
 
 void GameTileRenderer::Init()
 {
-	GameRenderer::Init(L"FrameRect", L"Sprite", 0);
+	GameRenderer::Init(L"FrameRect", L"TileRender", 0);
 }
 
 void GameTileRenderer::Init(int& _X, int& _Y, const GameString& _TexName, int _Index)
 {
-	GameRenderer::Init(L"FrameRect", L"Sprite", _Index);
 
 	X = _X;
 	Y = _Y;
 
-	m_SprDrawColor = CVector::WHITE;
-	m_SprRenderOption[3] = m_SprRenderOption[2] = m_SprRenderOption[1] = m_SprRenderOption[0] = 0;
-	m_Sprite = GameSprite::Find(_TexName);
+	////////////////////////////////////////////////////////////////////////////////////////
 
-	if (m_Sprite != nullptr)
+	m_Render = GetActor()->CreateCom<GameRenderer>(L"FrameRect", L"TileRender", _Index);
+
+
+	m_Mesh = new GameMesh();
+	CPtr<GameVtxBuffer> VB = new GameVtxBuffer();
+	CPtr<GameIdxBuffer> IB = new GameIdxBuffer();
+
+	m_VecVtx.resize((X + 1) * (Y + 1));
+
+	float StartX = -0.5f;
+	float StartY = 0.5f;
+
+	for (int y = 0; y < Y + 1; y++)
 	{
-		m_SprCutData = m_Sprite->SpriteData(0);
-		//SetCBuffer(L"TransData", m_Parent->GetPTransData(), CBUFMODE::CB_LINK);
-		//SetCBuffer(L"RenderOption", &m_SprRenderOption, CBUFMODE::CB_LINK);
-		//m_SprParent->CreateRenderPlayer(0)->m_RenderOption.IsDifTexture = false;
-		SetTexture(L"Tex", m_Sprite->Tex());
-		SetSampler(L"Smp", L"LWSMP");
-		SetCBuffer(L"CutData", &m_SprCutData, CBUFMODE::CB_LINK);
-		SetCBuffer(L"DrawColor", &m_SprDrawColor, CBUFMODE::CB_LINK);	
+		for (int x = 0; x < X + 1; x++)
+		{
+			float PosY = StartY - (y * ((float)1 / Y));
+			float PosX = StartX + (x * ((float)1 / X));
+
+			int Index = y * (X + 1) + x;
+
+			m_VecVtx[Index].Pos.X = PosX;
+			m_VecVtx[Index].Pos.Y = PosY;
+
+			m_VecVtx[Index].Uv.X = (float)x;
+			m_VecVtx[Index].Uv.Y = (float)y;
+		}
 	}
 
-	SettingTile();
+	VB->Create(m_VecVtx.size(), sizeof(Vtx2D), &m_VecVtx[0]);
+
+	std::vector<UINT> m_MapIdx;
+
+	for (int y = 0; y < Y; y++)
+	{
+		for (int x = 0; x < X; x++)
+		{
+			int Pivot = y * (X + 1) + x;
+
+			m_MapIdx.push_back(Pivot);
+			m_MapIdx.push_back(Pivot + 1);
+			m_MapIdx.push_back(Pivot + (X + 1) + 1);
+
+			m_MapIdx.push_back(Pivot);
+			m_MapIdx.push_back(Pivot + (X + 1) + 1);
+			m_MapIdx.push_back(Pivot + (X + 1));
+		}
+	}
+
+	IB->Create(m_MapIdx.size(), sizeof(UINT), &m_MapIdx[0], DXGI_FORMAT::DXGI_FORMAT_R32_UINT);
+
+	m_Mesh->SetVtxBuffer(VB);
+	m_Mesh->SetIdxBuffer(IB);
+
+	////////////////////////////////////////////////////////////////////////////////////////
+
+	m_SprIndex = 0;
+	m_Sprite = GameSprite::Find(_TexName);
+	m_BaseTextureIndex = 0;
+	m_BaseTextureIndex = _Index;
+
+	m_SprDrawColor = CVector::WHITE;
+	m_SprRenderOption[3] = m_SprRenderOption[2] = m_SprRenderOption[1] = 0;
+	m_SprRenderOption[0] = 1; // DifColor 
+
+	//m_Render->CreateRenderPlayer(m_Mesh, L"TileRender");
+	
+	if (m_Sprite != nullptr)
+	{
+		m_SprCutData = m_Sprite->SpriteData(m_BaseTextureIndex);
+	//	m_Render->SetCBuffer(L"TransData", m_Parent->GetPTransData(), CBUFMODE::CB_LINK);
+		m_Render->SetCBuffer(L"RenderOptionData", &m_SprRenderOption, CBUFMODE::CB_LINK);
+		m_Render->SetTexture(L"BaseTex", m_Sprite->Tex());
+		m_Render->SetSampler(L"BaseSmp", L"LWSMP");
+		m_Render->SetCBuffer(L"CutData", &m_SprCutData, CBUFMODE::CB_LINK);
+		//SetCBuffer(L"DrawColor", &m_SprDrawColor, CBUFMODE::CB_LINK);	
+	}
+
+
+	//SettingTile();
 
 }
 
 void GameTileRenderer::Update()
 {
-	m_SprCutData = m_Sprite->SpriteData(0);
-
+	// 베이스 텍스쳐 업데이트 
+	m_SprCutData = m_Sprite->SpriteData(m_BaseTextureIndex);
 }
 
 void GameTileRenderer::Render(CPtr<GameCamera> _Cam)
@@ -58,6 +122,9 @@ void GameTileRenderer::Render(CPtr<GameCamera> _Cam)
 
 void GameTileRenderer::TileAdd(CVector _Pos, unsigned int _Index)
 {
+	// 소스 텍스쳐 인덱스를 가져온다. 
+	m_BaseTextureIndex = _Index;
+
 	// 좌표를 통해 키를 만든다. 
 	int2 Coord = CalCoord(_Pos);
 	__int64 Key = Coord.Key;
@@ -65,40 +132,48 @@ void GameTileRenderer::TileAdd(CVector _Pos, unsigned int _Index)
 	// 인덱스를 찾는 함수를 만든다. 
 	//int Index = CalIndex(Coord);
 
-	std::map<__int64, TILE>::iterator FindIter = m_mapAllTile.find(Key);
+	//m_Sprite = GameSprite::Find(L"ColLevel2.png");
+	m_SprCutData = m_Sprite->SpriteData(_Index);
+	m_SprDrawColor = CVector::WHITE;
 
-	//if (m_mapAllTile.end() != FindIter)
-	//{
-	//	TileRemove(_Pos, _Index);
-	//	TILE* NewTile = new TILE();
-	//	
-	//	NewTile->Key.Key = Key;
-	//	NewTile->Index = FindIter->second.Index; // 수정 
-	//	NewTile->Rp = m_Render->GetRenderPlayer(NewTile->Index);
-	//	//  + 텍스쳐 옵션설정 바꾼다. 
-	//	NewTile->Rp->m_RenderOption.IsDifTexture = true;
-	//	NewTile->Rp->SetTexture(L"SrcTex", m_Tex);
-	//	NewTile->Rp->SetSampler(L"SrcSmp", L"LWSMP");
-	//	CVector SprCutData = m_Sprite->SpriteData(5);
-	//	NewTile->Rp->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
-	//	m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-	//	NewTile->Rp->Render();
-	//	return;
-	//}
+	std::map<__int64, TILE*>::iterator Find_Iter = m_mapAllTile.find(Key);
 
-	//TileRemove(_Pos, _Index);
-	//TILE* NewTile = new TILE();
-	//NewTile->Key.Key = Key;
-	//NewTile->Index = FindIter->second.Index; // 수정 
-	//NewTile->Rp = m_Render->GetRenderPlayer(NewTile->Index);
-	////  + 텍스쳐 옵션설정 바꾼다. 
-	//NewTile->Rp->m_RenderOption.IsDifTexture = true;
-	//NewTile->Rp->SetTexture(L"SrcTex", m_Tex);
-	//NewTile->Rp->SetSampler(L"SrcSmp", L"LWSMP");
-	//CVector SprCutData = m_Sprite->SpriteData(5);
-	//NewTile->Rp->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
-	//m_mapAllTile.insert(std::map<__int64, TILE>::value_type(Key, *NewTile));
-	//NewTile->Rp->Render();
+	if (m_mapAllTile.end() != Find_Iter)
+	{
+		TileRemove(_Pos, _Index);
+		
+		TILE* NEWTILE = new TILE(/*0, nullptr*/);
+		NEWTILE->KEY.Key = Key;
+		NEWTILE->INDEX = m_BaseTextureIndex;
+
+		m_mapAllTile.insert(std::map<__int64, TILE*>::value_type(Key, NEWTILE));
+		m_listAllTile.push_back(NEWTILE);
+
+		RP = GetRenderPlayer(Coord.Key);
+		RP->SetCBuffer(L"CutData", &m_SprCutData, CBUFMODE::CB_LINK);
+		//RP->SetCBuffer(L"DrawColor", &m_SprDrawColor, CBUFMODE::CB_LINK);
+		RP->SetCBuffer(L"RenderOptionData", &m_SprRenderOption, CBUFMODE::CB_LINK);
+		RP->SetTexture(L"BaseTex", m_Sprite->Tex());
+		RP->SetSampler(L"BaseSmp", L"LWSMP");
+		RP->m_RenderOption.IsDifTexture = true;
+		return;		
+	}
+
+	TILE* NEWTILE = new TILE(/*0, nullptr*/);
+	NEWTILE->KEY.Key = Key;
+	NEWTILE->INDEX = m_BaseTextureIndex;
+
+	m_mapAllTile.insert(std::map<__int64, TILE*>::value_type(Key, NEWTILE));
+	m_listAllTile.push_back(NEWTILE);
+
+	RP = GetRenderPlayer(Coord.Key);
+	RP->SetCBuffer(L"CutData", &m_SprCutData, CBUFMODE::CB_LINK);
+	//RP->SetCBuffer(L"DrawColor", &m_SprDrawColor, CBUFMODE::CB_LINK);
+	RP->SetCBuffer(L"RenderOptionData", &m_SprRenderOption, CBUFMODE::CB_LINK);
+	RP->SetTexture(L"BaseTex", m_Sprite->Tex());
+	RP->SetSampler(L"BaseSmp", L"LWSMP");
+	RP->m_RenderOption.IsDifTexture = true;
+
 }
 
 void GameTileRenderer::TileRemove(CVector _Pos, unsigned int _Index)
@@ -119,14 +194,13 @@ void GameTileRenderer::TileLoad()
 
 int2 GameTileRenderer::CalCoord(float4 _Pos)
 {
-	//float4 Scale = GetTrans()->GetWScale(); // 맵 크기 ? 
 	float XSize = MapSize.X / (float)X;
 	float YSize = MapSize.Y / (float)Y;
 	int2 ReturnIndex;
 	float IndexX = _Pos.X / XSize;
 	float IndexY = _Pos.Y / YSize;
-	IndexX = roundf(IndexX);
-	IndexY = roundf(IndexY);
+	IndexX = round(IndexX);
+	IndexY = round(IndexY);
 	ReturnIndex.x = (int)IndexX;
 	ReturnIndex.y = (int)IndexY;
 	return ReturnIndex;
@@ -177,12 +251,12 @@ void GameTileRenderer::SettingTile()
 			Index.x = x;
 			Index.y = y;
 
-			float CenterX = (x * InterX);
-			float CenterY = (y * InterY);
+			float CenterX = (x * InterX * 100);
+			float CenterY = (y * InterY * 100);
 
-			m_mapAllTile[Index.Key].KEY.Arr[0] = CenterX + HInterX;
-			m_mapAllTile[Index.Key].KEY.Arr[1] = CenterY + HInterY;
-			m_mapAllTile[Index.Key].INDEX = m_SprIndex;
+			m_mapAllTile[Index.Key]->KEY.x = CenterX + HInterX;
+			m_mapAllTile[Index.Key]->KEY.y = CenterY + HInterY;
+			m_mapAllTile[Index.Key]->INDEX = m_SprIndex;
 			m_SprIndex++;
 		}
 	}

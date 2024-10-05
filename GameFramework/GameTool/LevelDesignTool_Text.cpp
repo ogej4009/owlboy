@@ -3,7 +3,7 @@
 #include <DesignCam.h>
 #include <FreeCam.h>
 #include <GameLight.h>
-
+#include <GameTileRenderer.h>
 
 
 void LevelDesignTool::TextInfoUpdate()
@@ -39,25 +39,25 @@ void LevelDesignTool::TextInfoUpdate()
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,70 }, CVector::WHITE);
 
-	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-	//	, m_DesignCamActor->GetTrans()->GetWPos().X
-	//	, m_DesignCamActor->GetTrans()->GetWPos().Y
-	//	, m_DesignCamActor->GetTrans()->GetWPos().Z
-	//);
-	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
-
-	//swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
-	//	, m_DesignCamCom->GetCamSize().X
-	//	, m_DesignCamCom->GetCamSize().Y
-	//);
-	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
-
 	swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-		, m_FreeCamActor->GetTrans()->GetWPos().X
-		, m_FreeCamActor->GetTrans()->GetWPos().Y
-		, m_FreeCamActor->GetTrans()->GetWPos().Z
+		, m_DesignCamActor->GetTrans()->GetWPos().X
+		, m_DesignCamActor->GetTrans()->GetWPos().Y
+		, m_DesignCamActor->GetTrans()->GetWPos().Z
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
+
+	swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
+		, m_DesignCamCom->GetCamSize().X
+		, m_DesignCamCom->GetCamSize().Y
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
+
+	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
+	//	, m_FreeCamActor->GetTrans()->GetWPos().X
+	//	, m_FreeCamActor->GetTrans()->GetWPos().Y
+	//	, m_FreeCamActor->GetTrans()->GetWPos().Z
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
 
 	//swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
 	//	, m_FreeCamCom->GetCamSize().X
@@ -66,14 +66,57 @@ void LevelDesignTool::TextInfoUpdate()
 	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
 
 	swprintf_s(Arr, L"[ScreenPos3DToWorldPos] X : %f, Y : %f, Z : %f"
-		, m_ScreenPos3DToWorldPos.X
-		, m_ScreenPos3DToWorldPos.Y
-		, m_ScreenPos3DToWorldPos.Z
+		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X
+		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y
+		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Z
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,130 }, CVector::WHITE);
 
+	swprintf_s(Arr, L"[Light AmbColor] X : %f, Y : %f, Z : %f"
+		, m_LightCom->GetAmbColor().X
+		, m_LightCom->GetAmbColor().Y
+		, m_LightCom->GetAmbColor().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,150 }, CVector::WHITE);
 
-	PaperBurnTestCBuffer.W = PaperBurnTestCBuffer.W - sin(GameTime::DeltaTime(0.5f));
+	swprintf_s(Arr, L"[Light SpecPow] X : %f, Y : %f, Z : %f"
+		, m_LightCom->GetSpecPow().X
+		, m_LightCom->GetSpecPow().Y
+		, m_LightCom->GetSpecPow().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,170 }, CVector::WHITE);
+
+	swprintf_s(Arr, L"[Light Power] X : %f, Y : %f, Z : %f"
+		, m_LightCom->GetLightPower().X
+		, m_LightCom->GetLightPower().Y
+		, m_LightCom->GetLightPower().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,190 }, CVector::WHITE);
+
+	swprintf_s(Arr, L"[Light Dir] X : %f, Y : %f, Z : %f"
+		, m_LightCom->GetLightDir().X
+		, m_LightCom->GetLightDir().Y
+		, m_LightCom->GetLightDir().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,210 }, CVector::WHITE);
+
+	swprintf_s(Arr, L"[Light DirInv] X : %f, Y : %f, Z : %f"
+		, m_LightCom->GetLightDirInv().X
+		, m_LightCom->GetLightDirInv().Y
+		, m_LightCom->GetLightDirInv().Z
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,230 }, CVector::WHITE);
+
+	TestCoord = m_TileRenderCom->CalCoord(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()));
+	swprintf_s(Arr, L"[Coord] X : %d, Y : %d"
+		, TestCoord.x
+		, TestCoord.y
+	);
+	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,250 }, CVector::WHITE);
+
+
+
+	/*PaperBurnTestCBuffer.W = PaperBurnTestCBuffer.W - sin(GameTime::DeltaTime(0.5f));
 
 	CVector CamPos = GetScene()->MainCam()->GetTrans()->GetWPos();
 	CVector CamRot = GetScene()->MainCam()->GetTrans()->GetWRot();
@@ -87,7 +130,7 @@ void LevelDesignTool::TextInfoUpdate()
 		, m_LightCom->GetAmbColor().X
 		, m_LightCom->GetAmbColor().Y
 		, m_LightCom->GetAmbColor().Z
-	);
+	);*/
 
 }
 
