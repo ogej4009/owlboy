@@ -196,7 +196,11 @@ public:
 
 	std::vector<CPtr<GameRenderPlayer>> CreateRenderPlayerTileMap(const CPtr<GameMesh>& _Mesh
 		, const GameString& _MatName
-		, int INDEX);
+		, int _Index);
+
+	std::vector<CPtr<GameRenderPlayer>> CreateRenderPlayerTileRender(const CPtr<GameMesh>& _Mesh
+		, const GameString& _MatName
+		, int _Index);
 
 public:
 	void ShadowOn();

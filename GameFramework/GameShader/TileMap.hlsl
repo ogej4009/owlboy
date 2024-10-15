@@ -30,7 +30,7 @@ cbuffer RenderOptionData : register(b7)
 cbuffer CutData : register(b1)
 {
     CutData CD;
-};
+}
 
 ///////////////////////// ¼öÁ¤ 
 
@@ -84,13 +84,13 @@ DeferredOut PS_TileMap(VtxOut _Out) : SV_Target0
     DeferredOut Out = (DeferredOut) 0;
    
     if (RO.IsDifTexture.x == 0) // true false
-   {
-        Out.DifColor = ErrorTile.Sample(Smp, _Out.Uv.xy);
-   }
-   else
-   {
-        Out.DifColor = _Out.Color;
-   }
+    {
+         Out.DifColor = ErrorTile.Sample(Smp, _Out.Uv.xy);
+    }
+    else
+    {
+         Out.DifColor = _Out.Color;
+    }
 
     //Out.PosColor.x = 0.5f;
     //Out.PosColor.y = 0.5f;

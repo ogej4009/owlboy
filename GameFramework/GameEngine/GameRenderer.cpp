@@ -285,12 +285,11 @@ std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileMap(cons
 		RP->SetTexture(L"SrcTex", LEVEL->Tex());
 		RP->m_RenderOption.IsDifTexture = true;
 
-		if (false == RP->m_RenderOption.IsDifTexture)
+		if (false != RP->m_RenderOption.IsDifTexture)
 		{
-			RP->SetTexture(L"SrcTex", LEVEL->Tex());
 			RP->SetSampler(L"SrcSmp", L"LWSMP");
-			CVector SprCutData = LEVEL->SpriteData(0);
-			RP->SetCBuffer(L"SrcCutData", &SprCutData, CBUFMODE::CB_LINK);
+			CVector SprCutData = LEVEL->SpriteData(5);
+			RP->SetCBuffer(L"CutData", &SprCutData, CBUFMODE::CB_LINK);
 		}
 		NewList.push_back(RP);
 
@@ -309,6 +308,39 @@ std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileMap(cons
 
 }
 
+
+std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileRender(const CPtr<GameMesh>& _Mesh, const GameString& _MatName, int _Index)
+{
+
+	std::vector<CPtr<GameRenderPlayer>> NewList;
+	CPtr<GameSprite> LvSpr = GameSprite::Find(L"ColLevel2.png"); // ColLevel2
+
+
+	for (size_t i = 0; i < _Index; i++)
+	{
+		CPtr<GameRenderPlayer> RP = CreateRenderPlayer(_Mesh, _MatName);
+		RP->m_RenderOption.IsDifTexture = true;
+
+
+		RP->SetTexture(L"BaseTex", LvSpr->Tex());
+		RP->SetSampler(L"BaseSmp", L"LWSMP");
+		
+		NewList.push_back(RP);
+
+		if (0 <= _Index)
+		{
+			std::list<TextureData*> List = RP->AllTextureData(L"BaseTex");
+			for (auto Setter : List)
+			{
+				Setter->IsOption = true;
+			}
+		}
+	}
+
+
+
+	return NewList;
+}
 
 
 std::list<TextureData*> GameRenderPlayer::AllTextureData(const GameString& _SetterName)
@@ -618,7 +650,7 @@ bool GameRenderPlayer::IsStructuredBuffer(const GameString& _Name)
 
 void GameRenderPlayer::Render()
 {
-	//DebugCheck();
+
 
 	for (auto& _ResGroup : m_ConBuffer)
 	{

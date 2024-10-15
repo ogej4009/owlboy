@@ -242,3 +242,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	GameWin::WINMESSAGE(Start, Loop);
 
 }
+
+
+#pragma region 체크 사항
+	/*
+		4byte leak을 체크한다.
+		_ljGameWin -> m_AllObj를 확인한다.
+		_ljGameDevice -> m_AllObj를 확인한다.
+		FirstObj 를 통해서 처음 만들어진 _ljGameWin, _ljGameDevice 를 쓰는 순간을 확인한다.
+	*/
+#pragma endregion

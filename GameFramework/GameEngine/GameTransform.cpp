@@ -57,7 +57,7 @@ GameTransform::GameTransform()
 	m_GridTD.FloatSetting(10.0f, 50.0f, 0.05f, 0.1f); // 추가 
 
 	///////////////////////////////////////// 레벨디자인 
-	m_LevelTD.CalUnitMatrix();
+	//m_LevelTD.CalUnitMatrix();
 
 }
 
@@ -231,10 +231,10 @@ void GameTransform::CamUpdate(CPtr<GameCamera> _Cam)
 	m_GridTD.Pos.Y = 0.0f;
 
 	/////////////////////////////////////////////// 
-	m_LevelTD.WWORLD.ArrV[3] = _Cam->GetTrans()->GetWPos();
-	m_LevelTD.PROJ = _Cam->m_Proj;
-	m_LevelTD.VIEW = _Cam->m_View;
-	m_LevelTD.CalWVP();
+	//m_LevelTD.WWORLD.ArrV[3] = _Cam->GetTrans()->GetWPos();
+	//m_LevelTD.PROJ = _Cam->m_Proj;
+	//m_LevelTD.VIEW = _Cam->m_View;
+	//m_LevelTD.CalWVP();
 }
 
 void GameTransform::ColCheck()
@@ -459,9 +459,9 @@ void GameTransform::LightUpdate(const LightData& _Light)
 	m_DefTD.CalWVP();
 
 	//////////////////////////////////
-	m_LevelTD.PROJ = _Light.m_Proj;
-	m_LevelTD.VIEW = _Light.m_View;
-	m_LevelTD.CalWVP();
+	//m_LevelTD.PROJ = _Light.m_Proj;
+	//m_LevelTD.VIEW = _Light.m_View;
+	//m_LevelTD.CalWVP();
 
 }
 

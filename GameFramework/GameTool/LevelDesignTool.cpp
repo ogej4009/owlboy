@@ -81,28 +81,31 @@ void LevelDesignTool::Init()
 	//}
 	
 
-	{
+	/*{
 		CPtr<GameActor> NewActor = GetScene()->CreateActor();
 		NewActor->GetTrans()->SetWPos({ 0.0f, 0.0f, 15.0f });
 		CPtr<GameSpriteRenderer> NewRender = NewActor->CreateCom<GameSpriteRenderer>(L"TestGrid.png", (UINT)eRENDER_ORDER::RO_ACTOR);
 		NewRender->GetTrans()->SetWScale({ TILE_INTERVAL_A * 80, TILE_INTERVAL_A * 46, 3.0f });
-	}
+	}*/
 
 	{
 		m_TileRenderActor = GetScene()->CreateActor();
-		// LEVEL좌표는 항상 0
 		m_TileRenderActor->GetTrans()->SetWPos({ 0.0f, 0.0f, 10.0f });
-		// 타일 갯수, 베이스 텍스쳐, 랜더번호 
-		m_TileRenderCom = m_TileRenderActor->CreateCom<GameTileRenderer>(80, 46, L"ColLevel2.png", (UINT)eRENDER_ORDER::RO_COL_LEVEL);
+		m_TileRenderActor->GetTrans()->SetWScale({ TILE_INTERVAL_A * 80, TILE_INTERVAL_A * 46, 1.0f });
+		m_TileRenderCom = m_TileRenderActor->CreateCom<GameTileRenderer>(80, 46
+			, L"ColLevel2.png"
+			, (UINT)eRENDER_ORDER::RO_COL_LEVEL
+		);
 		m_TileRenderCom->SetMapSize({ TILE_INTERVAL_A * 80, TILE_INTERVAL_A * 46 });
-		//m_TileRenderCom->Off(); // 12.80f, 7.36f
+		//m_TileRenderCom->Off();
 	}
 
-	/*{
-		m_TileMapActor = GetScene()->CreateActor();
-		m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel2.png", 4);
-		m_TileMapActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
-	}*/
+	//{
+	//	m_TileMapActor = GetScene()->CreateActor();
+	//	m_TileMapActor->GetTrans()->SetWPos({ 0.0f, 0.0f, 1.0f });
+	//	m_TileMapActor->GetTrans()->SetWScale({ 12.80f, 7.20f, 1.0f });
+	//	m_TileMapCom = m_TileMapActor->CreateCom<GameTileMap>(80, 46, L"ColLevel2.png", (UINT)eRENDER_ORDER::RO_COL_LEVEL);
+	//}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -227,27 +230,27 @@ void LevelDesignTool::InputUpdate()
 	//	int XAB2 = 0; // 영역안이다. 
 	//}
 
-	m_ScreenPos3DToWorldPos = m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D());
+	//m_ScreenPos3DToWorldPos = m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D());
 
-	if (GameInput::Press(L"SELECT"))
-	{
+	//if (GameInput::Press(L"SELECT"))
+	//{
 
-		if (m_DesignCamCom->GetTrans()->GetWPos().X - (m_DesignCamCom->GetCamSize().X * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
-			m_DesignCamCom->GetTrans()->GetWPos().X + (m_DesignCamCom->GetCamSize().X * 0.5f) < m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
-			m_DesignCamCom->GetTrans()->GetWPos().Y - (m_DesignCamCom->GetCamSize().Y * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y ||
-			m_DesignCamCom->GetTrans()->GetWPos().Y + (m_DesignCamCom->GetCamSize().Y * 0.5f) < m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y)
-		{
-			int a = 0;
+	//	if (m_DesignCamCom->GetTrans()->GetWPos().X - (m_DesignCamCom->GetCamSize().X * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
+	//		m_DesignCamCom->GetTrans()->GetWPos().X + (m_DesignCamCom->GetCamSize().X * 0.5f) < m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X ||
+	//		m_DesignCamCom->GetTrans()->GetWPos().Y - (m_DesignCamCom->GetCamSize().Y * 0.5f) > m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y ||
+	//		m_DesignCamCom->GetTrans()->GetWPos().Y + (m_DesignCamCom->GetCamSize().Y * 0.5f) < m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y)
+	//	{
+	//		int a = 0;
 
-		}
-		else
-		{
-			m_TileRenderCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
+	//	}
+	//	else
+	//	{
+	//		m_TileRenderCom->TileAdd(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()), 5);
 
-			int b = 0;
-		}
+	//		int b = 0;
+	//	}
 
-	}
+	//}
 
 	//if (GameInput::Press(L"DELETE"))
 	//{

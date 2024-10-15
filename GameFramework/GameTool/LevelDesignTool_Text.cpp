@@ -39,18 +39,18 @@ void LevelDesignTool::TextInfoUpdate()
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,70 }, CVector::WHITE);
 
-	swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
-		, m_DesignCamActor->GetTrans()->GetWPos().X
-		, m_DesignCamActor->GetTrans()->GetWPos().Y
-		, m_DesignCamActor->GetTrans()->GetWPos().Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
+	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
+	//	, m_DesignCamActor->GetTrans()->GetWPos().X
+	//	, m_DesignCamActor->GetTrans()->GetWPos().Y
+	//	, m_DesignCamActor->GetTrans()->GetWPos().Z
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,90 }, CVector::WHITE);
 
-	swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
-		, m_DesignCamCom->GetCamSize().X
-		, m_DesignCamCom->GetCamSize().Y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
+	//swprintf_s(Arr, L"[CamScreenSize] X : %f, Y : %f"
+	//	, m_DesignCamCom->GetCamSize().X
+	//	, m_DesignCamCom->GetCamSize().Y
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
 
 	//swprintf_s(Arr, L"[CamPos] X : %f, Y : %f, Z : %f"
 	//	, m_FreeCamActor->GetTrans()->GetWPos().X
@@ -65,12 +65,12 @@ void LevelDesignTool::TextInfoUpdate()
 	//);
 	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,110 }, CVector::WHITE);
 
-	swprintf_s(Arr, L"[ScreenPos3DToWorldPos] X : %f, Y : %f, Z : %f"
-		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X
-		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y
-		, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Z
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,130 }, CVector::WHITE);
+	//swprintf_s(Arr, L"[ScreenPos3DToWorldPos] X : %f, Y : %f, Z : %f"
+	//	, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).X
+	//	, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Y
+	//	, m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()).Z
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,130 }, CVector::WHITE);
 
 	swprintf_s(Arr, L"[Light AmbColor] X : %f, Y : %f, Z : %f"
 		, m_LightCom->GetAmbColor().X
@@ -107,12 +107,12 @@ void LevelDesignTool::TextInfoUpdate()
 	);
 	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,230 }, CVector::WHITE);
 
-	TestCoord = m_TileRenderCom->CalCoord(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()));
-	swprintf_s(Arr, L"[Coord] X : %d, Y : %d"
-		, TestCoord.x
-		, TestCoord.y
-	);
-	GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,250 }, CVector::WHITE);
+	//TestCoord = m_TileRenderCom->CalCoord(m_DesignCamCom->ScreenPos3DToWorldPos(GameWin::MainObj()->MousePosVec3D()));
+	//swprintf_s(Arr, L"[Coord] X : %d, Y : %d"
+	//	, TestCoord.x
+	//	, TestCoord.y
+	//);
+	//GameDebugPlus::DrawDebugText(Arr, 20.0f, { 0,250 }, CVector::WHITE);
 
 
 

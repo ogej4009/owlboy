@@ -24,8 +24,8 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	X = _X;
 	Y = _Y;
 
-//	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);
-	m_Render = GetActor()->CreateCom<GameRenderer>(0);
+	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);
+//	m_Render = GetActor()->CreateCom<GameRenderer>(0);
 
 	m_Sprite = GameSprite::Find(_SrcTexName);
 	m_Tex = GameTexture::Find(_SrcTexName);
@@ -88,14 +88,14 @@ void GameTileMap::Init(int& _X, int& _Y, const GameString& _SrcTexName, int _Ind
 	FullRectSize = CVector{ X * TILE_INTERVAL, Y * TILE_INTERVAL };
 
 	RPList = m_Render->CreateRenderPlayerTileMap(m_Mesh, L"TileMap", TILEIDX);
+	
 	//SettingTile();
+
 }
 
 void GameTileMap::Update()
 {
 	// TILE Á¤º¸
-
-
 }
 
 //
@@ -166,7 +166,6 @@ void GameTileMap::TileLoad()
 }
 
 
-
 int GameTileMap::CalIndex(int2 _Coord)
 {
 	int aTileIdx = 0;
@@ -206,8 +205,6 @@ int GameTileMap::CalIndex(int2 _Coord)
 //		}
 //	}
 //}
-
-
 
 
 CVector GameTileMap::CalTexPos(const CVector& _Pos)
