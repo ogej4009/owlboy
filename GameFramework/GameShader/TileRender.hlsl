@@ -25,13 +25,11 @@ cbuffer RenderOptionData : register(b7)
     RenderOption RO;
 }
 
-cbuffer SprCutData : register(b1)
+cbuffer CutData : register(b1)
 {
     CutData CD;
 }
 
-Texture2D BaseTex : register(t1);
-SamplerState BaseSmp : register(s1);
 
 VtxOut VS_TileRender(VtxIn _In)
 {
@@ -41,7 +39,7 @@ VtxOut VS_TileRender(VtxIn _In)
     Out.Uv = _In.Uv;
     Out.Color = _In.Color;
     
-    if (RO.IsDifTexture.x != 0)
+    if (RO.IsDifTexture != 0)
     {   
        float XSize = CD.Data.z;
        float YSize = CD.Data.w;
@@ -50,11 +48,6 @@ VtxOut VS_TileRender(VtxIn _In)
     
        Out.Uv.x = (Out.Uv.x * XSize) + XStart;
        Out.Uv.y = (Out.Uv.y * YSize) + YStart;
-    
-       float4 TileColor = BaseTex.SampleLevel(BaseSmp, Out.Uv.xy, 0);
-    
-       Out.Color = TileColor;
-       
     }
     
     return Out;
@@ -74,11 +67,12 @@ struct DeferredOut
 Texture2D Tex : register(t1);
 SamplerState Smp : register(s1);
 
+
 DeferredOut PS_TileRender(VtxOut _Out) : SV_Target0
 {
     DeferredOut Out = (DeferredOut) 0;
    
-    if (RO.IsDifTexture.x == 0) 
+    if (RO.IsDifTexture != 0) 
     {
         Out.DifColor = Tex.Sample(Smp, _Out.Uv.xy);
     }
@@ -86,7 +80,7 @@ DeferredOut PS_TileRender(VtxOut _Out) : SV_Target0
     {
         Out.DifColor = _Out.Color;
     }
-
+ 
     return Out;
     
 }

@@ -313,31 +313,34 @@ std::vector<CPtr<GameRenderPlayer>> GameRenderer::CreateRenderPlayerTileRender(c
 {
 
 	std::vector<CPtr<GameRenderPlayer>> NewList;
-	CPtr<GameSprite> LvSpr = GameSprite::Find(L"ColLevel2.png"); // ColLevel2
-
+	
+	CPtr<GameSprite> LvSpr = GameSprite::Find(L"ColLevel2.png"); 
+	
+	CVector SprCutData = LvSpr->SpriteData(10);
+	
 
 	for (size_t i = 0; i < _Index; i++)
 	{
 		CPtr<GameRenderPlayer> RP = CreateRenderPlayer(_Mesh, _MatName);
+
+		RP->SetTexture(L"Tex", LvSpr->Tex());
+		RP->SetSampler(L"Smp", L"LWSMP");
+		RP->SetCBuffer(L"SprCutData", &SprCutData, CBUFMODE::CB_LINK);
+		// 트랜스데이터를 추가해봅시다 
+
 		RP->m_RenderOption.IsDifTexture = true;
 
-
-		RP->SetTexture(L"BaseTex", LvSpr->Tex());
-		RP->SetSampler(L"BaseSmp", L"LWSMP");
-		
 		NewList.push_back(RP);
 
 		if (0 <= _Index)
 		{
-			std::list<TextureData*> List = RP->AllTextureData(L"BaseTex");
+			std::list<TextureData*> List = RP->AllTextureData(L"Tex");
 			for (auto Setter : List)
 			{
 				Setter->IsOption = true;
 			}
 		}
 	}
-
-
 
 	return NewList;
 }
@@ -427,6 +430,12 @@ void GameRenderPlayer::SetMaterial(const GameString& _Name, bool _Push)
 				if (L"RenderOptionData" == _Res.second.Name)
 				{
 					SetCBuffer(L"RenderOptionData", &m_RenderOption, CBUFMODE::CB_LINK);
+				}
+				
+				if (L"SprCutData" == _Res.second.Name)
+				{
+					
+					SetCBuffer(L"SprCutData", &m_SprCutData, CBUFMODE::CB_LINK);
 				}
 
 				break;

@@ -17,8 +17,6 @@ void GameTileRenderer::Init(int& _X, int& _Y, const GameString& _TexName, int _I
 
 	m_Render = GetActor()->CreateCom<GameRenderer>(_Index);
 
-	m_Sprite = GameSprite::Find(_TexName);
-
 	m_Mesh = new GameMesh();
 	CPtr<GameVtxBuffer> VB = new GameVtxBuffer();
 	CPtr<GameIdxBuffer> IB = new GameIdxBuffer();
@@ -76,16 +74,11 @@ void GameTileRenderer::Init(int& _X, int& _Y, const GameString& _TexName, int _I
 	
 	//SettingTile();
 
-	m_SprIndex = 0;
-
-	CVector SprCutData = m_Sprite->SpriteData(m_SprIndex);
-	m_Render->SetCBuffer(L"SprCutData", &SprCutData, CBUFMODE::CB_LINK);
-
 }
 
 void GameTileRenderer::Update()
 {
-	m_SprCutData = m_Sprite->SpriteData(m_SprIndex);
+	
 }
 
 void GameTileRenderer::Render(CPtr<GameCamera> _Cam)

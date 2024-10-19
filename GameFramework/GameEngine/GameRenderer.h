@@ -113,6 +113,7 @@ class GameRenderPlayer : public CRef, public GameVirtualProgress
 public:
 	GameRenderer* m_Parent;
 	RenderPlayerOption	m_RenderOption;
+	CVector m_SprCutData;
 	CVector m_SprDrawColor;
 
 public:
